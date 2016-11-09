@@ -1,0 +1,21 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <!--&lt;!&ndash;状态栏的颜色&ndash;&gt;-->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <!--EditText,RadioButton,CheckBox的点击效果颜色-->
+        <item name="colorAccent">@color/colorAccent</item>
+        <!--<item name="colorAccent">#FF4081</item>
+        <item name="android:windowBackground">@android:color/white</item>-->
+
+        <!--<item name="colorPrimary">#34A2DA</item>-->
+        <!--<item name="colorPrimaryDark">#1785C6</item>-->
+
+    </style>
+
+</resources>

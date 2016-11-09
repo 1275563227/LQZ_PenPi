@@ -1,0 +1,38 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_name"
+        android:icon="@drawable/menu"
+        android:title="@string/menu_name" />
+
+    <item
+        android:id="@+id/record_name"
+        android:icon="@drawable/record"
+        android:title="@string/record_name" />
+
+    <item
+        android:id="@+id/config_name"
+        android:icon="@drawable/config"
+        android:title="@string/config_name" />
+
+    <item
+        android:id="@+id/outlogin_name"
+        android:icon="@drawable/outlogin"
+        android:title="@string/outlogin_name" />
+
+    <!--    <group android:checkableBehavior="single"></group>-->
+
+    <item android:title="Sub items">
+        <menu>
+            <item
+                android:icon="@drawable/community"
+                android:title="社区" />
+            <item
+                android:icon="@drawable/chat"
+                android:title="聊天" />
+            <item
+                android:icon="@drawable/more"
+                android:title="更多" />
+        </menu>
+    </item>
+</menu>

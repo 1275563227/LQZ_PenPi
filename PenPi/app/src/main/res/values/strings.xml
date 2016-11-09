@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">PenPi</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="menu_name">个人主页</string>
+    <string name="record_name">我的记录</string>
+    <string name="community_name">社区</string>
+    <string name="config_name">设置</string>
+    <string name="outlogin_name">退出登录</string>
+    <string name="chat_name">聊天</string>
+    <string name="more_name">更多</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="record_listern">听单模式</string>
+    <string name="message_one">消息1</string>
+    <string name="message_two">消息2</string>
+    <string name="message_three">消息3</string>
+</resources>
