@@ -59,9 +59,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".support_library_demo.SubActivity" />
-        <activity android:name=".myActivity.AddOrderActivity" />
-        <activity android:name=".myActivity.MapLocationList"/>
+        <activity android:name=".activity.SubActivity" />
+        <activity android:name=".activity.AddOrderActivity" />
+        <activity android:name=".activity.SpaceListActivity"/>
     </application>
 
 </manifest>

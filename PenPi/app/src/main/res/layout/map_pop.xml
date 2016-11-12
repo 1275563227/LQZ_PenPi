@@ -30,8 +30,8 @@
                 android:id="@+id/et_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="4" />
+                android:singleLine="true"
+                android:hint="你的快递在哪"/>
 
             <TextView
                 android:id="@+id/tv_end"
@@ -45,8 +45,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
-                android:hint="你要送去哪里"
-                android:layout_marginLeft="15dp" />
+                android:hint="你要送去哪里"/>
 
             <TextView
                 android:id="@+id/tv_name"
@@ -58,8 +57,7 @@
                 android:id="@+id/et_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:singleLine="true"
-                android:layout_marginLeft="15dp" />
+                android:singleLine="true"/>
 
             <TextView
                 android:id="@+id/tv_phone_number"
@@ -70,8 +68,7 @@
             <EditText
                 android:id="@+id/et_phone_number"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp" />
+                android:layout_height="wrap_content"/>
 
             <TextView
                 android:id="@+id/tv_remark"
@@ -82,8 +79,7 @@
             <EditText
                 android:id="@+id/et_remark"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp" />
+                android:layout_height="wrap_content" />
 
         </android.support.v7.widget.GridLayout>
 

@@ -1,4 +1,4 @@
-package gdin.com.penpi.myActivity;
+package gdin.com.penpi.activity;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +12,7 @@ import android.widget.EditText;
 import com.baidu.mapapi.map.MapView;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.mapUtil.MapLocation;
+import gdin.com.penpi.baidumap.MapLocation;
 
 /**
  * Created by Administrator on 2016/11/7.
@@ -35,7 +35,7 @@ public class AddOrderActivity extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.map_add_order);
+        setContentView(R.layout.activity_add_order);
 
         Toolbar toolbar = (Toolbar) this.findViewById(R.id.tool_bar);
         setSupportActionBar(toolbar);

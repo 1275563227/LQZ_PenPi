@@ -1,4 +1,4 @@
-package gdin.com.penpi.mapUtil;
+package gdin.com.penpi.baidumap;
 
 import android.content.Context;
 import android.graphics.Point;
@@ -107,7 +107,7 @@ public class MapMarkerOverlay extends MapLocation {
         BitmapDescriptor icon = BitmapDescriptorFactory
                 .fromResource(R.drawable.map_marker_overlay);
         options.position(gjs) // 位置
-                .title("广技师") // title
+                .title("广技师") // content_title
                 .icon(icon) // 图标
                 .draggable(true); // 设置图标可以拖动
 

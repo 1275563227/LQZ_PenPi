@@ -20,14 +20,15 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import gdin.com.penpi.myActivity.AddOrderActivity;
-import gdin.com.penpi.damain.Order;
-import gdin.com.penpi.fragment.MapFragment;
-import gdin.com.penpi.mapUtil.Utils;
-import gdin.com.penpi.myActivity.MapLocationList;
-import gdin.com.penpi.support_library_demo.FragmentAdapter;
-import gdin.com.penpi.support_library_demo.InfoDetailsFragment;
-import gdin.com.penpi.support_library_demo.SubActivity;
+import gdin.com.penpi.activity.AddOrderActivity;
+import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.fragment.MapShowFragment;
+import gdin.com.penpi.util.ClientUtils;
+import gdin.com.penpi.util.Utils;
+import gdin.com.penpi.activity.SpaceListActivity;
+import gdin.com.penpi.adapter.FragmentAdapter;
+import gdin.com.penpi.fragment.OrderShowFragment;
+import gdin.com.penpi.activity.SubActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -83,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         mDrawerToggle.syncState();
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 //        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setHomeAsUpIndicator(R.drawable.menumain);
+//        actionBar.setHomeAsUpIndicator(R.drawable.menu_main);
 //        actionBar.setDisplayHomeAsUpEnabled(true);
 
         //对NavigationView添加item的监听事件
@@ -100,10 +101,9 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
         //初始化ViewPager的数据集
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new InfoDetailsFragment());
-        fragments.add(new MapFragment());
-//        fragments.add(new ShareFragment());
-//        fragments.add(new AgendaFragment());
+        fragments.add(new OrderShowFragment());
+        fragments.add(new MapShowFragment());
+
         //创建ViewPager的adapter
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(adapter);
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //主界面右上角的menu菜单
         getMenuInflater().inflate(R.menu.menu_main, menu);
-//        menu_item = menu.findItem(R.id.record_listern);
+//        menu_item = menu_home.findItem(R.id.record_listern);
         return true;
     }
 
@@ -169,6 +169,25 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * SpaceListActivity 的回调函数
+     * @param requestCode 请求码
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        String location = null;
+        // 取得MapLocationList回传的数据
+        if(requestCode == 1)
+            if (resultCode == RESULT_OK)
+                location = data.getStringExtra("myLocation");
+
+        Log.i("location2", "location 2 = " + location);
+
+        et_start = (EditText) findViewById(R.id.et_start);
+        et_start.setText(location);
+    }
 
     /**
      * 按钮点击事件
@@ -176,14 +195,14 @@ public class MainActivity extends AppCompatActivity {
      * @param view
      */
 
-    EditText et_start;
-    EditText et_end;
-    EditText et_name;
-    EditText et_phone_number;
-    EditText et_remark;
+    private EditText et_start;
+    private EditText et_end;
+    private EditText et_name;
+    private EditText et_phone_number;
+    private EditText et_remark;
 
-    String response;
-    Order order_response;
+    private String response;
+    private Order order_response;
 
     Handler handler = new Handler() {
         @Override
@@ -224,10 +243,10 @@ public class MainActivity extends AppCompatActivity {
         new Thread() {
             @Override
             public void run() {
-                response = Utils.sendPost("http://139.199.159.60:8080/Demo/servlet/testClientServlet", order);
+                response = ClientUtils.sendPost("http://139.199.159.60:8080/Demo/servlet/testClientServlet", order);
                 if (response != null) {
                     Log.i("TAG", response);
-                    order_response = Utils.paresJSON_withGSON(response);
+                    order_response = ClientUtils.paresJSON_withGSON(response);
                     handler.sendEmptyMessage(0x123);
                 }
             }
@@ -240,7 +259,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void map_location_list(View view) {
-        Intent intent = new Intent(MainActivity.this, MapLocationList.class);
-        startActivity(intent);
+        Intent intent = new Intent(MainActivity.this, SpaceListActivity.class);
+        startActivityForResult (intent, 1);
     }
 }

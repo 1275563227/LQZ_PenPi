@@ -1,17 +1,8 @@
-package gdin.com.penpi.fragment;
+package gdin.com.penpi.baidumap;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
@@ -30,59 +21,28 @@ import com.baidu.mapapi.model.LatLng;
 
 import java.util.List;
 
-import gdin.com.penpi.MainActivity;
 import gdin.com.penpi.R;
-import gdin.com.penpi.mapUtil.MapMarkerOverlay;
 
 
-public class MapFragment extends Fragment {
+/**
+ * Created by Administrator on 2016/10/25.
+ */
 
-    private LatLng gjs = new LatLng(23.137158, 113.377325);
+public class MapLocation {
 
-    private MapView mapView;
-    private BaiduMap baiduMap;
+    protected LatLng gjs = new LatLng(23.137158, 113.377325);
+
+    protected MapView mapView;
+    private Context context;
+    protected BaiduMap baiduMap;
 
     private LocationClient mLocationClient = null;
     private BDLocationListener myListener = new MyLocationListener();
 
-    EditText et_start;
-    EditText et_end;
+    public MapLocation(MapView view, Context mycentext) {
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-
-        View view = inflater.inflate(R.layout.map_show, container, false);
-        mapView = (MapView) view.findViewById(R.id.map_view);
-        View v = mapView.getChildAt(0);//这个view实际上就是我们看见的绘制在表面的地图图层
-        v.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP) {
-                    MainActivity.mViewPager.requestDisallowInterceptTouchEvent(false);
-                } else {
-                    MainActivity.mViewPager.requestDisallowInterceptTouchEvent(true);
-                }
-                return false;
-            }
-
-        });
-
-//        获取屏幕尺寸
-//        DisplayMetrics dm2 = getResources().getDisplayMetrics();
-//        Log.i("TAGFF", "heigth2 : " + dm2.heightPixels);
-//        Log.i("TAGFF", "width2 : " + dm2.widthPixels);
-//        new MapMarkerOverlay(mapView, this.getActivity(), dm2.heightPixels, dm2.widthPixels);
-
-        initMapView();
-
-        et_start = (EditText) getActivity().findViewById(R.id.et_start);
-        et_end = (EditText) getActivity().findViewById(R.id.et_end);
-        return view;
-    }
-
-    private void initMapView() {
+        this.mapView = view;
+        this.context = mycentext;
         baiduMap = mapView.getMap(); // 获取地图控制器
 
         // 隐藏缩放按钮、比例尺
@@ -107,7 +67,7 @@ public class MapFragment extends Fragment {
         // uiSettings.setCompassEnabled(false); // 不显示指南针
 
         // 定位
-        mLocationClient = new LocationClient(getActivity().getApplicationContext()); // 声明LocationClient类
+        mLocationClient = new LocationClient(context.getApplicationContext()); // 声明LocationClient类
         mLocationClient.registerLocationListener(myListener); // 注册监听函数
         initLocation();
         baiduMap.setMyLocationEnabled(true); // 开启定位图层
@@ -120,7 +80,8 @@ public class MapFragment extends Fragment {
         // 在这个方法里面接收定位结果
         @Override
         public void onReceiveLocation(BDLocation location) {
-            SharedPreferences.Editor editor = getActivity().getSharedPreferences("data", 0).edit();
+
+            SharedPreferences.Editor editor = context.getSharedPreferences("data", 0).edit();
 
             if (location != null) {
                 MyLocationData.Builder builder = new MyLocationData.Builder();
@@ -157,6 +118,8 @@ public class MapFragment extends Fragment {
                 sb.append("\naddr : ");
                 sb.append(location.getAddrStr());
 
+                editor.putString("location", location.getAddrStr().substring(5));
+
             } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
                 sb.append("\n网络定位成功");
                 sb.append("\naddr : ");
@@ -185,13 +148,10 @@ public class MapFragment extends Fragment {
             sb.append("\nlocationdescribe : ");
             sb.append(location.getLocationDescribe());// 位置语义化信息
 
-
             List<Poi> list = location.getPoiList();// POI数据
             if (list != null) {
                 sb.append("\npoilist size = : ");
                 sb.append(list.size());
-
-                editor.putInt("poiSize", list.size());
                 int i = 0;
                 for (Poi p : list) {
                     sb.append("\npoi= : ");
@@ -201,13 +161,30 @@ public class MapFragment extends Fragment {
                 i = 0;
             }
             Log.i("Location", sb.toString());
-//            et_start.setHint(location.getAddrStr());
-            et_start.setText(location.getAddrStr().substring(5));
-
 
             editor.commit();
         }
     }
+
+
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        switch (keyCode) {
+//            case KeyEvent.KEYCODE_1: // 罗盘态，显示定位方向圈，保持定位图标在地图中心
+//                setMyLocationConfigeration(MyLocationConfiguration.LocationMode.COMPASS);
+//                break;
+//            case KeyEvent.KEYCODE_2: // 跟随态，保持定位图标在地图中心
+//                setMyLocationConfigeration(MyLocationConfiguration.LocationMode.FOLLOWING);
+//                break;
+//            case KeyEvent.KEYCODE_3: // 普通态： 更新定位数据时不对地图做任何操作
+//                setMyLocationConfigeration(MyLocationConfiguration.LocationMode.NORMAL);
+//                break;
+//
+//            default:
+//                break;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     /**
      * 设置定位图层的配置
@@ -238,26 +215,5 @@ public class MapFragment extends Fragment {
         option.SetIgnoreCacheException(false);// 可选，默认false，设置是否收集CRASH信息，默认收集
         option.setEnableSimulateGps(false);// 可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         mLocationClient.setLocOption(option);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        // 在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
-        mapView.onDestroy();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        // 在activity执行onResume时执行mMapView. onResume ()，实现地图生命周期管理
-        mapView.onResume();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        // 在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
-        mapView.onPause();
     }
 }

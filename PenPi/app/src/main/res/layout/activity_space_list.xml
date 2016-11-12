@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="gdin.com.penpi.myActivity.MapLocationList">
+    tools:context=".activity.SpaceListActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -38,7 +38,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/palce"
+                        android:id="@+id/tv_palce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="广州" />
@@ -52,7 +52,9 @@
                         android:id="@+id/et_location2"
                         android:background="@null"
                         android:layout_marginLeft="12dp"
-                        android:layout_width="220dp"
+                        android:layout_width="wrap_content"
+                        android:layout_weight="1"
+                        android:singleLine="true"
                         android:layout_height="wrap_content"/>
 
                     <TextView

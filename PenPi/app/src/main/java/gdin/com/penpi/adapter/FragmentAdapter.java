@@ -1,4 +1,4 @@
-package gdin.com.penpi.support_library_demo;
+package gdin.com.penpi.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

@@ -1,4 +1,4 @@
-package gdin.com.penpi.support_library_demo;
+package gdin.com.penpi.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.adapter.RecyclerViewAdapter;
 
 
 /**
@@ -18,13 +19,13 @@ import gdin.com.penpi.R;
  * Time         : 15:09
  * Description  :
  */
-public class InfoDetailsFragment extends Fragment {
+public class OrderShowFragment extends Fragment {
     private RecyclerView mRecyclerView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment1, container, false);
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.order_show, container, false);
         return mRecyclerView;
     }
 

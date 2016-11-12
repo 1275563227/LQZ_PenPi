@@ -1,4 +1,4 @@
-package gdin.com.penpi.damain;
+package gdin.com.penpi.bean;
 
 import org.json.JSONObject;
 

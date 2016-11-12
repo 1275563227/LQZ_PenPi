@@ -2,22 +2,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/menu_name"
-        android:icon="@drawable/menu"
+        android:icon="@drawable/menu_home"
         android:title="@string/menu_name" />
 
     <item
         android:id="@+id/record_name"
-        android:icon="@drawable/record"
+        android:icon="@drawable/menu_record"
         android:title="@string/record_name" />
 
     <item
         android:id="@+id/config_name"
-        android:icon="@drawable/config"
+        android:icon="@drawable/menu_config"
         android:title="@string/config_name" />
 
     <item
         android:id="@+id/outlogin_name"
-        android:icon="@drawable/outlogin"
+        android:icon="@drawable/menu_outlogin"
         android:title="@string/outlogin_name" />
 
     <!--    <group android:checkableBehavior="single"></group>-->
@@ -25,13 +25,13 @@
     <item android:title="Sub items">
         <menu>
             <item
-                android:icon="@drawable/community"
+                android:icon="@drawable/menu_community"
                 android:title="社区" />
             <item
-                android:icon="@drawable/chat"
+                android:icon="@drawable/menu_chat"
                 android:title="聊天" />
             <item
-                android:icon="@drawable/more"
+                android:icon="@drawable/menu_more"
                 android:title="更多" />
         </menu>
     </item>

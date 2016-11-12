@@ -1,4 +1,4 @@
-package gdin.com.penpi.support_library_demo;
+package gdin.com.penpi.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
