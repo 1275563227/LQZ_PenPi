@@ -10,11 +10,11 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <!--EditText,RadioButton,CheckBox的点击效果颜色-->
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item name="colorAccent">#FF4081</item>
-        <item name="android:windowBackground">@android:color/white</item>-->
+        <!--<item_login name="colorAccent">#FF4081</item_login>
+        <item_login name="android:windowBackground">@android:color/white</item_login>-->
 
-        <!--<item name="colorPrimary">#34A2DA</item>-->
-        <!--<item name="colorPrimaryDark">#1785C6</item>-->
+        <!--<item_login name="colorPrimary">#34A2DA</item_login>-->
+        <!--<item_login name="colorPrimaryDark">#1785C6</item_login>-->
 
     </style>
 

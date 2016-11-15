@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <!--必须使用CoordinatorLayout才会有向上隐藏效果-->
     <android.support.design.widget.CoordinatorLayout xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/main_content"
@@ -34,7 +35,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="map_location_list"
+                        android:onClick="space_list"
                         android:gravity="center">
 
                         <ImageView
@@ -75,19 +76,26 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <!--BottomSheet-->
-        <android.support.v4.widget.NestedScrollView
-            android:id="@+id/scroll"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="android.support.design.widget.BottomSheetBehavior"
-            app:behavior_hideable = "true" >
+        <!--<android.support.v4.widget.NestedScrollView-->
+            <!--android:id="@+id/scroll"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:layout_behavior="android.support.design.widget.BottomSheetBehavior"-->
+            <!--app:behavior_hideable = "true" >-->
 
-            <include layout="@layout/map_pop"/>
-        </android.support.v4.widget.NestedScrollView>
-        <!--/BottomSheet-->
+            <!--<include layout="@layout/map_pop"/>-->
+        <!--</android.support.v4.widget.NestedScrollView>-->
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:onClick="map_add"
+            android:src="@drawable/map_add" />
 
     </android.support.design.widget.CoordinatorLayout>
-
 
     <!--侧滑界面-->
     <android.support.design.widget.NavigationView

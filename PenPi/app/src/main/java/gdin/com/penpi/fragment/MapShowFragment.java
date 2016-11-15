@@ -94,8 +94,8 @@ public class MapShowFragment extends Fragment {
         mapView.showScaleControl(false); // 隐藏比例尺
 
         // 设置地图中心点为广技师
-//        mapStatusUpdate = MapStatusUpdateFactory.newLatLng(gjs);
-//        baiduMap.setMapStatus(mapStatusUpdate);
+        //mapStatusUpdate = MapStatusUpdateFactory.newLatLng(gjs);
+        //baiduMap.setMapStatus(mapStatusUpdate);
 
         // 设置地图缩放为15
         MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.zoomTo(17);
@@ -201,7 +201,7 @@ public class MapShowFragment extends Fragment {
             }
             Log.i("Location", sb.toString());
 //            et_start.setHint(location.getAddrStr());
-            et_start.setText(location.getAddrStr().substring(8));
+//            et_start.setText(location.getAddrStr().substring(8));
 
 
             editor.commit();
@@ -240,6 +240,7 @@ public class MapShowFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         // 在activity执行onDestroy时执行mMapView.onDestroy()，实现地图生命周期管理
+        mLocationClient.stop(); // 停止定位
         mapView.onDestroy();
     }
 

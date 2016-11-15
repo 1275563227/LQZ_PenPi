@@ -36,7 +36,7 @@
     <!-- android:screenOrientation="portrait" 设置手机只能竖屏显示 -->
 
 
-    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <!-- To auto-complete the email text field in the login form with the User's emails -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.READ_PROFILE" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -55,10 +55,12 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name=".login.LoginActivity" />
+        <activity android:name=".login.ResisterActivity" />
         <activity android:name=".activity.SubActivity" />
         <activity android:name=".activity.AddOrderActivity" />
         <activity android:name=".activity.SpaceListActivity"/>

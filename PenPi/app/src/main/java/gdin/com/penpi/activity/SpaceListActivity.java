@@ -9,7 +9,9 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,10 +37,10 @@ import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.SpaceListAdapter;
 import gdin.com.penpi.bean.PoiSearchResults;
 
-public class SpaceListActivity extends AppCompatActivity {
+public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSearchResultListener {
 
     private PoiSearch mPoiSearch = null;
-    private SuggestionSearch mSuggestionSearch = null;
+//    private SuggestionSearch mSuggestionSearch = null;
     private PoiCitySearchOption poiCitySearchOption = null;
     private List<PoiSearchResults> list = new ArrayList<>();
 
@@ -46,6 +48,9 @@ public class SpaceListActivity extends AppCompatActivity {
     private SpaceListAdapter adapter;
     private EditText et_Place;
     private TextView tv_city;
+
+    private String poiname;
+    private String poiadd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +60,13 @@ public class SpaceListActivity extends AppCompatActivity {
         et_Place = (EditText) findViewById(R.id.et_location2);
         tv_city = (TextView) findViewById(R.id.tv_palce);
         mRecyclerView = (RecyclerView) findViewById(R.id.list_RecyclerView_1);
+        ImageView iv_delete = (ImageView) findViewById(R.id.map_delete);
+        iv_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                et_Place.setText("");
+            }
+        });
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SpaceListAdapter(SpaceListActivity.this, list);
@@ -64,8 +76,8 @@ public class SpaceListActivity extends AppCompatActivity {
         String location = preferences.getString("location", "");
 
         mPoiSearch = PoiSearch.newInstance();
-        mPoiSearch.setOnGetPoiSearchResultListener(poiListener);
-        mSuggestionSearch = SuggestionSearch.newInstance();
+        mPoiSearch.setOnGetPoiSearchResultListener(this);
+//        mSuggestionSearch = SuggestionSearch.newInstance();
 
         et_Place.setText(location);
         et_Place.addTextChangedListener(new TextWatcher() {
@@ -77,7 +89,7 @@ public class SpaceListActivity extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String city = tv_city.getText().toString();
-                mSuggestionSearch.requestSuggestion((new SuggestionSearchOption()).keyword(s.toString()).city(city));
+//                mSuggestionSearch.requestSuggestion((new SuggestionSearchOption()).keyword(s.toString()).city(city));
                 poiCitySearchOption = new PoiCitySearchOption().city(city).keyword(et_Place.getText().toString());
                 mPoiSearch.searchInCity(poiCitySearchOption);
             }
@@ -92,74 +104,64 @@ public class SpaceListActivity extends AppCompatActivity {
         });
     }
 
-    OnGetPoiSearchResultListener poiListener = new OnGetPoiSearchResultListener() {
-        String poiname;
-        String poiadd;
+    @Override
+    public void onGetPoiResult(PoiResult poiResult) {
 
-        public void onGetPoiResult(PoiResult result) {
+        // 获取POI检索结果
+        if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
+            Toast.makeText(SpaceListActivity.this, "未找到结果", Toast.LENGTH_LONG).show();
+            return;
+        }
+        list.clear();
+        if (poiResult.getAllPoi() == null) {
+            Toast.makeText(SpaceListActivity.this, "未找到结果,请重新输入111", Toast.LENGTH_LONG).show();
+            return;
+        } else {
+            for (int i = 0; i < poiResult.getAllPoi().size(); i++) {
+                poiname = poiResult.getAllPoi().get(i).name;
+                poiadd = poiResult.getAllPoi().get(i).address;
+                LatLng poilocation = poiResult.getAllPoi().get(i).location;
 
-            // 获取POI检索结果
-            if (result == null
-                    || result.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-                Toast.makeText(SpaceListActivity.this, "未找到结果", Toast.LENGTH_LONG)
-                        .show();
-                return;
-            }
-            list.clear();
-            if (result.getAllPoi() == null) {
-                Toast.makeText(SpaceListActivity.this, "未找到结果,请重新输入111",
-                        Toast.LENGTH_LONG).show();
-                return;
-            } else {
-                for (int i = 0; i < result.getAllPoi().size(); i++) {
-                    poiname = result.getAllPoi().get(i).name;
-                    poiadd = result.getAllPoi().get(i).address;
-                    LatLng poilocation = result.getAllPoi().get(i).location;
+                if (poilocation != null) {
+                    Double latitude = poilocation.latitude;
+                    Double longitude = poilocation.longitude;
 
-                    if (poilocation != null) {
-                        Double latitude = poilocation.latitude;
-                        Double longitude = poilocation.longitude;
+                    // 实例化一个地理编码查询对象
+                    GeoCoder geoCoder = GeoCoder.newInstance();
+                    // 设置反地理编码位置坐标
+                    ReverseGeoCodeOption op = new ReverseGeoCodeOption();
+                    op.location(poilocation);
+                    // 发起反地理编码请求(经纬度->地址信息)
+                    geoCoder.reverseGeoCode(op);
+                    geoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
 
-                        // 实例化一个地理编码查询对象
-                        GeoCoder geoCoder = GeoCoder.newInstance();
-                        // 设置反地理编码位置坐标
-                        ReverseGeoCodeOption op = new ReverseGeoCodeOption();
-                        op.location(poilocation);
-                        // 发起反地理编码请求(经纬度->地址信息)
-                        geoCoder.reverseGeoCode(op);
-                        geoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
+                        @Override
+                        public void onGetReverseGeoCodeResult(ReverseGeoCodeResult arg0) {
+                            poiadd = arg0.getAddress();
+                        }
 
-                            @Override
-                            public void onGetReverseGeoCodeResult(
-                                    ReverseGeoCodeResult arg0) {
-                                poiadd = arg0.getAddress();
-                            }
+                        @Override
+                        public void onGetGeoCodeResult(GeoCodeResult arg0) {
+                        }
 
-                            @Override
-                            public void onGetGeoCodeResult(GeoCodeResult arg0) {
-                            }
-                        });
-                        PoiSearchResults results = new PoiSearchResults(
-                                poiname, poiadd, latitude, longitude);
-                        list.add(results);
-                        Log.i("111", list.toString());
-                    } else {
-                        Toast.makeText(SpaceListActivity.this, "未找到结果,请重新输入",
-                                Toast.LENGTH_LONG).show();
-                    }
+                    });
+                    PoiSearchResults results = new PoiSearchResults(poiname, poiadd, latitude, longitude);
+                    list.add(results);
+                    Log.i("111", list.toString());
+                } else {
+                    Toast.makeText(SpaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
                 }
-
             }
-//            adapter = new SpaceListAdapter(SpaceListActivity.this, list);
-            adapter.notifyDataSetChanged();
-//            mRecyclerView.setAdapter(adapter);
-        }
-
-        public void onGetPoiDetailResult(PoiDetailResult result) {
 
         }
+        adapter.notifyDataSetChanged();
+    }
 
-    };
+    @Override
+    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+
+    }
+
     public void setResultTo(String s) {
 
         // 需要返回的数据存入到intent中

@@ -26,8 +26,8 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="10dp"
                 android:gravity="center">
 
                 <LinearLayout
@@ -56,6 +56,13 @@
                         android:layout_weight="1"
                         android:singleLine="true"
                         android:layout_height="wrap_content"/>
+
+                    <ImageView
+                        android:id="@+id/map_delete"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_marginLeft="5dp"
+                        android:src="@drawable/map_delete"/>
 
                     <TextView
                         android:layout_marginLeft="15dp"

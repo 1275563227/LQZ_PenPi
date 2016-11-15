@@ -33,8 +33,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        TextView view = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.list_space, parent, false);
-        CardView view = (CardView)LayoutInflater.from(parent.getContext()).inflate(R.layout.list_order_show, parent, false);
+//        TextView view = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.ltem_space, parent, false);
+        CardView view = (CardView)LayoutInflater.from(parent.getContext()).inflate(R.layout.ltem_order_show, parent, false);
         return new ViewHolder(view);
     }
 

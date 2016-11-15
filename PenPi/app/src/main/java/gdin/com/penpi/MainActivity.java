@@ -16,6 +16,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import gdin.com.penpi.activity.AddOrderActivity;
 import gdin.com.penpi.bean.Order;
 import gdin.com.penpi.fragment.MapShowFragment;
+import gdin.com.penpi.login.ResisterActivity;
 import gdin.com.penpi.util.ClientUtils;
 import gdin.com.penpi.util.Utils;
 import gdin.com.penpi.activity.SpaceListActivity;
@@ -61,11 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
         //初始化控件及布局
         initView();
-
-        /**
-         * 标题的定位
-         */
-        TextView location = (TextView) findViewById(R.id.tv_location);
     }
 
     private void initView() {
@@ -117,9 +114,10 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public boolean onNavigationItemSelected(MenuItem menuItem) {
             //点击NavigationView中定义的menu item时触发反应
+            Intent intent;
             switch (menuItem.getItemId()) {
                 case R.id.menu_name:
-                    Intent intent = new Intent(MainActivity.this, SubActivity.class);
+                    intent = new Intent(MainActivity.this, SubActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.record_name:
@@ -169,97 +167,18 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * SpaceListActivity 的回调函数
-     * @param requestCode 请求码
-     * @param resultCode
-     * @param data
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        String location = null;
-        // 取得MapLocationList回传的数据
-        if(requestCode == 1)
-            if (resultCode == RESULT_OK)
-                location = data.getStringExtra("myLocation");
-
-        Log.i("location2", "location 2 = " + location);
-
-        et_start = (EditText) findViewById(R.id.et_start);
-        et_start.setText(location);
+    public void space_list(View view) {
+        Intent intent = new Intent(MainActivity.this, SpaceListActivity.class);
+        startActivityForResult (intent, 1);
     }
 
-    /**
-     * 按钮点击事件
-     *
-     * @param view
-     */
-
-    private EditText et_start;
-    private EditText et_end;
-    private EditText et_name;
-    private EditText et_phone_number;
-    private EditText et_remark;
-
-    private String response;
-    private Order order_response;
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x123) {
-                // 设置show组件显示服务器响应
-                et_start.setText(order_response.getStart_plac());
-                et_end.setText(order_response.getEnd_plac());
-                et_name.setText(order_response.getName());
-                et_phone_number.setText(order_response.getPhone_number());
-                et_remark.setText(order_response.getRemark());
-            }
-        }
-    };
-
-    public void btn_Submit(View view) {
-        et_start = (EditText) findViewById(R.id.et_start);
-        et_end = (EditText) findViewById(R.id.et_end);
-        et_name = (EditText) findViewById(R.id.et_name);
-        et_phone_number = (EditText) findViewById(R.id.et_phone_number);
-        et_remark = (EditText) findViewById(R.id.et_remark);
-
-        final Order order = new Order();
-        order.setStart_plac(et_start.getText().toString());
-        order.setEnd_plac(et_end.getText().toString());
-        order.setName(et_name.getText().toString());
-        order.setPhone_number(et_phone_number.getText().toString());
-        order.setRemark(et_remark.getText().toString());
-
-        order.setStart_plac("阳江");
-        order.setEnd_plac("广技师");
-        order.setName("傻吊志鹏");
-        order.setPhone_number("110");
-        order.setRemark("广师是我家，大家笑哈哈");
-
-        Log.i("HTTP", "开启线程准备发送");
-        Log.i("HTTP", order.toString());
-        new Thread() {
-            @Override
-            public void run() {
-                response = ClientUtils.sendPost("http://139.199.159.60:8080/Demo/servlet/testClientServlet", order);
-                if (response != null) {
-                    Log.i("TAG", response);
-                    order_response = ClientUtils.paresJSON_withGSON(response);
-                    handler.sendEmptyMessage(0x123);
-                }
-            }
-        }.start();
-    }
-
-    public void bt_map_add(View view) {
+    public void map_add(View view) {
         Intent intent = new Intent(MainActivity.this, AddOrderActivity.class);
         startActivity(intent);
     }
 
-    public void map_location_list(View view) {
-        Intent intent = new Intent(MainActivity.this, SpaceListActivity.class);
-        startActivityForResult (intent, 1);
+    public void register(View view) {
+        Intent intent = new Intent(MainActivity.this, ResisterActivity.class);
+        startActivity(intent);
     }
 }

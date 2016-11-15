@@ -27,7 +27,7 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        LinearLayout view = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.list_space, parent, false);
+        LinearLayout view = (LinearLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.ltem_space, parent, false);
         return new ViewHolder(view);
     }
 
@@ -36,15 +36,16 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
         SharedPreferences preferences = mContext.getSharedPreferences("data", 0);
 
         if (list.size() == 0)
-            holder.mTextView.setText(preferences.getString("poi" + position, "text"));
+            holder.mTextView1.setText(preferences.getString("poi" + position, "text"));
         else{
-            holder.mTextView.setText(list.get(position).getmAddress());
+            holder.mTextView1.setText(list.get(position).getmName());
+            holder.mTextView2.setText(list.get(position).getmAddress());
         }
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mContext.setResultTo(holder.mTextView.getText().toString());
+                mContext.setResultTo(holder.mTextView1.getText().toString());
             }
         });
     }
@@ -58,12 +59,14 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView;
+        public TextView mTextView1;
+        public TextView mTextView2;
         public ImageView imageView;
 
         public ViewHolder(LinearLayout view) {
             super(view);
-            mTextView = (TextView) view.findViewById(R.id.tv_list_show);
+            mTextView1 = (TextView) view.findViewById(R.id.tv_title_show);
+            mTextView2 = (TextView) view.findViewById(R.id.tv_content_show);
             imageView = (ImageView) view.findViewById(R.id.iv_list_show);
         }
     }

@@ -20,23 +20,31 @@ android {
     useLibrary 'org.apache.http.legacy' // httpClient
 }
 
+
+repositories{
+    flatDir{
+        dirs 'libs' //就是你放aar的目录地址
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-
     compile files('libs/baidumapapi_v3_5_0.jar')
     compile files('libs/locSDK_6.05.jar')
     compile files('libs/nineoldandroids-2.4.0.jar')
-
-//    support_library_demo
+    //    support_library_demo
     compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:support-v4:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
-
     compile 'com.android.support:gridlayout-v7:24.2.1'
-
-//    GSON
+    //    GSON
     compile 'com.google.code.gson:gson:2.6.2'
+
+    //    登录注册
+    compile files('libs/MobTools-2016.1012.1447.jar')
+    compile files('libs/MobCommons-2016.1012.1447.jar')
+    compile name:'SMSSDK-2.1.2',ext:'aar'
 }
