@@ -2,8 +2,6 @@ package gdin.com.penpi;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -13,27 +11,21 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.TextView;
-
-import gdin.com.penpi.activity.AddOrderActivity;
-import gdin.com.penpi.bean.Order;
-import gdin.com.penpi.fragment.MapShowFragment;
-import gdin.com.penpi.login.ResisterActivity;
-import gdin.com.penpi.util.ClientUtils;
-import gdin.com.penpi.util.Utils;
-import gdin.com.penpi.activity.SpaceListActivity;
-import gdin.com.penpi.adapter.FragmentAdapter;
-import gdin.com.penpi.fragment.OrderShowFragment;
-import gdin.com.penpi.activity.SubActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import gdin.com.penpi.activity.SubmitOrderActivity;
+import gdin.com.penpi.activity.PersonalPageActivity;
+import gdin.com.penpi.activity.SpaceListActivity;
+import gdin.com.penpi.adapter.FragmentAdapter;
+import gdin.com.penpi.client.ServiceManager;
+import gdin.com.penpi.fragment.MapShowFragment;
+import gdin.com.penpi.fragment.OrderShowFragment;
+import gdin.com.penpi.login.LoginActivity;
 
 /**
  * 一个中文版Demo App搞定所有Android的Support Library新增所有兼容控件
@@ -53,8 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;        ////定义toolbar左上角的弹出左侧菜单按扭
 
-    private MenuItem listenItem;
-    private MenuItem nolistenItem;
+    private MenuItem listernItem;                       //设置打开听单模式
+    private MenuItem nolisternItem;                     //设置关闭听单模式
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
 
         //初始化控件及布局
         initView();
+
+        // Start the service
+        ServiceManager serviceManager = new ServiceManager(this);
+        serviceManager.setNotificationIcon(R.drawable.notification);
+        serviceManager.startService();
     }
 
     private void initView() {
@@ -104,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
         //创建ViewPager的adapter
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(adapter);
+
         //千万别忘了，关联TabLayout与ViewPager
         //同时也要覆写PagerAdapter的getPageTitle方法，否则Tab没有title
         mTabLayout.setupWithViewPager(mViewPager);
@@ -117,17 +116,18 @@ public class MainActivity extends AppCompatActivity {
             Intent intent;
             switch (menuItem.getItemId()) {
                 case R.id.menu_name:
-                    intent = new Intent(MainActivity.this, SubActivity.class);
+                    intent = new Intent(MainActivity.this, PersonalPageActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.record_name:
-                    mViewPager.setCurrentItem(0);
+
                     break;
                 case R.id.config_name:
-                    mViewPager.setCurrentItem(1);
+                    ServiceManager.viewNotificationSettings(MainActivity.this);
                     break;
                 case R.id.outlogin_name:
-
+                    intent = new Intent(MainActivity.this, LoginActivity.class);
+                    startActivity(intent);
                     break;
             }
             //关闭DrawerLayout回到主界面选中的tab的fragment页
@@ -140,7 +140,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //主界面右上角的menu菜单
         getMenuInflater().inflate(R.menu.menu_main, menu);
-//        menu_item = menu_home.findItem(R.id.record_listern);
+        nolisternItem = menu.findItem(R.id.record_nolistern);
+        listernItem = menu.findItem(R.id.record_listern);
         return true;
     }
 
@@ -148,15 +149,15 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.record_listern:
-                if(!(item.isCheckable())){
-                    listenItem.setChecked(true);
+                if (!(item.isChecked())) {
+                    listernItem.setChecked(true);
                 }
                 break;
-
             case R.id.record_nolistern:
-                if(!(item.isCheckable())){
-                    nolistenItem.setChecked(true);
+                if (!(item.isChecked())) {
+                    nolisternItem.setChecked(true);
                 }
+
                 break;
 
             case android.R.id.home:
@@ -173,12 +174,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void map_add(View view) {
-        Intent intent = new Intent(MainActivity.this, AddOrderActivity.class);
+        Intent intent = new Intent(MainActivity.this, SubmitOrderActivity.class);
         startActivity(intent);
     }
 
+    /*
+    * 点击头像进入登录界面
+    * */
     public void register(View view) {
-        Intent intent = new Intent(MainActivity.this, ResisterActivity.class);
+        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 }

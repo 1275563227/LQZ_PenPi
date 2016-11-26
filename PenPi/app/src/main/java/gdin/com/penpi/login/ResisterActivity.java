@@ -1,11 +1,11 @@
 package gdin.com.penpi.login;
 
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -18,23 +18,23 @@ import android.widget.FrameLayout.LayoutParams;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import gdin.com.penpi.MainActivity;
 import gdin.com.penpi.R;
 import gdin.com.penpi.bean.User;
+import gdin.com.penpi.util.ClearEditText;
 
-public class ResisterActivity extends Activity implements OnClickListener {
+public class ResisterActivity extends AppCompatActivity implements OnClickListener {
     String APPKEY = "189f9aed6f6f0";
     String APPSECRETE = "5353a661e3caac3429057bccb5614af9";
 
     // 手机号输入框
-    private EditText inputPhoneEt;
+    private ClearEditText inputPhoneEt;
 
     // 验证码输入框
     private EditText inputCodeEt;
-    private EditText passwordEt;
+    private ClearEditText passwordEt;
 
     // 获取验证码按钮
     private Button requestCodeBtn;
@@ -57,11 +57,11 @@ public class ResisterActivity extends Activity implements OnClickListener {
      * 初始化控件
      */
     private void init() {
-        inputPhoneEt = (EditText) findViewById(R.id.register_input_phone_et);
+        inputPhoneEt = (ClearEditText) findViewById(R.id.register_input_phone_et);
         inputCodeEt = (EditText) findViewById(R.id.register_input_code_et);
         requestCodeBtn = (Button) findViewById(R.id.register_request_code_btn);
         commitBtn = (Button) findViewById(R.id.register_commit_btn);
-        passwordEt = (EditText) findViewById(R.id.passward);
+        passwordEt = (ClearEditText) findViewById(R.id.passward);
         requestCodeBtn.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
 

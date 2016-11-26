@@ -256,5 +256,6 @@ public class MapShowFragment extends Fragment {
         super.onPause();
         // 在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mapView.onPause();
+
     }
 }

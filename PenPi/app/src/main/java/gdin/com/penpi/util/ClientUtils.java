@@ -85,8 +85,8 @@ public class ClientUtils {
                     }.getType());
 
             for (Order order2 : orderList) {
-                order.setStart_plac(order2.getStart_plac());
-                order.setEnd_plac(order2.getEnd_plac());
+                order.setStart_place(order2.getStart_place());
+                order.setEnd_place(order2.getEnd_place());
                 order.setName(order2.getName());
                 order.setPhone_number(order2.getPhone_number());
                 order.setRemark(order2.getRemark());

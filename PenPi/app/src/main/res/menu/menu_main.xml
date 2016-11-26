@@ -6,6 +6,6 @@
             android:title="@string/record_listern" />
         <item
             android:id="@+id/record_nolistern"
-            android:title="关闭听单模式" />
+            android:title="@string/record_nolistern" />
     </group>
 </menu>

@@ -1,21 +1,26 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+    <!--<style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        &lt;!&ndash; Customize your theme here. &ndash;&gt;
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">@color/colorPrimary</item>
-        <!--&lt;!&ndash;状态栏的颜色&ndash;&gt;-->
+        &lt;!&ndash;&lt;!&ndash;状态栏的颜色&ndash;&gt;&ndash;&gt;
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <!--EditText,RadioButton,CheckBox的点击效果颜色-->
+        &lt;!&ndash;EditText,RadioButton,CheckBox的点击效果颜色&ndash;&gt;
         <item name="colorAccent">@color/colorAccent</item>
-        <!--<item_login name="colorAccent">#FF4081</item_login>
-        <item_login name="android:windowBackground">@android:color/white</item_login>-->
 
-        <!--<item_login name="colorPrimary">#34A2DA</item_login>-->
-        <!--<item_login name="colorPrimaryDark">#1785C6</item_login>-->
+    </style>-->
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ActivityItemTheme" parent="AppTheme">
     </style>
 
 </resources>

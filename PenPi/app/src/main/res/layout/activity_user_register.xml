@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
@@ -41,18 +41,11 @@
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_weight="0.13"
-            android:layout_height="110dp">
-
-        </RelativeLayout>
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
-            android:layout_marginTop="25dp"
+            android:layout_marginTop="100dp"
             android:orientation="horizontal">
 
             <TextView
@@ -60,16 +53,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_weight="0.21"
+                android:layout_marginRight="10dp"
                 android:text="@string/login_name" />
 
-            <EditText
+            <gdin.com.penpi.util.ClearEditText
                 android:textColorHint="#CCCCCC"
                 android:id="@+id/register_input_phone_et"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_weight="1.01"
                 android:background="@null"
                 android:ems="10"
                 android:hint="@string/login_name_hint"
@@ -81,7 +73,7 @@
             android:id="@+id/imageView5"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@drawable/login_xian" />
+            android:background="@drawable/login_thread" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -93,15 +85,16 @@
 
             <TextView
                 android:id="@+id/textView4"
-                android:layout_width="69dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                android:layout_marginRight="10dp"
                 android:text="@string/login_yan" />
 
             <EditText
                 android:textColorHint="#CCCCCC"
                 android:id="@+id/register_input_code_et"
-                android:layout_width="169dp"
+                android:layout_width="180dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:background="@null"
@@ -112,11 +105,11 @@
             <Button
                 android:id="@+id/register_request_code_btn"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="32dp"
                 android:layout_gravity="bottom"
                 android:background="#30000000"
                 android:text="@string/login_get_yan"
-                android:textSize="10dp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -124,7 +117,7 @@
             android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@drawable/login_xian" />
+            android:background="@drawable/login_thread" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -138,15 +131,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_weight="0.20"
+                android:layout_marginRight="10dp"
                 android:text="@string/login_pwd" />
 
-            <EditText
+            <gdin.com.penpi.util.ClearEditText
                 android:id="@+id/passward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                android:layout_weight="1.02"
                 android:background="@null"
                 android:ems="10"
                 android:hint="@string/login_pwd_hint"
@@ -159,7 +151,7 @@
             android:id="@+id/imageView3"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@drawable/login_xian" />
+            android:background="@drawable/login_thread" />
 
         <Button
             android:id="@+id/register_commit_btn"
@@ -167,6 +159,7 @@
             android:layout_height="62dp"
             android:layout_marginTop="20dp"
             android:text="注册"/>
+
 
         <RelativeLayout
             android:layout_width="match_parent"

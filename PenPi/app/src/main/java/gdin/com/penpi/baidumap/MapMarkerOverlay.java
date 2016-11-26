@@ -85,9 +85,9 @@ public class MapMarkerOverlay extends MapLocation {
         public boolean onMarkerClick(Marker marker) {
             // 显示一个泡泡
             if (pop == null) {
-                pop = View.inflate(context, R.layout.map_pop,
+                pop = View.inflate(context, R.layout.submit_order,
                         null);
-//                tv_title = (TextView) map_pop.findViewById(R.id.tv_title);
+//                tv_title = (TextView) submit_order.findViewById(R.id.tv_title);
                 mapView.addView(pop, createLayoutParams(marker.getPosition()));
             } else {
                 mapView.updateViewLayout(pop,

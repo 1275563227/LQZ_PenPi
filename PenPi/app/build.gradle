@@ -23,7 +23,7 @@ android {
 
 repositories{
     flatDir{
-        dirs 'libs' //就是你放aar的目录地址
+        dirs 'libs'
     }
 }
 
@@ -42,9 +42,10 @@ dependencies {
     compile 'com.android.support:gridlayout-v7:24.2.1'
     //    GSON
     compile 'com.google.code.gson:gson:2.6.2'
-
     //    登录注册
     compile files('libs/MobTools-2016.1012.1447.jar')
     compile files('libs/MobCommons-2016.1012.1447.jar')
-    compile name:'SMSSDK-2.1.2',ext:'aar'
+    compile name: 'SMSSDK-2.1.2', ext: 'aar'
+    compile 'de.hdodenhof:circleimageview:2.1.0'
+    compile files('libs/asmack.jar')
 }

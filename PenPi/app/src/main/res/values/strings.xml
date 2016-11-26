@@ -12,7 +12,8 @@
     <string name="more_name">更多</string>
     <string name="open">Open</string>
     <string name="close">Close</string>
-    <string name="record_listern">听单模式</string>
+    <string name="record_listern">打开听单模式</string>
+    <string name="record_nolistern">关闭听单模式</string>
 
     <string name="user_login">登录</string>
     <string name="user_login_name">账号</string>
