@@ -14,13 +14,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import gdin.com.penpi.activity.SubmitOrderActivity;
 import gdin.com.penpi.activity.PersonalPageActivity;
 import gdin.com.penpi.activity.SpaceListActivity;
+import gdin.com.penpi.activity.SubmitOrderActivity;
 import gdin.com.penpi.adapter.FragmentAdapter;
 import gdin.com.penpi.client.ServiceManager;
 import gdin.com.penpi.fragment.MapShowFragment;
@@ -45,6 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;        ////定义toolbar左上角的弹出左侧菜单按扭
 
+    private TextView school;                            //ToolBar显示学校
+
     private MenuItem listernItem;                       //设置打开听单模式
     private MenuItem nolisternItem;                     //设置关闭听单模式
 
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         //MainActivity的布局文件中的主要控件初始化
+        school = (TextView) this.findViewById(R.id.tv_location);
+
         mToolbar = (Toolbar) this.findViewById(R.id.tool_bar);
         mToolbar.setTitle("");
         mDrawerLayout = (DrawerLayout) this.findViewById(R.id.drawer_layout);
@@ -185,4 +190,19 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
     }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        // 取得MapLocationList回传的数据
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK)
+                school.setText(data.getStringExtra("myLocation"));
+        }
+        /*if (requestCode == 2) {
+            if (resultCode == RESULT_OK)
+                et_end.setText(data.getStringExtra("myLocation"));
+        }*/
+    }
+
 }

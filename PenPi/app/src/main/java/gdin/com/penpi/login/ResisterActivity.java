@@ -153,9 +153,9 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
 
                         user = new User();
-                        user.setACCOUNT(inputPhoneEt.getText().toString());
+                        user.setPhone_number(inputPhoneEt.getText().toString());
                         user.setYZM(inputCodeEt.getText().toString());
-                        user.setPWD(passwordEt.getText().toString());
+                        user.setPassword(passwordEt.getText().toString());
 
                         Log.i("LOGIN", user.toString());
                         Intent intent = new Intent(ResisterActivity.this, MainActivity.class);

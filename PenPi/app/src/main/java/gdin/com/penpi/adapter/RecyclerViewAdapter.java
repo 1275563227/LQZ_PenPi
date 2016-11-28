@@ -46,8 +46,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    public RecyclerViewAdapter(List<Order> fruitList) {
-        mOrderList = fruitList;
+    public RecyclerViewAdapter(List<Order> orderList) {
+        mOrderList = orderList;
     }
 
     /*public RecyclerViewAdapter(Context mContext) {
@@ -72,10 +72,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.itemView.findViewById(R.id.grab_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                addOrder(0);
             }
         });
+
         return holder;
+    }
+
+    public void addOrder(int pos) {
+        Order order = new Order("邓文","广州","梅州","3.0");
+        mOrderList.add(pos,order);
+        notifyItemInserted(pos);
     }
 
     /*@Override

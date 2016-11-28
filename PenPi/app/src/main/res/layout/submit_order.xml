@@ -183,7 +183,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:onClick="btn_return_main"
+                android:onClick="Return_Main"
                 android:text="取消" />
         </LinearLayout>
     </android.support.v7.widget.CardView>

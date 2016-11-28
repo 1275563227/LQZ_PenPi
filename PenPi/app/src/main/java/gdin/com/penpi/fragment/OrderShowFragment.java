@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -47,7 +48,7 @@ public class OrderShowFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.order_show, container, false);
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_order_show, container, false);
         return_page mRecyclerView;
     }*/
 
@@ -83,11 +84,12 @@ public class OrderShowFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.order_show, container, false);
+        view = inflater.inflate(R.layout.fragment_order_show, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         adapter = new RecyclerViewAdapter(orderList);
         mRecyclerView.setAdapter(adapter);
+        mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipe_refresh);
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);

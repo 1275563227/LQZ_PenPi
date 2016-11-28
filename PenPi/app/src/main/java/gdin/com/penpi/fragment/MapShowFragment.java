@@ -3,6 +3,7 @@ package gdin.com.penpi.fragment;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,6 +38,7 @@ public class MapShowFragment extends Fragment {
 
     private MapView mapView;
     private BaiduMap baiduMap;
+    private ViewPager viewPager;
 
     private LocationClient mLocationClient = null;
     private BDLocationListener myListener = new MyLocationListener();
@@ -48,7 +50,7 @@ public class MapShowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.map_show, container, false);
+        View view = inflater.inflate(R.layout.fragment_map_show, container, false);
         mapView = (MapView) view.findViewById(R.id.map_view);
         et_start = (EditText) getActivity().findViewById(R.id.et_start);
         et_end = (EditText) getActivity().findViewById(R.id.et_end);
@@ -78,6 +80,9 @@ public class MapShowFragment extends Fragment {
 //        new MapLocation(mapView, getActivity());
 
 //        SharedPreferences preferences = getActivity().getSharedPreferences("data", 0);
+
+        viewPager = (ViewPager) getActivity().findViewById(R.id.view_pager);
+
         return view;
     }
 

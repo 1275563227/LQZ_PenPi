@@ -26,6 +26,8 @@ import android.widget.Toast;
 
 import java.util.Random;
 
+import gdin.com.penpi.activity.OrderNotificationActivity;
+
 /**
  * This class is to notify the user of messages with NotificationManager.
  *
@@ -103,7 +105,7 @@ public class Notifier {
             //            }
 
             Intent intent = new Intent(context,
-                    NotificationDetailsActivity.class);
+                    OrderNotificationActivity.class);
             intent.putExtra(Constants.NOTIFICATION_ID, notificationId);
             intent.putExtra(Constants.NOTIFICATION_API_KEY, apiKey);
             intent.putExtra(Constants.NOTIFICATION_TITLE, title);

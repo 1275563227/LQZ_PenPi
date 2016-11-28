@@ -5,6 +5,6 @@
         android:angle="270"
         />
     <solid
-        android:color="#88cccccc"
+        android:color="#cccccc"
         />
 </shape>

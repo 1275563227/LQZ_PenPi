@@ -7,32 +7,31 @@ import org.json.JSONObject;
  * 发布订单信息的一个bean
  */
 public class Order {
+    int id;
     String start_place;
     String end_place;
     String name;
     String phone_number;
     String charges;
     String remark;
-
-    public Order(String name,String start_place,String end_place,String charges) {
-        this.name = name;
-        this.start_place = start_place;
-        this.end_place = end_place;
-        this.charges = charges;
-
-    }
+    String state;       //订单的状态
 
     public Order() {
-
-
     }
 
-    public String getCharges() {
-        return charges;
-    }
-
-    public void setCharges(String charges) {
+    public Order(String name, String start_place, String end_place, String charges) {
+        this.start_place = start_place;
+        this.end_place = end_place;
+        this.name = name;
         this.charges = charges;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getStart_place() {
@@ -51,6 +50,14 @@ public class Order {
         this.end_place = end_place;
     }
 
+    public String getPhone_number() {
+        return phone_number;
+    }
+
+    public void setPhone_number(String phone_number) {
+        this.phone_number = phone_number;
+    }
+
     public String getName() {
         return name;
     }
@@ -59,12 +66,12 @@ public class Order {
         this.name = name;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getCharges() {
+        return charges;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setCharges(String charges) {
+        this.charges = charges;
     }
 
     public String getRemark() {
@@ -75,27 +82,38 @@ public class Order {
         this.remark = remark;
     }
 
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
     @Override
     public String toString() {
         return "Order{" +
-                "start_place='" + start_place + '\'' +
+                "id=" + id +
+                ", start_place='" + start_place + '\'' +
                 ", end_place='" + end_place + '\'' +
                 ", name='" + name + '\'' +
                 ", phone_number='" + phone_number + '\'' +
                 ", charges='" + charges + '\'' +
                 ", remark='" + remark + '\'' +
+                ", state='" + state + '\'' +
                 '}';
     }
 
     public JSONObject toJSONObj() {
         JSONObject orderJson = new JSONObject();
         try {
-            orderJson.put("start_plac", this.start_place);
-            orderJson.put("end_plac", this.end_place);
+            orderJson.put("start_place", this.start_place);
+            orderJson.put("end_place", this.end_place);
             orderJson.put("name", this.name);
             orderJson.put("phone_number", this.phone_number);
             orderJson.put("charges", this.charges);
             orderJson.put("remark", this.remark);
+            orderJson.put("state", this.state);
         } catch (Exception e) {
             e.printStackTrace();
         }
