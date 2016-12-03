@@ -22,7 +22,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 
 import gdin.com.penpi.bean.Order;
-import gdin.com.penpi.util.StringSpilt;
+import gdin.com.penpi.util.SpiltStringUtil;
 
 /**
  * Broadcast receiver that handles push notification messages from the server.
@@ -72,7 +72,7 @@ public final class NotificationReceiver extends BroadcastReceiver {
             editor.putString("notificationMessage", notificationMessage);
             editor.commit();
 
-            Order order = StringSpilt.messageToOrder(notificationMessage);
+            Order order = SpiltStringUtil.messageToOrder(notificationMessage);
             notificationMessage = "快递地点：" + order.getStart_place() + ",  "
                     + "送货地点：" + order.getEnd_place() + ",  "
                     + "悬赏金：" + order.getCharges();

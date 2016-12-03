@@ -41,6 +41,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
+import gdin.com.penpi.MainActivity;
+import gdin.com.penpi.util.SubmitUtil;
+
 /**
  * This class is to manage the XMPP connection between client and server.
  *
@@ -477,6 +480,7 @@ public class XmppManager {
                     PacketListener packetListener = xmppManager
                             .getNotificationPacketListener();
                     connection.addPacketListener(packetListener, packetFilter);
+                    Constants.connectSucceed = "服务器连接成功";
                     connection.startHeartBrat();
 
                 } catch (XMPPException e) {
@@ -490,7 +494,6 @@ public class XmppManager {
                         return;
                     }
                     xmppManager.startReconnectionThread();
-
                 } catch (Exception e) {
                     Log.e(LOGTAG, "LoginTask.run()... other error");
                     Log.e(LOGTAG, "Failed to login to xmpp server. Caused by: "

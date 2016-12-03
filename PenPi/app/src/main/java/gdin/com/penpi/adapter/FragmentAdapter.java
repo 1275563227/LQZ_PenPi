@@ -25,7 +25,6 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        Log.i("Fragment", "111");
         return mFragments.get(position);
     }
 
@@ -36,7 +35,6 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        Log.i("Fragment", "333");
         return mTitles.get(position);
     }
 }

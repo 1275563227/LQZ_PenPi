@@ -1,15 +1,20 @@
 package gdin.com.penpi.util;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 
@@ -21,6 +26,7 @@ import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -254,6 +260,48 @@ public class ConnectUtil {
             // 方法二
             JSONObject userJSON = user.toJSONObj();
             httpPost.setEntity(new StringEntity(userJSON.toString(), "UTF-8"));
+
+            HttpResponse httpResponse = httpClient.execute(httpPost);
+
+            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                // 请求和响应都成功
+                HttpEntity httpEntity = httpResponse.getEntity();
+                response = EntityUtils.toString(httpEntity, "uft-8");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    public static String send_httpClient_Post(String url, String[] ss) {
+
+        String response = null;
+        try {
+            HttpClient httpClient = new DefaultHttpClient();
+
+            // Post方法
+            HttpPost httpPost = new HttpPost(url);
+
+            // 方法一
+            List<NameValuePair> params = new ArrayList<>();
+            int i = 0;
+            for (String temp: ss) {
+                i++;
+                if (i == 1) {
+                    params.add(new BasicNameValuePair("state", temp));
+                }
+                if (i == 2) {
+                    params.add(new BasicNameValuePair("id", temp));
+                }
+            }
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(params, "utf-8");
+            httpPost.setEntity(entity);
+
+            // 方法二
+//            JSONObject userJSON = user.toJSONObj();
+//            httpPost.setEntity(new StringEntity(userJSON.toString(), "UTF-8"));
 
             HttpResponse httpResponse = httpClient.execute(httpPost);
 

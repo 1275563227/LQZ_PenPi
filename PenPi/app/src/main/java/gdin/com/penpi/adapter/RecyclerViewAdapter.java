@@ -1,8 +1,13 @@
 package gdin.com.penpi.adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +17,7 @@ import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.util.SubmitUtil;
 
 
 /**
@@ -21,13 +27,26 @@ import gdin.com.penpi.bean.Order;
  * Description  :
  */
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
-    /*private int[] colors = {R.color.color_0, R.color.color_1, R.color.color_2, R.color.color_3,
-            R.color.color_4, R.color.color_5, R.color.color_6, R.color.color_7,
-            R.color.color_8, R.color.color_9,};*/
 
     private Context mContext;
 
     private List<Order> mOrderList;
+
+    private int mPosition;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                SubmitUtil.showToast(mContext, "抢单成功，请在'我的记录'查看详细信息");
+                mOrderList.remove(mPosition);
+                notifyDataSetChanged();
+            }
+            if (msg.what == 0x124) {
+                SubmitUtil.showToast(mContext, "抢单失败，该订单已被其他人获取");
+            }
+        }
+    };
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
@@ -35,6 +54,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         TextView startPlace;
         TextView endPlace;
         TextView charges;
+        TextView date;
 
         public ViewHolder(View view) {
             super(view);
@@ -42,7 +62,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             peopleName = (TextView) view.findViewById(R.id.people_name);
             startPlace = (TextView) view.findViewById(R.id.start_place);
             endPlace = (TextView) view.findViewById(R.id.end_place);
+            date = (TextView) view.findViewById(R.id.date_name);
             charges = (TextView) view.findViewById(R.id.charges_name);
+
         }
     }
 
@@ -50,73 +72,61 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         mOrderList = orderList;
     }
 
-    /*public RecyclerViewAdapter(Context mContext) {
-        this.mContext = mContext;
-    }*/
-
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-//        TextView view = (TextView) LayoutInflater.from(parent.getContext()).inflate(R.layout.ltem_space, parent, false);
-        /*CardView view = (CardView)LayoutInflater.from(parent.getContext()).inflate(R.layout.ltem_order_show, parent, false);
-        return_page new ViewHolder(view);*/
 
         if (mContext == null) {
             mContext = parent.getContext();
         }
         View view = LayoutInflater.from(mContext).inflate(R.layout.ltem_order_show, parent, false);
-        final ViewHolder holder = new ViewHolder(view);
-
-        /*
-         * 点击抢按钮的点击事件
-         * */
-        holder.itemView.findViewById(R.id.grab_icon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addOrder(0);
-            }
-        });
+        ViewHolder holder = new ViewHolder(view);
 
         return holder;
     }
 
-    public void addOrder(int pos) {
-        Order order = new Order("邓文","广州","梅州","3.0");
-        mOrderList.add(pos,order);
-        notifyItemInserted(pos);
-    }
-
-    /*@Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-
-        holder.itemView.findViewById(R.id.grab_icon).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                *//*
-                * 抢单按钮的跳转活动
-                * *//*
-                mContext.startActivity(new Intent(mContext, PersonalPageActivity.class));
+    @Override
+    public void onBindViewHolder(ViewHolder holder, final int position) {
+        if (mOrderList.size() != 0) {
+            final Order order = mOrderList.get(position);
+            if (order != null) {
+                holder.peopleName.setText(order.getName());
+                holder.startPlace.setText(order.getStart_place());
+                holder.endPlace.setText(order.getEnd_place());
+                holder.charges.setText(order.getCharges());
+                holder.date.setText(order.getDate());
+                /**
+                 * 点击抢按钮的点击事件
+                 */
+                holder.itemView.findViewById(R.id.grab_icon).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                boolean isChange = SubmitUtil.changeOrderStatetoServlet(Integer.toString(order.getId()), "已抢");
+                                Log.i("RecyclerViewAdapter", isChange + "");
+                                mPosition = position;
+                                if (isChange) {
+                                    handler.sendEmptyMessage(0x123);
+                                } else
+                                    handler.sendEmptyMessage(0x124);
+                            }
+                        }).start();
+                    }
+                });
             }
-        });
-    }*/
-
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        Order order = mOrderList.get(position);
-        holder.peopleName.setText(order.getName());
-        holder.startPlace.setText(order.getStart_place());
-        holder.endPlace.setText(order.getEnd_place());
-        holder.charges.setText(order.getCharges());
+        }
     }
 
-
+    /**
+     * 返回RecyclerView子项的数目
+     * @return
+     */
     @Override
-    /*
-    * 返回RecyclerView子项的数目
-    * 当用户提交订单信息，Item数目+1，并刷新RecyclerView
-    * */
     public int getItemCount() {
-        return mOrderList.size();
+        if (mOrderList == null) {
+            return 0;
+        } else
+            return mOrderList.size();
     }
-
 }

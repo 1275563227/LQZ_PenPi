@@ -22,6 +22,8 @@ package gdin.com.penpi.client;
  */
 public class Constants {
 
+    public static String connectSucceed = "";
+
     public static final String SHARED_PREFERENCE_NAME = "client_preferences";
 
     // PREFERENCE KEYS

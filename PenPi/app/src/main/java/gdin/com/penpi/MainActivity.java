@@ -1,7 +1,14 @@
 package gdin.com.penpi;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -11,10 +18,12 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +32,12 @@ import gdin.com.penpi.activity.PersonalPageActivity;
 import gdin.com.penpi.activity.SpaceListActivity;
 import gdin.com.penpi.activity.SubmitOrderActivity;
 import gdin.com.penpi.adapter.FragmentAdapter;
+import gdin.com.penpi.client.Constants;
 import gdin.com.penpi.client.ServiceManager;
 import gdin.com.penpi.fragment.MapShowFragment;
 import gdin.com.penpi.fragment.OrderShowFragment;
 import gdin.com.penpi.login.LoginActivity;
+import gdin.com.penpi.util.SubmitUtil;
 
 /**
  * 一个中文版Demo App搞定所有Android的Support Library新增所有兼容控件
@@ -51,6 +62,20 @@ public class MainActivity extends AppCompatActivity {
     private MenuItem listernItem;                       //设置打开听单模式
     private MenuItem nolisternItem;                     //设置关闭听单模式
 
+    private BroadcastReceiver connectionReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            ConnectivityManager connectMgr = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+            NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+            NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {// unconnect network
+                Toast.makeText(MainActivity.this, "网络连接失败，请连接上网络！", Toast.LENGTH_LONG).show();
+            }
+//            else {// connect network
+//                Toast.makeText(MainActivity.this, "网络连接成功，请下拉刷新！", Toast.LENGTH_LONG).show();
+//            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +89,22 @@ public class MainActivity extends AppCompatActivity {
         ServiceManager serviceManager = new ServiceManager(this);
         serviceManager.setNotificationIcon(R.drawable.notification);
         serviceManager.startService();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (!Constants.connectSucceed.contains("成功")){
+                    try {
+                        Thread.sleep(100);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    if (Constants.connectSucceed.contains("成功")){
+                        handler.sendEmptyMessage(0x123);
+                    }
+                }
+            }
+        }).start();
     }
 
     private void initView() {
@@ -112,6 +153,11 @@ public class MainActivity extends AppCompatActivity {
         //同时也要覆写PagerAdapter的getPageTitle方法，否则Tab没有title
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabsFromPagerAdapter(adapter);
+
+        //广播监听
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
+        registerReceiver(connectionReceiver, intentFilter);
     }
 
     private NavigationView.OnNavigationItemSelectedListener naviListener = new NavigationView.OnNavigationItemSelectedListener() {
@@ -173,19 +219,28 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * 选择地点
+     * @param view
+     */
     public void space_list(View view) {
         Intent intent = new Intent(MainActivity.this, SpaceListActivity.class);
         startActivityForResult (intent, 1);
     }
 
+    /**
+     * SubmitOrderActivity 调用
+     * @param view
+     */
     public void map_add(View view) {
         Intent intent = new Intent(MainActivity.this, SubmitOrderActivity.class);
         startActivity(intent);
     }
 
-    /*
-    * 点击头像进入登录界面
-    * */
+    /**
+     * 点击头像进入登录界面
+     * @param view
+     */
     public void register(View view) {
         Intent intent = new Intent(MainActivity.this, LoginActivity.class);
         startActivity(intent);
@@ -199,10 +254,20 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK)
                 school.setText(data.getStringExtra("myLocation"));
         }
-        /*if (requestCode == 2) {
-            if (resultCode == RESULT_OK)
-                et_end.setText(data.getStringExtra("myLocation"));
-        }*/
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(connectionReceiver);
+    }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                SubmitUtil.showToast(MainActivity.this, "PN-服务器->连接成功");
+            }
+        }
+    };
 }

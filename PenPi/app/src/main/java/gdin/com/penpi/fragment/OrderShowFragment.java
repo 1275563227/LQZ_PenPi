@@ -1,23 +1,29 @@
 package gdin.com.penpi.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.RecyclerViewAdapter;
 import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.util.SubmitUtil;
 
 
 /**
@@ -32,49 +38,36 @@ import gdin.com.penpi.bean.Order;
  */
 public class OrderShowFragment extends Fragment {
 
-    private Order[] orders = {
-      new Order("小王","遂溪","湛江","2.3"),new Order("小李","遂溪","湛江","2.3"),new Order("小张","遂溪","湛江","2.3"),new Order("小红","遂溪","湛江","2.3"),
-            new Order("小王","遂溪","湛江","2.3"),new Order("小花","遂溪","湛江","2.3"),new Order("小哎","遂溪","湛江","2.3"),new Order("小二","遂溪","湛江","2.3"),
-            new Order("小王","遂溪","湛江","2.3"),new Order("小王","遂溪","湛江","2.3"),new Order("小王","遂溪","湛江","2.3"),new Order("小王","遂溪","湛江","2.3")
-    };
     private List<Order> orderList = new ArrayList<>();
 
     private RecyclerViewAdapter adapter;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout swipeRefresh;
-    private View view;
-
-    /*@Nullable
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_order_show, container, false);
-        return_page mRecyclerView;
-    }*/
-
-    private void initOrders() {
-        orderList.clear();
-        for (int i = 0; i < 20; i++) {
-            Random random = new Random();
-            int index = random.nextInt(orders.length);
-            orderList.add(orders[index]);
-        }
-    }
 
     private void refreshOrders() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
-                    Thread.sleep(2000);
+                    if (orderList != null) {
+                        orderList.clear();
+
+                    }
+                    orderList = SubmitUtil.getOrdersfromServe();
+                    Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        initOrders();
-                        adapter.notifyDataSetChanged();
+
+                        if (orderList == null) {
+                            SubmitUtil.showToast(getActivity(), "订单已被抢光");
+                        } else {
+                            adapter = new RecyclerViewAdapter(orderList);
+                            mRecyclerView.setAdapter(adapter);
+                        }
                         swipeRefresh.setRefreshing(false);
                     }
                 });
@@ -84,9 +77,11 @@ public class OrderShowFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_order_show, container, false);
+        View view = inflater.inflate(R.layout.fragment_order_show, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
+
+//        Log.i("OrderShowFragment", orderList.toString());
         adapter = new RecyclerViewAdapter(orderList);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -100,13 +95,31 @@ public class OrderShowFragment extends Fragment {
             }
         });
 
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                orderList = SubmitUtil.getOrdersfromServe();
+//                Log.i("OrderShowFragment", "orderList = " + orderList.toString());
+                if (orderList != null){
+                    handler.sendEmptyMessage(0x123);
+                } else
+                    handler.sendEmptyMessage(0x124);
+            }
+        }).start();
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        initOrders();
-    }
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                adapter = new RecyclerViewAdapter(orderList);
+                mRecyclerView.setAdapter(adapter);
+            }
+            if (msg.what == 0x124) {
+                SubmitUtil.showToast(getActivity(), "订单已被抢光");
+            }
+        }
+    };
 
 }

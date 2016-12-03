@@ -56,7 +56,7 @@
                 android:layout_marginRight="10dp"
                 android:text="@string/login_name" />
 
-            <gdin.com.penpi.util.ClearEditText
+            <gdin.com.penpi.util.ClearEditTextUtil
                 android:textColorHint="#CCCCCC"
                 android:id="@+id/register_input_phone_et"
                 android:layout_width="match_parent"
@@ -134,7 +134,7 @@
                 android:layout_marginRight="10dp"
                 android:text="@string/login_pwd" />
 
-            <gdin.com.penpi.util.ClearEditText
+            <gdin.com.penpi.util.ClearEditTextUtil
                 android:id="@+id/passward"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

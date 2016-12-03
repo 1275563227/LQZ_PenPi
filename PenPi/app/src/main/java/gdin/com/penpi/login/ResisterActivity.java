@@ -23,18 +23,18 @@ import cn.smssdk.SMSSDK;
 import gdin.com.penpi.MainActivity;
 import gdin.com.penpi.R;
 import gdin.com.penpi.bean.User;
-import gdin.com.penpi.util.ClearEditText;
+import gdin.com.penpi.util.ClearEditTextUtil;
 
 public class ResisterActivity extends AppCompatActivity implements OnClickListener {
     String APPKEY = "189f9aed6f6f0";
     String APPSECRETE = "5353a661e3caac3429057bccb5614af9";
 
     // 手机号输入框
-    private ClearEditText inputPhoneEt;
+    private ClearEditTextUtil inputPhoneEt;
 
     // 验证码输入框
     private EditText inputCodeEt;
-    private ClearEditText passwordEt;
+    private ClearEditTextUtil passwordEt;
 
     // 获取验证码按钮
     private Button requestCodeBtn;
@@ -57,11 +57,11 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
      * 初始化控件
      */
     private void init() {
-        inputPhoneEt = (ClearEditText) findViewById(R.id.register_input_phone_et);
+        inputPhoneEt = (ClearEditTextUtil) findViewById(R.id.register_input_phone_et);
         inputCodeEt = (EditText) findViewById(R.id.register_input_code_et);
         requestCodeBtn = (Button) findViewById(R.id.register_request_code_btn);
         commitBtn = (Button) findViewById(R.id.register_commit_btn);
-        passwordEt = (ClearEditText) findViewById(R.id.passward);
+        passwordEt = (ClearEditTextUtil) findViewById(R.id.passward);
         requestCodeBtn.setOnClickListener(this);
         commitBtn.setOnClickListener(this);
 

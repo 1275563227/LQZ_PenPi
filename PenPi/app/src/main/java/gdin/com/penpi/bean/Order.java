@@ -2,11 +2,13 @@ package gdin.com.penpi.bean;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
+
 /**
  * Created by Administrator on 2016/11/5.
  * 发布订单信息的一个bean
  */
-public class Order {
+public class Order implements Serializable {
     int id;
     String start_place;
     String end_place;
@@ -15,14 +17,16 @@ public class Order {
     String charges;
     String remark;
     String state;       //订单的状态
+    String date;
 
     public Order() {
     }
 
-    public Order(String name, String start_place, String end_place, String charges) {
+    public Order(String name, String start_place, String end_place, String charges, String date) {
+        this.name = name;
         this.start_place = start_place;
         this.end_place = end_place;
-        this.name = name;
+        this.date = date;
         this.charges = charges;
     }
 
@@ -90,6 +94,15 @@ public class Order {
         this.state = state;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+
     @Override
     public String toString() {
         return "Order{" +
@@ -101,7 +114,40 @@ public class Order {
                 ", charges='" + charges + '\'' +
                 ", remark='" + remark + '\'' +
                 ", state='" + state + '\'' +
+                ", date='" + date + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Order order = (Order) o;
+
+        if (id != order.id) return false;
+        if (!start_place.equals(order.start_place)) return false;
+        if (!end_place.equals(order.end_place)) return false;
+        if (!name.equals(order.name)) return false;
+        if (phone_number != null ? !phone_number.equals(order.phone_number) : order.phone_number != null)
+            return false;
+        if (!charges.equals(order.charges)) return false;
+        if (remark != null ? !remark.equals(order.remark) : order.remark != null) return false;
+        return state != null ? state.equals(order.state) : order.state == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + start_place.hashCode();
+        result = 31 * result + end_place.hashCode();
+        result = 31 * result + name.hashCode();
+        result = 31 * result + (phone_number != null ? phone_number.hashCode() : 0);
+        result = 31 * result + charges.hashCode();
+        result = 31 * result + (remark != null ? remark.hashCode() : 0);
+        result = 31 * result + (state != null ? state.hashCode() : 0);
+        return result;
     }
 
     public JSONObject toJSONObj() {
@@ -114,9 +160,16 @@ public class Order {
             orderJson.put("charges", this.charges);
             orderJson.put("remark", this.remark);
             orderJson.put("state", this.state);
+            orderJson.put("date",this.date);
         } catch (Exception e) {
             e.printStackTrace();
+
         }
         return orderJson;
     }
+
+    /*
+    * 判断Order是否是同个
+    * 直接根据时间判断
+    * */
 }

@@ -16,10 +16,11 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
+import gdin.com.penpi.MainActivity;
 import gdin.com.penpi.R;
 import gdin.com.penpi.bean.Order;
 import gdin.com.penpi.bean.User;
-import gdin.com.penpi.util.ConnectUtil;
+import gdin.com.penpi.util.SubmitUtil;
 
 /**
  * Created by Administrator on 2016/11/7.
@@ -47,6 +48,8 @@ public class SubmitOrderActivity extends AppCompatActivity {
     private double common_price;
     private double Vip_price;
     private double final_price;
+
+    private final Order order = new Order();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -138,56 +141,34 @@ public class SubmitOrderActivity extends AppCompatActivity {
     };
 
     public void Submit_to_Sever(View view) {
-//        forCaculator(view);
-//        et_start = (EditText) findViewById(R.id.et_start);
-//        et_end = (EditText) findViewById(R.id.et_end);
-//        et_name = (EditText) findViewById(R.id.et_name);
-//        et_phone_number = (EditText) findViewById(R.id.et_phone_number);
-//        et_remark = (EditText) findViewById(R.id.et_remark);
+        forCaculator(view);
+        et_start = (EditText) findViewById(R.id.et_start);
+        et_end = (EditText) findViewById(R.id.et_end);
+        et_name = (EditText) findViewById(R.id.et_name);
+        et_phone_number = (EditText) findViewById(R.id.et_phone_number);
+        et_remark = (EditText) findViewById(R.id.et_remark);
 
-        final Order order = new Order();
-        /*order.setStart_place(et_start.getText().toString());
+//        final Order order = new Order();
+        order.setStart_place(et_start.getText().toString());
         order.setEnd_place(et_end.getText().toString());
         order.setName(et_name.getText().toString());
         order.setPhone_number(et_phone_number.getText().toString());
         order.setRemark(et_remark.getText().toString());
-        order.setCharges(Double.toString(final_price));*/
+        order.setCharges(Double.toString(final_price));
 
-        order.setStart_place("阳江");
-        order.setEnd_place("广技师");
-        order.setName("SB志鹏");
-        order.setPhone_number("110");
-        order.setRemark("广师是我家，大家笑哈哈");
-        order.setState("未取");
-        order.setCharges("80.65");
+//        order.setStart_place("阳江");
+//        order.setEnd_place("广技师");
+//        order.setName("SB志鹏");
+//        order.setPhone_number("110");
+//        order.setRemark("广师是我家，大家笑哈哈");
+//        order.setState("未取");
+//        order.setCharges("80.65");
 
-        final User user = new User();
-        user.setPassword("22");
-        user.setUsername("操逼志鹏");
-        user.setPhone_number("44");
+//        final User user = new User();
+//        user.setPassword("22");
+//        user.setUsername("操逼志鹏");
+//        user.setPhone_number("44");
 
-        Log.i("HTTP", "开启线程准备发送");
-        Log.i("HTTP", order.toString());
-        Log.i("HTTP", user.toString());
-        new Thread() {
-            @Override
-            public void run() {
-                Log.i("HTTP", "start...");
-                String response = ConnectUtil
-                        .send_httpClient_Post("http://penpi.lqzcloud.cn:8080/Androidpn-tomcat/servlet/addOrderServlet", order);
-//                        .send_httpClient_Post("http://penpi.lqzcloud.cn:8080/Androidpn-tomcat/servlet/addOrderServlet", order);
-//                        .send_httpClient_Post("http://192.168.1.118:8080/servlet/registerServlet", user);
-
-                Log.i("HTTP", "response = " + response);
-                Log.i("HTTP", "receive...");
-                if (response != null) {
-                    user_response = ConnectUtil.paresJSON_withGSON_toUser(response);
-                    handler.sendEmptyMessage(0x123);
-
-                    Log.i("HTTP", "end...");
-                }
-            }
-        }.start();
     }
 
     /**
@@ -247,8 +228,15 @@ public class SubmitOrderActivity extends AppCompatActivity {
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加确定按钮
                     @Override
                     public void onClick(DialogInterface dialog, int which) {//确定按钮的响应事件
-
-//                        finish();
+                        Log.i("HTTP", "开启线程准备发送");
+                        Log.i("HTTP", order.toString());
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                SubmitUtil.addOrdertoServe(order);
+                            }
+                        }.start();
+                        finish();
                     }
                 })
                 .setNegativeButton("返回", new DialogInterface.OnClickListener() {//添加返回按钮
@@ -258,5 +246,23 @@ public class SubmitOrderActivity extends AppCompatActivity {
 //                        Log.i("alertdialog", " 请保存数据！");
                     }
                 }).show();//在按键响应事件中显示此对话框
+    }
+
+    /**
+     * 取消点击事件
+     * @param view
+     */
+    public void Return_Main(View view) {
+        Intent intent = new Intent(SubmitOrderActivity.this,MainActivity.class);
+        startActivity(intent);
+    }
+
+    /**
+     * 收费标准点击事件
+     * @param view
+     */
+    public void Charges_Standrad(View view) {
+        Intent intent = new Intent(SubmitOrderActivity.this, ChargesStandradActivity.class);
+        startActivity(intent);
     }
 }

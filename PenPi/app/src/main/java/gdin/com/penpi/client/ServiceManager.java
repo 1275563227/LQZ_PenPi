@@ -97,6 +97,7 @@ public final class ServiceManager {
             @Override
             public void run() {
                 Intent intent = NotificationService.getIntent();
+//                intent.setPackage("gdin.com.penpi.client");
                 context.startService(intent);
             }
         });
