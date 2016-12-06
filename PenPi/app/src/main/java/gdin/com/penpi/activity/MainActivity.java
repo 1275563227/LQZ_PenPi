@@ -1,9 +1,10 @@
-package gdin.com.penpi;
+package gdin.com.penpi.activity;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
@@ -25,19 +26,32 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
+import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiResult;
+import com.baidu.mapapi.search.poi.PoiSearch;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import gdin.com.penpi.activity.PersonalPageActivity;
-import gdin.com.penpi.activity.SpaceListActivity;
-import gdin.com.penpi.activity.SubmitOrderActivity;
+import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.FragmentAdapter;
+import gdin.com.penpi.baidumap.MapMarkerOverlay;
 import gdin.com.penpi.client.Constants;
 import gdin.com.penpi.client.ServiceManager;
+import gdin.com.penpi.db.DBManger;
+import gdin.com.penpi.db.MyDatabaseHelper;
 import gdin.com.penpi.fragment.MapShowFragment;
 import gdin.com.penpi.fragment.OrderShowFragment;
 import gdin.com.penpi.login.LoginActivity;
+import gdin.com.penpi.transformer.RotateDownPageTransformer;
 import gdin.com.penpi.util.SubmitUtil;
+import gdin.com.penpi.transformer.DepthPageTransformer;
 
 /**
  * 一个中文版Demo App搞定所有Android的Support Library新增所有兼容控件
@@ -59,8 +73,12 @@ public class MainActivity extends AppCompatActivity {
 
     private TextView school;                            //ToolBar显示学校
 
-    private MenuItem listernItem;                       //设置打开听单模式
-    private MenuItem nolisternItem;                     //设置关闭听单模式
+    private MenuItem messageRecord;                       //设置消息记录
+
+    private MyDatabaseHelper dataHelper;
+    private SQLiteDatabase db;
+
+    private PoiSearch mPoiSearch = null;
 
     private BroadcastReceiver connectionReceiver = new BroadcastReceiver() {
         @Override
@@ -85,21 +103,26 @@ public class MainActivity extends AppCompatActivity {
         //初始化控件及布局
         initView();
 
-        // Start the service
+        /**
+         * Start the service
+         */
         ServiceManager serviceManager = new ServiceManager(this);
         serviceManager.setNotificationIcon(R.drawable.notification);
         serviceManager.startService();
 
+        /**
+         * 判断是否与“长连接”连接成功
+         */
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (!Constants.connectSucceed.contains("成功")){
+                while (!Constants.connectSucceed.contains("成功")) {
                     try {
                         Thread.sleep(100);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    if (Constants.connectSucceed.contains("成功")){
+                    if (Constants.connectSucceed.contains("成功")) {
                         handler.sendEmptyMessage(0x123);
                     }
                 }
@@ -148,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
         //创建ViewPager的adapter
         FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(adapter);
+        mViewPager.setPageTransformer(true,new RotateDownPageTransformer());
 
         //千万别忘了，关联TabLayout与ViewPager
         //同时也要覆写PagerAdapter的getPageTitle方法，否则Tab没有title
@@ -158,6 +182,44 @@ public class MainActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
         registerReceiver(connectionReceiver, intentFilter);
+
+        initPoiSearch();
+    }
+
+    /**
+     * 初始化学校地址的监听
+     */
+    private void initPoiSearch() {
+        mPoiSearch = PoiSearch.newInstance();
+        mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
+            @Override
+            public void onGetPoiResult(PoiResult poiResult) {
+                // 获取POI检索结果
+                if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
+                    Log.i("RecyclerViewAdapter", "未找到结果,请重新输入");
+                }
+                if (poiResult.getAllPoi() == null) {
+                    Log.i("RecyclerViewAdapter", "未找到结果,请重新输入");
+                } else {
+                    LatLng poilocation = poiResult.getAllPoi().get(0).location;
+                    if (poilocation != null) {
+                        Double latitude = poilocation.latitude;
+                        Double longitude = poilocation.longitude;
+                        LatLng latLng = new LatLng(latitude, longitude);
+
+                        MapMarkerOverlay mapMarkerOverlay = MapMarkerOverlay.getMapMarkerOverlay();
+                        BaiduMap baiduMap = mapMarkerOverlay.getBaiduMap();
+                        baiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(latLng));
+                        baiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(16));
+                    }
+                }
+            }
+
+            @Override
+            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+
+            }
+        });
     }
 
     private NavigationView.OnNavigationItemSelectedListener naviListener = new NavigationView.OnNavigationItemSelectedListener() {
@@ -171,7 +233,10 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case R.id.record_name:
-
+                    dataHelper = DBManger.getInstance(MainActivity.this);
+                    db = dataHelper.getWritableDatabase();
+                    intent = new Intent(MainActivity.this, OrderRecordActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.config_name:
                     ServiceManager.viewNotificationSettings(MainActivity.this);
@@ -191,24 +256,14 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         //主界面右上角的menu菜单
         getMenuInflater().inflate(R.menu.menu_main, menu);
-        nolisternItem = menu.findItem(R.id.record_nolistern);
-        listernItem = menu.findItem(R.id.record_listern);
+        messageRecord = menu.findItem(R.id.message);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.record_listern:
-                if (!(item.isChecked())) {
-                    listernItem.setChecked(true);
-                }
-                break;
-            case R.id.record_nolistern:
-                if (!(item.isChecked())) {
-                    nolisternItem.setChecked(true);
-                }
-
+            case R.id.message:
                 break;
 
             case android.R.id.home:
@@ -221,15 +276,17 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 选择地点
+     *
      * @param view
      */
     public void space_list(View view) {
         Intent intent = new Intent(MainActivity.this, SpaceListActivity.class);
-        startActivityForResult (intent, 1);
+        startActivityForResult(intent, 1);
     }
 
     /**
      * SubmitOrderActivity 调用
+     *
      * @param view
      */
     public void map_add(View view) {
@@ -239,6 +296,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * 点击头像进入登录界面
+     *
      * @param view
      */
     public void register(View view) {
@@ -251,8 +309,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // 取得MapLocationList回传的数据
         if (requestCode == 1) {
-            if (resultCode == RESULT_OK)
+            if (resultCode == RESULT_OK) {
                 school.setText(data.getStringExtra("myLocation"));
+                PoiCitySearchOption poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(data.getStringExtra("myLocation"));
+                mViewPager.setCurrentItem(1);
+                mPoiSearch.searchInCity(poiCitySearchOption);
+            }
         }
     }
 
@@ -270,4 +332,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     };
+
+    public static ViewPager getmViewPager() {
+        return mViewPager;
+    }
 }

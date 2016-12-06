@@ -17,7 +17,6 @@ import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
-import com.baidu.mapapi.model.LatLng;
 
 import java.util.List;
 
@@ -30,19 +29,20 @@ import gdin.com.penpi.R;
 
 public class MapLocation {
 
-    protected LatLng gjs = new LatLng(23.137158, 113.377325);
-
     protected MapView mapView;
-    private Context context;
+
+    private Context mContext;
+
     protected BaiduMap baiduMap;
 
     private LocationClient mLocationClient = null;
+
     private BDLocationListener myListener = new MyLocationListener();
 
-    public MapLocation(MapView view, Context mycentext) {
+    public MapLocation(MapView view, Context mCentext) {
 
         this.mapView = view;
-        this.context = mycentext;
+        this.mContext = mCentext;
         baiduMap = mapView.getMap(); // 获取地图控制器
 
         // 隐藏缩放按钮、比例尺
@@ -55,11 +55,11 @@ public class MapLocation {
         mapView.showScaleControl(false); // 隐藏比例尺
 
         // 设置地图中心点为广技师
-//        mapStatusUpdate = MapStatusUpdateFactory.newLatLng(gjs);
+//        MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.newLatLng(gjs);
 //        baiduMap.setMapStatus(mapStatusUpdate);
 
         // 设置地图缩放为15
-        MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.zoomTo(17);
+        MapStatusUpdate mapStatusUpdate = MapStatusUpdateFactory.zoomTo(18);
         baiduMap.setMapStatus(mapStatusUpdate);
 
         // 获取地图Ui控制器：隐藏指南针
@@ -67,7 +67,7 @@ public class MapLocation {
         // uiSettings.setCompassEnabled(false); // 不显示指南针
 
         // 定位
-        mLocationClient = new LocationClient(context.getApplicationContext()); // 声明LocationClient类
+        mLocationClient = new LocationClient(mContext.getApplicationContext()); // 声明LocationClient类
         mLocationClient.registerLocationListener(myListener); // 注册监听函数
         initLocation();
         baiduMap.setMyLocationEnabled(true); // 开启定位图层
@@ -80,8 +80,7 @@ public class MapLocation {
         // 在这个方法里面接收定位结果
         @Override
         public void onReceiveLocation(BDLocation location) {
-
-            SharedPreferences.Editor editor = context.getSharedPreferences("data", 0).edit();
+            SharedPreferences.Editor editor = mContext.getSharedPreferences("map_location", 0).edit();
 
             if (location != null) {
                 MyLocationData.Builder builder = new MyLocationData.Builder();
@@ -118,14 +117,12 @@ public class MapLocation {
                 sb.append("\naddr : ");
                 sb.append(location.getAddrStr());
 
-                editor.putString("location", location.getAddrStr().substring(5));
-
             } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {// 网络定位结果
                 sb.append("\n网络定位成功");
                 sb.append("\naddr : ");
                 sb.append(location.getAddrStr());
 
-                editor.putString("location", location.getAddrStr().substring(5));
+                editor.putString("location", location.getAddrStr().substring(8));
 
                 // 运营商信息
                 sb.append("\noperationers : ");
@@ -148,24 +145,25 @@ public class MapLocation {
             sb.append("\nlocationdescribe : ");
             sb.append(location.getLocationDescribe());// 位置语义化信息
 
+
             List<Poi> list = location.getPoiList();// POI数据
             if (list != null) {
                 sb.append("\npoilist size = : ");
                 sb.append(list.size());
+
+                editor.putInt("poiSize", list.size());
                 int i = 0;
                 for (Poi p : list) {
                     sb.append("\npoi= : ");
                     sb.append(p.getId() + " " + p.getName() + " " + p.getRank());
                     editor.putString("poi" + i++, p.getName());
                 }
-                i = 0;
             }
-            Log.i("Location", sb.toString());
+            Log.i("MapLocation", sb.toString());
 
             editor.commit();
         }
     }
-
 
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -189,13 +187,10 @@ public class MapLocation {
     /**
      * 设置定位图层的配置
      */
-    private void setMyLocationConfigeration(
-            MyLocationConfiguration.LocationMode mode) {
+    private void setMyLocationConfigeration(MyLocationConfiguration.LocationMode mode) {
         boolean enableDirection = true; // 设置允许显示方向
-        BitmapDescriptor customMarker = BitmapDescriptorFactory
-                .fromResource(R.drawable.map_location); // 自定义定位的图标
-        MyLocationConfiguration config = new MyLocationConfiguration(mode,
-                enableDirection, customMarker);
+        BitmapDescriptor customMarker = BitmapDescriptorFactory.fromResource(R.drawable.map_location); // 自定义定位的图标
+        MyLocationConfiguration config = new MyLocationConfiguration(mode, enableDirection, customMarker);
         baiduMap.setMyLocationConfigeration(config);
     }
 
@@ -204,7 +199,7 @@ public class MapLocation {
         LocationClientOption option = new LocationClientOption();
         option.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);// 可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         option.setCoorType("bd09ll");// 可选，默认gcj02，设置返回的定位结果坐标系
-        int span = 50000;
+        int span = 60000;
         option.setScanSpan(span);// 可选，默认0，即仅定位一次，设置发起定位请求的间隔需要大于等于1000ms才是有效的
         option.setIsNeedAddress(true);// 可选，设置是否需要地址信息，默认不需要
         option.setOpenGps(true);// 可选，默认false,设置是否使用gps
@@ -215,5 +210,13 @@ public class MapLocation {
         option.SetIgnoreCacheException(false);// 可选，默认false，设置是否收集CRASH信息，默认收集
         option.setEnableSimulateGps(false);// 可选，默认false，设置是否需要过滤gps仿真结果，默认需要
         mLocationClient.setLocOption(option);
+    }
+
+    public LocationClient getLocationClient() {
+        return mLocationClient;
+    }
+
+    public BaiduMap getBaiduMap() {
+        return baiduMap;
     }
 }

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * 发布订单信息的一个bean
  */
 public class Order implements Serializable {
-    int id;
+    String id;
     String start_place;
     String end_place;
     String name;
@@ -30,11 +30,11 @@ public class Order implements Serializable {
         this.charges = charges;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -118,41 +118,24 @@ public class Order implements Serializable {
                 '}';
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Order order = (Order) o;
-
-        if (id != order.id) return false;
-        if (!start_place.equals(order.start_place)) return false;
-        if (!end_place.equals(order.end_place)) return false;
-        if (!name.equals(order.name)) return false;
-        if (phone_number != null ? !phone_number.equals(order.phone_number) : order.phone_number != null)
-            return false;
-        if (!charges.equals(order.charges)) return false;
-        if (remark != null ? !remark.equals(order.remark) : order.remark != null) return false;
-        return state != null ? state.equals(order.state) : order.state == null;
-
+    public String toGrabOrderString() {
+        return this.getId() + ","
+                + this.getStart_place() + ","
+                + this.getEnd_place() + ","
+                + this.getName() + ","
+                + this.getPhone_number() + ","
+                + this.getCharges() + ","
+                + this.getRemark() + ","
+                + this.getState() + ","
+                + this.getDate();
     }
 
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + start_place.hashCode();
-        result = 31 * result + end_place.hashCode();
-        result = 31 * result + name.hashCode();
-        result = 31 * result + (phone_number != null ? phone_number.hashCode() : 0);
-        result = 31 * result + charges.hashCode();
-        result = 31 * result + (remark != null ? remark.hashCode() : 0);
-        result = 31 * result + (state != null ? state.hashCode() : 0);
-        return result;
-    }
+
 
     public JSONObject toJSONObj() {
         JSONObject orderJson = new JSONObject();
         try {
+            orderJson.put("id",this.id);
             orderJson.put("start_place", this.start_place);
             orderJson.put("end_place", this.end_place);
             orderJson.put("name", this.name);

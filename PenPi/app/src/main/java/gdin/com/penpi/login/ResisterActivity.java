@@ -20,7 +20,6 @@ import android.widget.Toast;
 
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
-import gdin.com.penpi.MainActivity;
 import gdin.com.penpi.R;
 import gdin.com.penpi.bean.User;
 import gdin.com.penpi.util.ClearEditTextUtil;
@@ -158,7 +157,7 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
                         user.setPassword(passwordEt.getText().toString());
 
                         Log.i("LOGIN", user.toString());
-                        Intent intent = new Intent(ResisterActivity.this, MainActivity.class);
+                        Intent intent = new Intent(ResisterActivity.this, LoginActivity.class);
                         startActivity(intent);
 
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {

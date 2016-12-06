@@ -67,7 +67,8 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="match_parent"
                 android:layout_height="35dp"
-                android:background="?attr/colorPrimary" />
+                android:background="?attr/colorPrimary"
+                app:tabMode="fixed" />
 
         </android.support.design.widget.AppBarLayout>
 

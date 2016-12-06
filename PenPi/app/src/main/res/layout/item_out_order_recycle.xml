@@ -37,15 +37,35 @@
                         android:id="@+id/people_tilte"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="用户名:"
-                        android:textSize="20sp" />
+                        android:text="订单编号:"
+                        android:textSize="16sp" />
 
                     <TextView
-                        android:id="@+id/people_name"
+                        android:id="@+id/order_people_id"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="20sp" />
-                    <!--显示用户的名字-->
+                        android:textSize="16sp" />
+                    <!--显示订单的编号-->
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/name_tilte"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="用户姓名:"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/order_people_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp" />
+                    <!--显示用户姓名-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -59,15 +79,13 @@
                         android:layout_height="wrap_content"
                         android:text="快递地点:"
                         android:textSize="16sp" />
-
                     <TextView
-                        android:id="@+id/start_place"
+                        android:id="@+id/order_start_place"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp" />
-                    <!--显示快递的地点-->
+                    <!--显示快递地点-->
                 </LinearLayout>
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -79,25 +97,43 @@
                         android:layout_height="wrap_content"
                         android:text="送货地点:"
                         android:textSize="16sp" />
-
                     <TextView
-                        android:id="@+id/end_place"
+                        android:id="@+id/order_end_place"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp" />
                     <!--显示送货地点-->
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/Phone_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="联系电话:"
+                        android:textSize="16sp" />
+                    <TextView
+                        android:id="@+id/Phonenum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp" />
+                    <!--显示联系电话-->
+                </LinearLayout>
+
 
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/grab_icon"
+            <Button
+                android:id="@+id/foruse_icon"
                 android:layout_width="70dp"
                 android:layout_height="70dp"
+                android:layout_gravity="center_vertical"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_gravity="center_vertical"
-                android:src="@drawable/order_grab" />
+                />
         </LinearLayout>
 
         <LinearLayout
@@ -117,14 +153,15 @@
                     android:id="@+id/money_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="悬赏金:"
+                    android:text="悬赏金额:"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/charges_name"
+                    android:id="@+id/order_charges_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp" />
+                <!--显示悬赏金额-->
             </LinearLayout>
 
             <LinearLayout
@@ -147,6 +184,7 @@
                     android:gravity="right"
                     android:textColor="#777"
                     android:textSize="16sp" />
+                <!--显示发布日期-->
             </LinearLayout>
         </LinearLayout>
 

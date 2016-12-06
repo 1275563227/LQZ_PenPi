@@ -8,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-import gdin.com.penpi.MainActivity;
 import gdin.com.penpi.R;
 import gdin.com.penpi.bean.Order;
 import gdin.com.penpi.client.LogUtil;

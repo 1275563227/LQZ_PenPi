@@ -1,28 +1,27 @@
 package gdin.com.penpi.fragment;
 
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.RecyclerViewAdapter;
 import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.util.ComparatorDateUtil;
 import gdin.com.penpi.util.SubmitUtil;
 
 
@@ -44,11 +43,14 @@ public class OrderShowFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout swipeRefresh;
 
+    private boolean mIsRefreshing = false;
+
     private void refreshOrders() {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
+                    mIsRefreshing = true;
                     if (orderList != null) {
                         orderList.clear();
 
@@ -65,14 +67,37 @@ public class OrderShowFragment extends Fragment {
                         if (orderList == null) {
                             SubmitUtil.showToast(getActivity(), "订单已被抢光");
                         } else {
+                            //刷新排序（时间）
+                            ComparatorDateUtil c = new ComparatorDateUtil();
+                            Collections.sort(orderList, c);
                             adapter = new RecyclerViewAdapter(orderList);
                             mRecyclerView.setAdapter(adapter);
                         }
                         swipeRefresh.setRefreshing(false);
+                        mIsRefreshing = false;
                     }
                 });
             }
         }).start();
+
+
+        /*
+        * RecycleView下拉拉取新数据的时候，同时在向上
+        * 滑动RecycleView时程序就崩溃了
+        * */
+        mRecyclerView.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (mIsRefreshing) {
+                    Log.d("OrderShowFragment",String.valueOf(mIsRefreshing));
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });
+
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -100,7 +125,7 @@ public class OrderShowFragment extends Fragment {
             public void run() {
                 orderList = SubmitUtil.getOrdersfromServe();
 //                Log.i("OrderShowFragment", "orderList = " + orderList.toString());
-                if (orderList != null){
+                if (orderList != null) {
                     handler.sendEmptyMessage(0x123);
                 } else
                     handler.sendEmptyMessage(0x124);
@@ -113,6 +138,9 @@ public class OrderShowFragment extends Fragment {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
+                //对从服务器传入的orderList进行排序
+                ComparatorDateUtil c = new ComparatorDateUtil();
+                Collections.sort(orderList, c);
                 adapter = new RecyclerViewAdapter(orderList);
                 mRecyclerView.setAdapter(adapter);
             }

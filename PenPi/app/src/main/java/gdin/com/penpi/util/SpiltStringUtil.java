@@ -20,7 +20,8 @@ public class SpiltStringUtil {
         String[] MessageSpilts = message.split(",");
         Log.i("SpiltStringUtil", message);
         if (MessageSpilts.length > 1) {
-            order.setId(Integer.parseInt(MessageSpilts[0]));
+//            order.setId(Integer.parseInt(MessageSpilts[0]));
+            order.setId(MessageSpilts[0]);
             order.setStart_place(MessageSpilts[1]);
             order.setEnd_place(MessageSpilts[2]);
             order.setName(MessageSpilts[3]);

@@ -1,11 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/record_listern"
-            android:checked="true"
-            android:title="@string/record_listern" />
-        <item
-            android:id="@+id/record_nolistern"
-            android:title="@string/record_nolistern" />
-    </group>
+    <!--<group android:checkableBehavior="single">-->
+        <!--<item-->
+            <!--android:id="@+id/record_listern"-->
+            <!--android:checked="true"-->
+            <!--android:title="@string/record_listern" />-->
+        <!--<item-->
+            <!--android:id="@+id/record_nolistern"-->
+            <!--android:title="@string/record_nolistern" />-->
+    <!--</group>-->
+    <item
+        android:id="@+id/message"
+        android:title="@string/message" />
+
 </menu>

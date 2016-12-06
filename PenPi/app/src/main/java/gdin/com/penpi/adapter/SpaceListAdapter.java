@@ -33,11 +33,11 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        SharedPreferences preferences = mContext.getSharedPreferences("data", 0);
+        SharedPreferences preferences = mContext.getSharedPreferences("map_location", 0);
 
         if (list.size() == 0)
             holder.mTextView1.setText(preferences.getString("poi" + position, "text"));
-        else{
+        else {
             holder.mTextView1.setText(list.get(position).getmName());
             holder.mTextView2.setText(list.get(position).getmAddress());
         }
@@ -52,10 +52,10 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
 
     @Override
     public int getItemCount() {
-        if (list.size() == 0){
+        if (list.size() == 0) {
             SharedPreferences preferences = mContext.getSharedPreferences("data", 0);
             return preferences.getInt("poiSize", 12);
-        }else return list.size();
+        } else return list.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

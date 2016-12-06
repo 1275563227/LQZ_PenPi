@@ -37,4 +37,5 @@
     <string name="login_statement_1">注册代表你同意</string>
     <string name="login_statement_2">PenPi用户服务协议和隐私条款</string>
     <string name="title_activity_login">Sign in</string>
+    <string name="message">消息记录</string>
 </resources>

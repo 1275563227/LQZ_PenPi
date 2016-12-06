@@ -41,7 +41,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.Future;
 
-import gdin.com.penpi.MainActivity;
 import gdin.com.penpi.util.SubmitUtil;
 
 /**
@@ -480,7 +479,7 @@ public class XmppManager {
                     PacketListener packetListener = xmppManager
                             .getNotificationPacketListener();
                     connection.addPacketListener(packetListener, packetFilter);
-                    Constants.connectSucceed = "服务器连接成功";
+                    SubmitUtil.showToast(context, "网络连接成功");
                     connection.startHeartBrat();
 
                 } catch (XMPPException e) {

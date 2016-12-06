@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import gdin.com.penpi.MainActivity;
+import gdin.com.penpi.activity.MainActivity;
 import gdin.com.penpi.R;
 
 public class LoginActivity extends AppCompatActivity {

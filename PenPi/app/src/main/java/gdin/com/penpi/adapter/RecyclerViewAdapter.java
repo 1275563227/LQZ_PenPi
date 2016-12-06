@@ -1,10 +1,8 @@
 package gdin.com.penpi.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -13,9 +11,24 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.BitmapDescriptor;
+import com.baidu.mapapi.map.BitmapDescriptorFactory;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MarkerOptions;
+import com.baidu.mapapi.model.LatLng;
+import com.baidu.mapapi.search.core.SearchResult;
+import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
+import com.baidu.mapapi.search.poi.PoiCitySearchOption;
+import com.baidu.mapapi.search.poi.PoiDetailResult;
+import com.baidu.mapapi.search.poi.PoiResult;
+import com.baidu.mapapi.search.poi.PoiSearch;
+
 import java.util.List;
 
+import gdin.com.penpi.activity.MainActivity;
 import gdin.com.penpi.R;
+import gdin.com.penpi.baidumap.MapMarkerOverlay;
 import gdin.com.penpi.bean.Order;
 import gdin.com.penpi.util.SubmitUtil;
 
@@ -34,6 +47,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private int mPosition;
 
+    private PoiSearch mPoiSearch = null;
+
+    private PoiCitySearchOption poiCitySearchOption = null;
+
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -48,7 +65,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     };
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView peopleName;
         TextView startPlace;
@@ -64,12 +81,70 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             endPlace = (TextView) view.findViewById(R.id.end_place);
             date = (TextView) view.findViewById(R.id.date_name);
             charges = (TextView) view.findViewById(R.id.charges_name);
-
         }
     }
 
+    int i = 0;
+
     public RecyclerViewAdapter(List<Order> orderList) {
         mOrderList = orderList;
+        mPoiSearch = PoiSearch.newInstance();
+        mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
+            @Override
+            public void onGetPoiResult(PoiResult poiResult) {
+                // 获取POI检索结果
+                if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
+                    Log.i("RecyclerViewAdapter", "未找到结果,请重新输入");
+                }
+                if (poiResult.getAllPoi() == null) {
+                    Log.i("RecyclerViewAdapter", "未找到结果,请重新输入");
+                } else {
+                    LatLng poilocation = poiResult.getAllPoi().get(0).location;
+                    if (poilocation != null) {
+                        Double latitude = poilocation.latitude;
+                        Double longitude = poilocation.longitude;
+                        LatLng latLng = new LatLng(latitude, longitude);
+
+                        MapMarkerOverlay mapMarkerOverlay = MapMarkerOverlay.getMapMarkerOverlay();
+                        BaiduMap baiduMap = mapMarkerOverlay.getBaiduMap();
+                        BitmapDescriptor icon = BitmapDescriptorFactory
+                                .fromResource(R.drawable.map_icon_start);
+
+                        i++;
+                        if (i == 1) {
+                            /**
+                             * 为百度地图添加覆盖物
+                             */
+                            MarkerOptions options = new MarkerOptions();
+                            options.position(latLng) // 位置
+                                    .title("start_place") // content_title
+                                    .icon(icon) // 图标
+                                    .draggable(true); // 设置图标可以拖动
+
+                            baiduMap.clear();
+                            baiduMap.addOverlay(options);
+                            Log.i("RecyclerViewAdapter", "latLng start_place = " + latLng.toString());
+                            baiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(latLng));
+                            baiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(17));
+                        }
+                        if (i == 2) {
+                            i = 0;
+                            icon = BitmapDescriptorFactory
+                                    .fromResource(R.drawable.map_icon_end);
+                            MarkerOptions options = new MarkerOptions().icon(icon).title("end_place")
+                                    .position(latLng).draggable(true);
+                            baiduMap.addOverlay(options);
+                            Log.i("RecyclerViewAdapter", "latLng end_place = " + latLng.toString());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
+
+            }
+        });
     }
 
     @Override
@@ -78,6 +153,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (mContext == null) {
             mContext = parent.getContext();
         }
+
         View view = LayoutInflater.from(mContext).inflate(R.layout.ltem_order_show, parent, false);
         ViewHolder holder = new ViewHolder(view);
 
@@ -103,7 +179,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                boolean isChange = SubmitUtil.changeOrderStatetoServlet(Integer.toString(order.getId()), "已抢");
+                                boolean isChange = SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢");
                                 Log.i("RecyclerViewAdapter", isChange + "");
                                 mPosition = position;
                                 if (isChange) {
@@ -114,12 +190,31 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         }).start();
                     }
                 });
+                /**
+                 * 设置整体的点击事件
+                 */
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        MainActivity.getmViewPager().setCurrentItem(1);
+                        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getStart_place());
+                        mPoiSearch.searchInCity(poiCitySearchOption);
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getEnd_place());
+                        mPoiSearch.searchInCity(poiCitySearchOption);
+                    }
+                });
             }
         }
     }
 
     /**
      * 返回RecyclerView子项的数目
+     *
      * @return
      */
     @Override

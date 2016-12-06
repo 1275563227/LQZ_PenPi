@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="username"
+        android:text="点击我登录"
         android:textColor="#FFF"
         android:textSize="16sp" />
 

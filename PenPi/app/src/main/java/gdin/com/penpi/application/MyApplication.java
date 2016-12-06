@@ -1,4 +1,4 @@
-package gdin.com.penpi;
+package gdin.com.penpi.application;
 
 import android.app.Application;
 
