@@ -49,7 +49,7 @@ public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSear
 
     private RecyclerView mRecyclerView;
     private SpaceListAdapter adapter;
-    private EditText location;
+    private EditText place;
     private TextView city;
 
     private String poiName;
@@ -60,29 +60,37 @@ public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSear
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_list);
 
-        location = (EditText) findViewById(R.id.et_location2);
+        place = (EditText) findViewById(R.id.et_location2);
         city = (TextView) findViewById(R.id.tv_palce);
         mRecyclerView = (RecyclerView) findViewById(R.id.list_RecyclerView_1);
         ImageView iv_delete = (ImageView) findViewById(R.id.map_delete);
         iv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                location.setText("");
+                place.setText("");
             }
         });
+
+        mPoiSearch = PoiSearch.newInstance();
+        mPoiSearch.setOnGetPoiSearchResultListener(this);
+
+        /**
+         * 初始值
+         */
+        if (list != null)
+            list.clear();
+        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword("中山大道西293");
+        mPoiSearch.searchInCity(poiCitySearchOption);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SpaceListAdapter(SpaceListActivity.this, list);
         mRecyclerView.setAdapter(adapter);
 
-        SharedPreferences preferences = getSharedPreferences("map_location", MODE_PRIVATE);
-        String location = preferences.getString("location", "");
-
-        mPoiSearch = PoiSearch.newInstance();
-        mPoiSearch.setOnGetPoiSearchResultListener(this);
-
-        this.location.setText(location);
-        this.location.addTextChangedListener(new TextWatcher() {
+//        SharedPreferences preferences = getSharedPreferences("map_location", MODE_PRIVATE);
+//        String location = preferences.getString("location", "");
+//        place.setText(location);
+        place.setText("广东技术师范学院本部");
+        place.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -91,13 +99,14 @@ public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSear
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String city = SpaceListActivity.this.city.getText().toString();
-                poiCitySearchOption = new PoiCitySearchOption().city(city).keyword(SpaceListActivity.this.location.getText().toString());
+//                mSuggestionSearch.requestSuggestion((new SuggestionSearchOption()).keyword(s.toString()).city(city));
+                poiCitySearchOption = new PoiCitySearchOption().city(city).keyword(place.getText().toString());
                 mPoiSearch.searchInCity(poiCitySearchOption);
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (SpaceListActivity.this.location.getText().toString().equals("")) {
+                if (place.getText().toString().equals("")) {
                     list.clear();
                     adapter.notifyDataSetChanged();
                 }

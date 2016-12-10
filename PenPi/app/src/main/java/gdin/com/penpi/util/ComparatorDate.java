@@ -11,7 +11,7 @@ import gdin.com.penpi.bean.Order;
  * 作者：Administrator
  * 时间：2016.12.05
  */
-public class ComparatorDateUtil implements Comparator {
+public class ComparatorDate implements Comparator {
 
 
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -20,7 +20,7 @@ public class ComparatorDateUtil implements Comparator {
         Order order1 = (Order) obj1;
         Order order2 = (Order) obj2;
 
-        Date d1, d2;
+        Date d1,d2;
         try {
             d1 = format.parse(order1.getDate());
             d2 = format.parse(order2.getDate());

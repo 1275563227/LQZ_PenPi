@@ -479,8 +479,8 @@ public class XmppManager {
                     PacketListener packetListener = xmppManager
                             .getNotificationPacketListener();
                     connection.addPacketListener(packetListener, packetFilter);
-                    SubmitUtil.showToast(context, "网络连接成功");
                     connection.startHeartBrat();
+                    Constants.connectSucceed = "成功";
 
                 } catch (XMPPException e) {
                     Log.e(LOGTAG, "LoginTask.run()... xmpp error");

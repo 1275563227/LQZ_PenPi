@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.client.ServiceManager;
 
 public class WelcomeActivity extends AppCompatActivity {
 
@@ -13,10 +14,19 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
+
+        /**
+         * Start the service
+         */
+        ServiceManager serviceManager = new ServiceManager(this);
+        serviceManager.setNotificationIcon(R.drawable.notification);
+        serviceManager.startService();
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                Intent intent = new Intent(WelcomeActivity.this, NoLoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//别忘了这行，否则退出不起作用
                 startActivity(intent);
                 WelcomeActivity.this.finish();
             }

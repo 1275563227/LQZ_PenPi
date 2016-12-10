@@ -79,7 +79,7 @@ public class InRecordFragment extends android.support.v4.app.Fragment {
         dbhelper = DBManger.getInstance(mContext);
         Cursor cursor = dbhelper.getReadableDatabase().rawQuery("select * from " + MyDatabaseHelper.TABLE_IN_NAME, null);
         while (cursor.moveToNext()){
-            Log.i("forsee", cursor.getString(0));
+            Log.i("forsee++", cursor.getString(0)+cursor.getString(3));
             Order or= new Order();
             or.setId(cursor.getString(0));
             or.setStart_place(cursor.getString(1));

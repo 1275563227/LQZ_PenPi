@@ -126,30 +126,10 @@ public class SubmitOrderActivity extends AppCompatActivity {
         });
     }
 
-    private User user_response;
     /**
-     * 按钮点击事件
-     *
+     * 提交订单
      * @param view
      */
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x123) {
-                // 设置show组件显示服务器响应
-
-//                et_start.setText(user_response.getId());
-//                et_end.setText(user_response.getEnd_place());
-//                et_name.setText(user_response.getName());
-//                et_phone_number.setText(user_response.getPhone_number());
-//                et_remark.setText(user_response.getRemark());
-            }
-        }
-    };
-
-    /*
-    * 提交订单
-    * */
     public void Submit_to_Sever(View view) {
         MyDatabaseHelper dataHelper;
         SQLiteDatabase db;

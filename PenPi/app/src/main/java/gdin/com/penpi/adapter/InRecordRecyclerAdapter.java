@@ -37,7 +37,6 @@ public class InRecordRecyclerAdapter extends RecyclerView.Adapter<InRecordRecycl
     }
 
 
-
     //定义OnItemClickListener的接口,便于在实例化的时候实现它的点击效果
     public interface OnItemClickListener {
         void onItemClick(View view, int position, int indext);
@@ -58,18 +57,18 @@ public class InRecordRecyclerAdapter extends RecyclerView.Adapter<InRecordRecycl
             super(view);
             cardView = (CardView) view;
             order_id = (TextView) view.findViewById(R.id.order_people_id);
-            order_name = (TextView)view.findViewById(R.id.order_people_name);
+            order_name = (TextView) view.findViewById(R.id.order_people_name);
             startPlace = (TextView) view.findViewById(R.id.order_start_place);
             endPlace = (TextView) view.findViewById(R.id.order_end_place);
-            telephone = (TextView)view.findViewById(R.id.Phonenum);
+            telephone = (TextView) view.findViewById(R.id.Phonenum);
             charges = (TextView) view.findViewById(R.id.order_charges_name);
-            Date = (TextView)view.findViewById(R.id.date_name);
+            Date = (TextView) view.findViewById(R.id.date_name);
             foruse = (Button) view.findViewById(R.id.foruse_icon);
             foruse.setOnClickListener(this);
         }
 
         public void onClick(View v) {
-            if(mOnItemClickListener!=null) {
+            if (mOnItemClickListener != null) {
                 //此处调用的是onItemClick方法，而这个方法是会在RecyclerAdapter被实例化的时候实现
                 mOnItemClickListener.onItemClick(v, getItemCount(), getPosition());
             }
@@ -97,7 +96,7 @@ public class InRecordRecyclerAdapter extends RecyclerView.Adapter<InRecordRecycl
         // Log.i("forsee","----------------------------------------------------------------------------------------------------------------------");
         int legh = mOrderList.size();
         Order order = mOrderList.get(legh - position - 1);
-        holder.order_id.setText(order.getId().substring(0,7));
+        holder.order_id.setText(order.getId().substring(0, 11));
         holder.order_name.setText(order.getName());
         holder.startPlace.setText(order.getStart_place());
         holder.endPlace.setText(order.getEnd_place());
@@ -106,10 +105,10 @@ public class InRecordRecyclerAdapter extends RecyclerView.Adapter<InRecordRecycl
         holder.Date.setText(order.getDate());
 
 
-        if (order.getState().equals("完成")){
+        if (order.getState().equals("完成")) {
             holder.foruse.setText("待审核");
             holder.foruse.setEnabled(false);
-        }else{
+        } else {
             holder.foruse.setEnabled(true);
             holder.foruse.setText("完成");
         }

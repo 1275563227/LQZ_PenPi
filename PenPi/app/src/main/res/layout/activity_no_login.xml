@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_no_login"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="gdin.com.penpi.activity.NoLoginActivity">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textOne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="22sp"
+            android:text="请先"
+             />
+        <TextView
+            android:id="@+id/textTwo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorPrimary"
+            android:textSize="22sp"
+            android:text="登录"
+             />
+        <TextView
+            android:id="@+id/textThree"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="，享用PenPi专属服务"
+            android:textSize="22sp"
+             />
+
+    </LinearLayout>
+</RelativeLayout>

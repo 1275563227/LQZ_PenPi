@@ -99,6 +99,8 @@
         <activity android:name=".activity.ChargesStandradActivity" />
         <activity android:name=".activity.OrderNotificationActivity" />
         <activity android:name=".activity.OrderRecordActivity" />
+        <activity android:name=".activity.NoLoginActivity" />
+        <activity android:name=".activity.EvaluationActivity"></activity>
     </application>
 
 </manifest>

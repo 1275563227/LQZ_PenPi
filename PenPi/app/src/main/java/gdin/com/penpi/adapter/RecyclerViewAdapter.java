@@ -1,6 +1,8 @@
 package gdin.com.penpi.adapter;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.CardView;
@@ -30,6 +32,8 @@ import gdin.com.penpi.activity.MainActivity;
 import gdin.com.penpi.R;
 import gdin.com.penpi.baidumap.MapMarkerOverlay;
 import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.db.DBManger;
+import gdin.com.penpi.db.MyDatabaseHelper;
 import gdin.com.penpi.util.SubmitUtil;
 
 
@@ -46,6 +50,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<Order> mOrderList;
 
     private int mPosition;
+
+    private MyDatabaseHelper dataHelper;
 
     private PoiSearch mPoiSearch = null;
 
@@ -157,6 +163,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         View view = LayoutInflater.from(mContext).inflate(R.layout.ltem_order_show, parent, false);
         ViewHolder holder = new ViewHolder(view);
 
+        dataHelper = DBManger.getInstance(mContext);
+
         return holder;
     }
 
@@ -171,7 +179,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.charges.setText(order.getCharges());
                 holder.date.setText(order.getDate());
                 /**
-                 * 点击抢按钮的点击事件
+                 * 设置图片“抢”的点击事件
                  */
                 holder.itemView.findViewById(R.id.grab_icon).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -184,6 +192,22 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 mPosition = position;
                                 if (isChange) {
                                     handler.sendEmptyMessage(0x123);
+
+                                    //建立本地数据库SQLite
+                                    order.setState("已抢");
+                                    SQLiteDatabase db = dataHelper.getWritableDatabase();
+                                    ContentValues values = new ContentValues();
+                                    values.put(MyDatabaseHelper.TABLE_ORDER_ID,order.getId());
+                                    values.put(MyDatabaseHelper.TABLE_STAART_PLACE,order.getStart_place());
+                                    values.put(MyDatabaseHelper.TABLE_END_PLACE,order.getEnd_place());
+                                    values.put(MyDatabaseHelper.TABLE_PEOPLE_NAME,order.getName());
+                                    values.put(MyDatabaseHelper.TABLE_PHONE,order.getPhone_number());
+                                    values.put(MyDatabaseHelper.TABLE_CHARGES,order.getCharges());
+                                    values.put(MyDatabaseHelper.TABLE_REMARK,order.getRemark());
+                                    values.put(MyDatabaseHelper.TABLE_STATE,order.getState());
+                                    values.put(MyDatabaseHelper.TABLE_DATE,order.getDate());
+                                    db.insert(MyDatabaseHelper.TABLE_IN_NAME,null,values);
+                                    db.close();
                                 } else
                                     handler.sendEmptyMessage(0x124);
                             }
@@ -196,11 +220,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MainActivity.getmViewPager().setCurrentItem(1);
+                        MainActivity.getViewPager().setCurrentItem(1);
                         poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getStart_place());
                         mPoiSearch.searchInCity(poiCitySearchOption);
                         try {
-                            Thread.sleep(1000);
+                            Thread.sleep(1500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }

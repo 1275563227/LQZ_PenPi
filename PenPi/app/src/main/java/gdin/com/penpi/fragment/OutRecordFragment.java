@@ -3,6 +3,7 @@ package gdin.com.penpi.fragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.activity.EvaluationActivity;
 import gdin.com.penpi.adapter.OutRecordRecyclerAdapter;
 import gdin.com.penpi.bean.Order;
 import gdin.com.penpi.db.DBManger;
@@ -135,6 +137,7 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
                                 orderList3.get(position - 1 -indext).setState("完成");
                                 bt.setEnabled(false);
                                 bt.setText("已完成");
+
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
@@ -142,6 +145,9 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
                                         //SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢")
                                     }
                                 }).start();
+
+                                Intent intent = new Intent(getActivity(), EvaluationActivity.class);
+                                startActivity(intent);
 
 //                                Intent intent = new Intent(getActivity(), MainActivity.class);
 //                                startActivity(intent);
@@ -159,40 +165,6 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
                             }
                         }).show();
 
-//                if (flag == true) {
-//                    dbhelper = DBManger.getInstance(mContext);
-//                    SQLiteDatabase db = dbhelper.getWritableDatabase();
-//                    ContentValues values = new ContentValues();
-//                    values.put(MyDatabaseHelper.TABLE_STATE, "完成");
-//                    int result = db.update(MyDatabaseHelper.TABLE_OUT_NAME,
-//                            values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList3.get(position - 1 - indext).getId() + "'", null);
-//                    dbhelper.close();
-//
-//                    orderList3.get(position - 1 -indext).setState("完成");
-//                    bt.setEnabled(false);
-//                    bt.setText("已完成");
-//
-//                    Intent intent = new Intent(getActivity(), MainActivity.class);
-//                    startActivity(intent);
-//                }
-
-                /*if (flag == true) {
-                    orderList3.get(position - 1 -indext).setState("已抢");
-                    bt.setEnabled(true);
-                    bt.setText("完成");
-                }else{
-                    dbhelper = DBManger.getInstance(mContext);
-                    SQLiteDatabase db = dbhelper.getWritableDatabase();
-                    ContentValues values = new ContentValues();
-                    values.put(MyDatabaseHelper.TABLE_STATE, "完成");
-                    int result = db.update(MyDatabaseHelper.TABLE_OUT_NAME,
-                            values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList3.get(position - 1 - indext).getId() + "'", null);
-                    dbhelper.close();
-
-                    orderList3.get(position - 1 -indext).setState("完成");
-                    bt.setEnabled(false);
-                    bt.setText("已完成");
-                }*/
 
             }
 

@@ -34,7 +34,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="快递地点:" />
+                    android:text="快 递 地 点:" />
 
                 <EditText
                     android:id="@+id/et_start"
@@ -49,7 +49,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="送货地点:" />
+                    android:text="送 货 地 点:" />
 
                 <EditText
                     android:id="@+id/et_end"
@@ -64,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="收件人名:" />
+                    android:text="收 件 人 名:" />
 
                 <EditText
                     android:id="@+id/et_name"
@@ -78,7 +78,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="手机号码:" />
+                    android:text="手 机 号 码:" />
 
                 <EditText
                     android:id="@+id/et_phone_number"
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="16sp"
-                    android:text="备        注:" />
+                    android:text="备注(选填):" />
 
                 <EditText
                     android:id="@+id/et_remark"
@@ -136,13 +136,13 @@
                     <RadioButton
                         android:id="@+id/common_order"
                         android:checked="true"
-                        android:text="农民"
+                        android:text="大众"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         />
                     <RadioButton
                         android:id="@+id/Vip_order"
-                        android:text="地主"
+                        android:text="VIP"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
 

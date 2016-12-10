@@ -2,6 +2,7 @@ package gdin.com.penpi.adapter;
 
 import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.mapapi.map.BaiduMap;
+
 import java.util.List;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.baidumap.MapMarkerOverlay;
 import gdin.com.penpi.bean.PoiSearchResults;
 import gdin.com.penpi.activity.SpaceListActivity;
 
@@ -33,29 +37,37 @@ public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        SharedPreferences preferences = mContext.getSharedPreferences("map_location", 0);
+//        SharedPreferences preferences = mContext.getSharedPreferences("map_location", 0);
 
-        if (list.size() == 0)
-            holder.mTextView1.setText(preferences.getString("poi" + position, "text"));
-        else {
+        if (list.size() != 0) {
             holder.mTextView1.setText(list.get(position).getmName());
             holder.mTextView2.setText(list.get(position).getmAddress());
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mContext.setResultTo(holder.mTextView1.getText().toString());
+                    // 清楚百度地图的覆盖物
+                    MapMarkerOverlay mapMarkerOverlay = MapMarkerOverlay.getMapMarkerOverlay();
+                    BaiduMap baiduMap = mapMarkerOverlay.getBaiduMap();
+                    baiduMap.clear();
+                }
+            });
         }
+//        else
+//            holder.mTextView1.setText(preferences.getString("poi" + position, "text"));
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mContext.setResultTo(holder.mTextView1.getText().toString());
-            }
-        });
     }
 
     @Override
     public int getItemCount() {
-        if (list.size() == 0) {
-            SharedPreferences preferences = mContext.getSharedPreferences("data", 0);
-            return preferences.getInt("poiSize", 12);
-        } else return list.size();
+        if (list.size() != 0) {
+            return list.size();
+        }
+//        else {
+//            SharedPreferences preferences = mContext.getSharedPreferences("map_location", 0);
+//            return preferences.getInt("poiSize", 5);
+//        }
+        return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
