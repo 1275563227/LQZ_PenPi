@@ -1,89 +1,112 @@
 package gdin.com.penpi.bean;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * Created by Administrator on 2016/11/5.
  * 发布订单信息的一个bean
  */
-public class Order implements Serializable {
-    String id;
-    String start_place;
-    String end_place;
-    String name;
-    String phone_number;
-    String charges;
-    String remark;
-    String state;       //订单的状态
-    String date;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Order{
+    private Integer orderID;
 
-    public Order() {
+    private String startPlace;
+    private String endPlace;
+
+    private User sendOrderPeple; // 发订单的人
+    private Date sendOrderdate; // 发订单的时间
+
+    private User takeOrderPeple; // 拿订单的人
+    private Date takeOrderdate; // 拿订单的时间
+
+    private Double charges;// 费用
+
+    private String state; // 状态
+    private String remark; // 评论
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderID=" + orderID +
+                ", startPlace='" + startPlace + '\'' +
+                ", endPlace='" + endPlace + '\'' +
+                ", sendOrderPeple=" + sendOrderPeple +
+                ", sendOrderdate=" + sendOrderdate +
+                ", takeOrderPeple=" + takeOrderPeple +
+                ", takeOrderdate=" + takeOrderdate +
+                ", charges=" + charges +
+                ", state='" + state + '\'' +
+                ", remark='" + remark + '\'' +
+                '}';
     }
 
-    public Order(String name, String start_place, String end_place, String charges, String date) {
-        this.name = name;
-        this.start_place = start_place;
-        this.end_place = end_place;
-        this.date = date;
-        this.charges = charges;
+    public Integer getOrderID() {
+        return orderID;
     }
 
-    public String getId() {
-        return id;
+    public void setOrderID(Integer orderID) {
+        this.orderID = orderID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public String getStartPlace() {
+        return startPlace;
     }
 
-    public String getStart_place() {
-        return start_place;
+    public void setStartPlace(String startPlace) {
+        this.startPlace = startPlace;
     }
 
-    public void setStart_place(String start_place) {
-        this.start_place = start_place;
+    public String getEndPlace() {
+        return endPlace;
     }
 
-    public String getEnd_place() {
-        return end_place;
+    public void setEndPlace(String endPlace) {
+        this.endPlace = endPlace;
     }
 
-    public void setEnd_place(String end_place) {
-        this.end_place = end_place;
+    public User getSendOrderPeple() {
+        return sendOrderPeple;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public void setSendOrderPeple(User sendOrderPeple) {
+        this.sendOrderPeple = sendOrderPeple;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public Date getSendOrderdate() {
+        return sendOrderdate;
     }
 
-    public String getName() {
-        return name;
+    public void setSendOrderdate(Date sendOrderdate) {
+        this.sendOrderdate = sendOrderdate;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public User getTakeOrderPeple() {
+        return takeOrderPeple;
     }
 
-    public String getCharges() {
+    public void setTakeOrderPeple(User takeOrderPeple) {
+        this.takeOrderPeple = takeOrderPeple;
+    }
+
+    public Date getTakeOrderdate() {
+        return takeOrderdate;
+    }
+
+    public void setTakeOrderdate(Date takeOrderdate) {
+        this.takeOrderdate = takeOrderdate;
+    }
+
+    public Double getCharges() {
         return charges;
     }
 
-    public void setCharges(String charges) {
+    public void setCharges(Double charges) {
         this.charges = charges;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
     }
 
     public String getState() {
@@ -94,65 +117,11 @@ public class Order implements Serializable {
         this.state = state;
     }
 
-    public String getDate() {
-        return date;
+    public String getRemark() {
+        return remark;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public void setRemark(String remark) {
+        this.remark = remark;
     }
-
-
-    @Override
-    public String toString() {
-        return "Order{" +
-                "id=" + id +
-                ", start_place='" + start_place + '\'' +
-                ", end_place='" + end_place + '\'' +
-                ", name='" + name + '\'' +
-                ", phone_number='" + phone_number + '\'' +
-                ", charges='" + charges + '\'' +
-                ", remark='" + remark + '\'' +
-                ", state='" + state + '\'' +
-                ", date='" + date + '\'' +
-                '}';
-    }
-
-    public String toGrabOrderString() {
-        return this.getId() + ","
-                + this.getStart_place() + ","
-                + this.getEnd_place() + ","
-                + this.getName() + ","
-                + this.getPhone_number() + ","
-                + this.getCharges() + ","
-                + this.getRemark() + ","
-                + this.getState() + ","
-                + this.getDate();
-    }
-
-
-
-    public JSONObject toJSONObj() {
-        JSONObject orderJson = new JSONObject();
-        try {
-            orderJson.put("id",this.id);
-            orderJson.put("start_place", this.start_place);
-            orderJson.put("end_place", this.end_place);
-            orderJson.put("name", this.name);
-            orderJson.put("phone_number", this.phone_number);
-            orderJson.put("charges", this.charges);
-            orderJson.put("remark", this.remark);
-            orderJson.put("state", this.state);
-            orderJson.put("date",this.date);
-        } catch (Exception e) {
-            e.printStackTrace();
-
-        }
-        return orderJson;
-    }
-
-    /*
-    * 判断Order是否是同个
-    * 直接根据时间判断
-    * */
 }

@@ -81,16 +81,17 @@ public class InRecordFragment extends android.support.v4.app.Fragment {
         while (cursor.moveToNext()){
             Log.i("forsee++", cursor.getString(0)+cursor.getString(3));
             Order or= new Order();
-            or.setId(cursor.getString(0));
-            or.setStart_place(cursor.getString(1));
-            or.setEnd_place(cursor.getString(2));
-            or.setName(cursor.getString(3));
-            or.setPhone_number(cursor.getString(4));
-            or.setCharges(cursor.getString(5));
-            or.setRemark(cursor.getString(6));
-            or.setState(cursor.getString(7));
-            or.setDate(cursor.getString(8));
-            orderList3.add(or);
+            // TODO
+//            or.setId(cursor.getString(0));
+//            or.setStart_place(cursor.getString(1));
+//            or.setEnd_place(cursor.getString(2));
+//            or.setName(cursor.getString(3));
+//            or.setPhone_number(cursor.getString(4));
+//            or.setCharges(cursor.getString(5));
+//            or.setRemark(cursor.getString(6));
+//            or.setState(cursor.getString(7));
+//            or.setDate(cursor.getString(8));
+//            orderList3.add(or);
             i++;
         }
         cursor.close();
@@ -147,9 +148,9 @@ public class InRecordFragment extends android.support.v4.app.Fragment {
                 ContentValues values = new ContentValues();
                 values.put(MyDatabaseHelper.TABLE_STATE, "完成");
                 int result = db.update(MyDatabaseHelper.TABLE_IN_NAME,
-                        values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList3.get(position - 1 - indext).getId() + "'", null);
+                        values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList3.get(position - 1 - indext).getOrderID() + "'", null);
                 dbhelper.close();
-                Log.i("isChangeSuccess", orderList3.get(position - 1 - indext).getId());
+                Log.i("isChangeSuccess", orderList3.get(position - 1 - indext).getOrderID().toString());
 
                 //Log.i("fortext", orders[position].getOrder_id());
                 //adapter.notifyDataSetChanged();

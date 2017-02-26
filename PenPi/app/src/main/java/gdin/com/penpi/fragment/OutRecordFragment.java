@@ -28,7 +28,7 @@ import gdin.com.penpi.adapter.OutRecordRecyclerAdapter;
 import gdin.com.penpi.bean.Order;
 import gdin.com.penpi.db.DBManger;
 import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.util.SubmitUtil;
+import gdin.com.penpi.utils.OrderHandle;
 
 /**
  * Created by Administrator on 2016/11/30.
@@ -64,15 +64,16 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
         while (cursor.moveToNext()){
             Log.i("forsee", cursor.getString(0));
             Order or= new Order();
-            or.setId(cursor.getString(0));
-            or.setStart_place(cursor.getString(1));
-            or.setEnd_place(cursor.getString(2));
-            or.setName(cursor.getString(3));
-            or.setPhone_number(cursor.getString(4));
-            or.setCharges(cursor.getString(5));
-            or.setRemark(cursor.getString(6));
-            or.setState(cursor.getString(7));
-            or.setDate(cursor.getString(8));
+            // TODO
+//            or.setId(cursor.getString(0));
+//            or.setStart_place(cursor.getString(1));
+//            or.setEnd_place(cursor.getString(2));
+//            or.setName(cursor.getString(3));
+//            or.setPhone_number(cursor.getString(4));
+//            or.setCharges(cursor.getString(5));
+//            or.setRemark(cursor.getString(6));
+//            or.setState(cursor.getString(7));
+//            or.setDate(cursor.getString(8));
             orderList3.add(or);
             i++;
         }
@@ -131,7 +132,7 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
                                 ContentValues values = new ContentValues();
                                 values.put(MyDatabaseHelper.TABLE_STATE, "完成");
                                 int result = db.update(MyDatabaseHelper.TABLE_OUT_NAME,
-                                        values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList3.get(position - 1 - indext).getId() + "'", null);
+                                        values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList3.get(position - 1 - indext).getOrderID() + "'", null);
                                 dbhelper.close();
 
                                 orderList3.get(position - 1 -indext).setState("完成");
@@ -141,7 +142,9 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        SubmitUtil.changeOrderStatetoServlet(orderList3.get(position - 1 - indext).getId(), "完成");
+                                        // TODO
+                                        //SubmitUtil.changeOrderStatetoServlet(orderList3.get(position - 1 - indext).getOrderID(), "完成");
+                                        new OrderHandle().alterOrderState(orderList3.get(position - 1 - indext).getOrderID(), OrderHandle.HASGRAP);
                                         //SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢")
                                     }
                                 }).start();

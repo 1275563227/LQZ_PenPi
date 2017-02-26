@@ -4,6 +4,9 @@ android {
     compileSdkVersion 24
     buildToolsVersion "25.0.0"
 
+    packagingOptions {
+        exclude 'META-INF/ASL2.0'
+    }
     defaultConfig {
         applicationId "gdin.com.penpi"
         minSdkVersion 16
@@ -48,4 +51,12 @@ dependencies {
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile files('libs/amsack.jar')
+
+    //    jackson框架
+    compile files('libs/jackson-annotations-2.2.1.jar')
+    compile files('libs/jackson-core-2.2.1.jar')
+    compile files('libs/jackson-core-asl-1.8.8.jar')
+    compile files('libs/jackson-databind-2.2.1.jar')
+    compile files('libs/jackson-mapper-asl-1.8.8.jar')
+    compile files('libs/jackson-module-jaxb-annotations-2.2.1.jar')
 }

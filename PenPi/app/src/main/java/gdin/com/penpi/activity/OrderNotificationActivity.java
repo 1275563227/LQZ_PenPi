@@ -12,31 +12,30 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.bean.Order;
-import gdin.com.penpi.client.LogUtil;
 import gdin.com.penpi.db.DBManger;
 import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.util.SpiltStringUtil;
-import gdin.com.penpi.util.SubmitUtil;
+import gdin.com.penpi.utils.JacksonUtils;
+import gdin.com.penpi.utils.OrderHandle;
 
 public class OrderNotificationActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
-    private static final String LOGTAG = LogUtil.makeLogTag(OrderNotificationActivity.class);
+//    private static final String LOGTAG = LogUtil.makeLogTag(OrderNotificationActivity.class);
 
     private MyDatabaseHelper dataHelper = DBManger.getInstance(OrderNotificationActivity.this);
-    ;
 
     private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
-                SubmitUtil.showToast(OrderNotificationActivity.this, "抢单成功，请在'我的记录'查看详细信息");
+                Toast.makeText(OrderNotificationActivity.this, "抢单成功，请在'我的记录'查看详细信息", Toast.LENGTH_SHORT).show();
             }
             if (msg.what == 0x124) {
-                SubmitUtil.showToast(OrderNotificationActivity.this, "抢单失败，该订单已被其他人获取");
+                Toast.makeText(OrderNotificationActivity.this, "抢单失败，该订单已被其他人获取", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -49,7 +48,9 @@ public class OrderNotificationActivity extends AppCompatActivity {
         SharedPreferences preferences = getSharedPreferences("NotificationData", MODE_PRIVATE);
         String notificationMessage = preferences.getString("notificationMessage", null);
 
-        final Order order = SpiltStringUtil.messageToOrder(notificationMessage);
+//        final Order order = SpiltStringUtil.messageToOrder(notificationMessage);
+        // TODO
+        final Order order = JacksonUtils.readJson(notificationMessage, Order.class);
 
         mToolbar = (Toolbar) findViewById(R.id.item_tool_bar);
         mToolbar.setTitle("");
@@ -74,7 +75,9 @@ public class OrderNotificationActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean isChange = SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢");
+//                        boolean isChange = SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢");
+                        // TODO
+                        boolean isChange = new OrderHandle().alterOrderState(order.getOrderID(), OrderHandle.HASGRAP);
                         Log.i("OrderNotificationAct", isChange + "");
                         if (isChange) {
                             handler.sendEmptyMessage(0x123);
@@ -83,15 +86,16 @@ public class OrderNotificationActivity extends AppCompatActivity {
                             order.setState("已抢");
                             SQLiteDatabase db = dataHelper.getWritableDatabase();
                             ContentValues values = new ContentValues();
-                            values.put(MyDatabaseHelper.TABLE_ORDER_ID, order.getId());
-                            values.put(MyDatabaseHelper.TABLE_STAART_PLACE, order.getStart_place());
-                            values.put(MyDatabaseHelper.TABLE_END_PLACE, order.getEnd_place());
-                            values.put(MyDatabaseHelper.TABLE_PEOPLE_NAME, order.getName());
-                            values.put(MyDatabaseHelper.TABLE_PHONE, order.getPhone_number());
-                            values.put(MyDatabaseHelper.TABLE_CHARGES, order.getCharges());
-                            values.put(MyDatabaseHelper.TABLE_REMARK, order.getRemark());
-                            values.put(MyDatabaseHelper.TABLE_STATE, order.getState());
-                            values.put(MyDatabaseHelper.TABLE_DATE, order.getDate());
+                            // TODO
+//                            values.put(MyDatabaseHelper.TABLE_ORDER_ID, order.getId());
+//                            values.put(MyDatabaseHelper.TABLE_STAART_PLACE, order.getStart_place());
+//                            values.put(MyDatabaseHelper.TABLE_END_PLACE, order.getEnd_place());
+//                            values.put(MyDatabaseHelper.TABLE_PEOPLE_NAME, order.getName());
+//                            values.put(MyDatabaseHelper.TABLE_PHONE, order.getPhone_number());
+//                            values.put(MyDatabaseHelper.TABLE_CHARGES, order.getCharges());
+//                            values.put(MyDatabaseHelper.TABLE_REMARK, order.getRemark());
+//                            values.put(MyDatabaseHelper.TABLE_STATE, order.getState());
+//                            values.put(MyDatabaseHelper.TABLE_DATE, order.getDate());
                             db.insert(MyDatabaseHelper.TABLE_IN_NAME, null, values);
                             db.close();
                         } else
@@ -101,9 +105,9 @@ public class OrderNotificationActivity extends AppCompatActivity {
             }
         });
 
-        people_name.setText(order.getPhone_number());
-        start_place.setText(order.getStart_place());
-        end_place.setText(order.getEnd_place());
-        charges_name.setText(order.getCharges());
+        people_name.setText(order.getSendOrderPeple().getPhoneNumber());
+        start_place.setText(order.getStartPlace());
+        end_place.setText(order.getEndPlace());
+        charges_name.setText(Double.toString(order.getCharges()));
     }
 }

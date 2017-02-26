@@ -1,30 +1,47 @@
 package gdin.com.penpi.bean;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import org.json.JSONObject;
+
+import java.util.Date;
 
 /**
  * Created by chen on 2016/11/13.
  */
-
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class User {
+    private Integer userID;
 
-    /**
-     * ACCOUNT : 123
-     * YZM : 123
-     * PWD : 123
-     */
-    private int id;
     private String username;
-    private String phone_number;
     private String password;
-    private String YZM;
+    private String phoneNumber;
+    private String gender; // 性别
+    private String authority; // 权限
 
-    public int getId() {
-        return id;
+    private Date loginTime; // 登录时间
+    private Date logoutTime; // 退出时间
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userID=" + userID +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", gender='" + gender + '\'' +
+                ", authority='" + authority + '\'' +
+                ", loginTime=" + loginTime +
+                ", logoutTime=" + logoutTime +
+                '}';
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public Integer getUserID() {
+        return userID;
+    }
+
+    public void setUserID(Integer userID) {
+        this.userID = userID;
     }
 
     public String getUsername() {
@@ -35,14 +52,6 @@ public class User {
         this.username = username;
     }
 
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -51,35 +60,43 @@ public class User {
         this.password = password;
     }
 
-    public String getYZM() {
-        return YZM;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setYZM(String YZM) {
-        this.YZM = YZM;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id='" + id + '\'' +
-                ", username='" + username + '\'' +
-                ", phone_number='" + phone_number + '\'' +
-                ", password='" + password + '\'' +
-                ", YZM='" + YZM + '\'' +
-                '}';
+    public String getGender() {
+        return gender;
     }
 
-    public JSONObject toJSONObj() {
-        JSONObject userJson = new JSONObject();
-        try {
-            userJson.put("id", this.id);
-            userJson.put("username", this.username);
-            userJson.put("phone_number", this.phone_number);
-            userJson.put("password", this.password);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return userJson;
+    public void setGender(String gender) {
+        this.gender = gender;
+    }
+
+    public String getAuthority() {
+        return authority;
+    }
+
+    public void setAuthority(String authority) {
+        this.authority = authority;
+    }
+
+    public Date getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(Date loginTime) {
+        this.loginTime = loginTime;
+    }
+
+    public Date getLogoutTime() {
+        return logoutTime;
+    }
+
+    public void setLogoutTime(Date logoutTime) {
+        this.logoutTime = logoutTime;
     }
 }

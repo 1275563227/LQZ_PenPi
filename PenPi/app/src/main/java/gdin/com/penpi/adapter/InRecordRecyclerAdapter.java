@@ -96,13 +96,13 @@ public class InRecordRecyclerAdapter extends RecyclerView.Adapter<InRecordRecycl
         // Log.i("forsee","----------------------------------------------------------------------------------------------------------------------");
         int legh = mOrderList.size();
         Order order = mOrderList.get(legh - position - 1);
-        holder.order_id.setText(order.getId().substring(0, 11));
-        holder.order_name.setText(order.getName());
-        holder.startPlace.setText(order.getStart_place());
-        holder.endPlace.setText(order.getEnd_place());
-        holder.telephone.setText(order.getPhone_number());
-        holder.charges.setText(order.getCharges());
-        holder.Date.setText(order.getDate());
+        holder.order_id.setText(order.getOrderID());
+        holder.order_name.setText(order.getSendOrderPeple().getUsername());
+        holder.startPlace.setText(order.getStartPlace());
+        holder.endPlace.setText(order.getEndPlace());
+        holder.telephone.setText(order.getSendOrderPeple().getPhoneNumber());
+        holder.charges.setText(Double.toString(order.getCharges()));
+        holder.Date.setText(order.getSendOrderdate().toString());
 
 
         if (order.getState().equals("完成")) {
