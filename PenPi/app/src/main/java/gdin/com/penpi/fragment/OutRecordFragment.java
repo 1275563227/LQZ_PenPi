@@ -25,7 +25,7 @@ import java.util.List;
 import gdin.com.penpi.R;
 import gdin.com.penpi.activity.EvaluationActivity;
 import gdin.com.penpi.adapter.OutRecordRecyclerAdapter;
-import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.db.DBManger;
 import gdin.com.penpi.db.MyDatabaseHelper;
 import gdin.com.penpi.utils.OrderHandle;

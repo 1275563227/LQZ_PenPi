@@ -15,7 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.db.DBManger;
 import gdin.com.penpi.db.MyDatabaseHelper;
 import gdin.com.penpi.utils.JacksonUtils;
@@ -105,7 +105,7 @@ public class OrderNotificationActivity extends AppCompatActivity {
             }
         });
 
-        people_name.setText(order.getSendOrderPeple().getPhoneNumber());
+        people_name.setText(order.getSendOrderPeople().getPhoneNumber());
         start_place.setText(order.getStartPlace());
         end_place.setText(order.getEndPlace());
         charges_name.setText(Double.toString(order.getCharges()));

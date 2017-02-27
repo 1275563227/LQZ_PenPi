@@ -1,7 +1,6 @@
 package gdin.com.penpi.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -33,7 +32,7 @@ import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.SpaceListAdapter;
-import gdin.com.penpi.bean.PoiSearchResults;
+import gdin.com.penpi.domain.PoiSearchResults;
 
 /**
  * 点击首页ToolBar的“地址栏”时 调用该类

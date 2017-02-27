@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import gdin.com.penpi.bean.User;
+import gdin.com.penpi.domain.User;
 
 /**
  * 连接服务器之后接受数据并解析
@@ -12,7 +12,7 @@ import gdin.com.penpi.bean.User;
  */
 public class UserHandle {
 
-    private String requestURL = "http://penpi.lqzcloud.cn/PenPiServer/userAction_";
+    private String requestURL = Connect.requestURL + "userAction_";
 
     public boolean login(User user) {
         String responseData = Connect.connect(requestURL + "login", user);

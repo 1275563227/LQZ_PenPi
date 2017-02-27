@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.domain.Order;
 
 /**
  * 连接服务器之后接受数据并解析
@@ -14,7 +14,7 @@ import gdin.com.penpi.bean.Order;
  */
 public class OrderHandle {
 
-    private String requestURL = "http://www.lqzcloud.cn/PenPiServer/orderAction_";
+    private String requestURL = Connect.requestURL + "orderAction_";
 
     public final static String NOGRAP = "未抢";
     public final static String HASGRAP = "已抢";

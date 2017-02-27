@@ -1,8 +1,6 @@
 package gdin.com.penpi.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.CardView;
@@ -32,7 +30,7 @@ import java.util.List;
 import gdin.com.penpi.activity.MainActivity;
 import gdin.com.penpi.R;
 import gdin.com.penpi.baidumap.MapMarkerOverlay;
-import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.db.DBManger;
 import gdin.com.penpi.db.MyDatabaseHelper;
 import gdin.com.penpi.utils.FormatUtils;
@@ -175,11 +173,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (mOrderList.size() != 0) {
             final Order order = mOrderList.get(position);
             if (order != null) {
-                holder.peopleName.setText(order.getSendOrderPeple().getUsername());
+                holder.peopleName.setText(order.getSendOrderPeopleName());
                 holder.startPlace.setText(order.getStartPlace());
                 holder.endPlace.setText(order.getEndPlace());
                 holder.charges.setText(String.valueOf(order.getCharges()));
-                holder.date.setText(FormatUtils.formatTime(order.getSendOrderdate()));
+                holder.date.setText(FormatUtils.formatTime(order.getSendOrderDate()));
                 /**
                  * 设置图片“抢”的点击事件
                  */

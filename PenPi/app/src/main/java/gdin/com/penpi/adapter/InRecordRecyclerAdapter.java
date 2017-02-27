@@ -16,7 +16,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.domain.Order;
 
 /**
  * Created by Administrator on 2016/11/27.
@@ -97,12 +97,12 @@ public class InRecordRecyclerAdapter extends RecyclerView.Adapter<InRecordRecycl
         int legh = mOrderList.size();
         Order order = mOrderList.get(legh - position - 1);
         holder.order_id.setText(order.getOrderID());
-        holder.order_name.setText(order.getSendOrderPeple().getUsername());
         holder.startPlace.setText(order.getStartPlace());
         holder.endPlace.setText(order.getEndPlace());
-        holder.telephone.setText(order.getSendOrderPeple().getPhoneNumber());
+        holder.order_name.setText(order.getSendOrderPeopleName());
+        holder.telephone.setText(order.getSendOrderPeoplePhone());
+        holder.Date.setText(order.getSendOrderDate().toString());
         holder.charges.setText(Double.toString(order.getCharges()));
-        holder.Date.setText(order.getSendOrderdate().toString());
 
 
         if (order.getState().equals("完成")) {

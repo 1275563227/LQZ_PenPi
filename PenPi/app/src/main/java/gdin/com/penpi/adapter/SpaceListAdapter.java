@@ -1,8 +1,6 @@
 package gdin.com.penpi.adapter;
 
-import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +14,7 @@ import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.baidumap.MapMarkerOverlay;
-import gdin.com.penpi.bean.PoiSearchResults;
+import gdin.com.penpi.domain.PoiSearchResults;
 import gdin.com.penpi.activity.SpaceListActivity;
 
 public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.ViewHolder> {

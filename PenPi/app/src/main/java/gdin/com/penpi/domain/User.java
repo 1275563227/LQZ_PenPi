@@ -1,8 +1,6 @@
-package gdin.com.penpi.bean;
+package gdin.com.penpi.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-
-import org.json.JSONObject;
 
 import java.util.Date;
 
@@ -15,10 +13,9 @@ public class User {
 
     private String username;
     private String password;
-    private String phoneNumber;
+    private Integer phoneNumber;
     private String gender; // 性别
     private String authority; // 权限
-
     private Date loginTime; // 登录时间
     private Date logoutTime; // 退出时间
 
@@ -28,7 +25,7 @@ public class User {
                 "userID=" + userID +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
+                ", phoneNumber=" + phoneNumber +
                 ", gender='" + gender + '\'' +
                 ", authority='" + authority + '\'' +
                 ", loginTime=" + loginTime +
@@ -60,11 +57,11 @@ public class User {
         this.password = password;
     }
 
-    public String getPhoneNumber() {
+    public Integer getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
+    public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

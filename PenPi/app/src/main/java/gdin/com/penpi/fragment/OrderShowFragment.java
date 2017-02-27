@@ -27,7 +27,7 @@ import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.RecyclerViewAdapter;
-import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.utils.ComparatorDate;
 import gdin.com.penpi.utils.OrderHandle;
 

@@ -1,4 +1,4 @@
-package gdin.com.penpi.bean;
+package gdin.com.penpi.domain;
 
 
 public class PoiSearchResults {
