@@ -1,5 +1,7 @@
 package gdin.com.penpi.utils;
 
+import android.util.Log;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +18,8 @@ public class UserHandle {
 
     public boolean login(User user) {
         String responseData = Connect.connect(requestURL + "login", user);
-        if (responseData != null && responseData.length() > 0) {
+        if (responseData != null && responseData.charAt(0) == '{') {
+            Log.d(getClass().getName(), "responseData = " + responseData);
             Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -28,7 +31,8 @@ public class UserHandle {
 
     public boolean register(User user) {
         String responseData = Connect.connect(requestURL + "register", user);
-        if (responseData != null && responseData.length() > 0) {
+        if (responseData != null && responseData.charAt(0) == '{') {
+            Log.d(getClass().getName(), "responseData = " + responseData);
             Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -40,7 +44,8 @@ public class UserHandle {
 
     public boolean saveUser(User user) {
         String responseData = Connect.connect(requestURL + "saveUser", user);
-        if (responseData != null && responseData.length() > 0) {
+        if (responseData != null && responseData.charAt(0) == '{') {
+            Log.d(getClass().getName(), "responseData = " + responseData);
             Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -52,7 +57,8 @@ public class UserHandle {
 
     public boolean deleteUser(User user) {
         String responseData = Connect.connect(requestURL + "deleteUser", user);
-        if (responseData != null && responseData.length() > 0) {
+        if (responseData != null && responseData.charAt(0) == '{') {
+            Log.d(getClass().getName(), "responseData = " + responseData);
             Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -64,7 +70,8 @@ public class UserHandle {
 
     public List<User> findAllUser() {
         String responseData = Connect.connect(requestURL + "findAllUser", null);
-        if (responseData != null && responseData.length() > 0) {
+        if (responseData != null && responseData.charAt(0) == '{') {
+            Log.d(getClass().getName(), "responseData = " + responseData);
             Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
@@ -80,7 +87,8 @@ public class UserHandle {
         User user = new User();
         user.setUserID(ID);
         String responseData = Connect.connect(requestURL + "findUserByID", user);
-        if (responseData != null && responseData.length() > 0) {
+        if (responseData != null && responseData.charAt(0) == '{') {
+            Log.d(getClass().getName(), "responseData = " + responseData);
             Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -92,7 +100,8 @@ public class UserHandle {
 
     public boolean alterUser(User user) {
         String responseData = Connect.connect(requestURL + "alterUser", user);
-        if (responseData != null && responseData.length() > 0) {
+        if (responseData != null && responseData.charAt(0) == '{') {
+            Log.d(getClass().getName(), "responseData = " + responseData);
             Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))

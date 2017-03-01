@@ -77,9 +77,8 @@ public class OrderNotificationActivity extends AppCompatActivity {
                     public void run() {
 //                        boolean isChange = SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢");
                         // TODO
-                        boolean isChange = new OrderHandle().alterOrderState(order.getOrderID(), OrderHandle.HASGRAP);
-                        Log.i("OrderNotificationAct", isChange + "");
-                        if (isChange) {
+                        Order orderReturn = new OrderHandle().alterOrderState(order.getOrderID(), OrderHandle.HASGRAP);
+                        if (orderReturn != null) {
                             handler.sendEmptyMessage(0x123);
 
                             //建立本地数据库SQLite

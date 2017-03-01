@@ -187,9 +187,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                boolean isChange = new OrderHandle().alterOrderState(order.getOrderID(), OrderHandle.HASGRAP);
-                                Log.i("RecyclerViewAdapter", isChange + "");
-                                if (isChange) {
+                                Order orderReturn = new OrderHandle().alterOrderState(order.getOrderID(), OrderHandle.HASGRAP);
+                                if (orderReturn != null) {
                                     mPosition = position;
                                     handler.sendEmptyMessage(0x123);
 
