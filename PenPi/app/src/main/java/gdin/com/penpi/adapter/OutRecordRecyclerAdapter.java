@@ -97,12 +97,12 @@ public class OutRecordRecyclerAdapter extends RecyclerView.Adapter<OutRecordRecy
         // Log.i("forsee","----------------------------------------------------------------------------------------------------------------------");
         int legh = mOrderList.size();
         Order order = mOrderList.get(legh - position - 1);
-        holder.order_id.setText(order.getOrderID());
+        holder.order_id.setText(order.getOrderID() + "");
         holder.order_name.setText(order.getSendOrderPeopleName());
         holder.startPlace.setText(order.getStartPlace());
         holder.endPlace.setText(order.getEndPlace());
-        holder.telephone.setText(order.getSendOrderPeoplePhone());
-        holder.charges.setText(Double.toString(order.getCharges()));
+        holder.telephone.setText(order.getSendOrderPeoplePhone() + "");
+        holder.charges.setText(String.valueOf(order.getCharges()));
         holder.Date.setText(order.getSendOrderDate().toString());
         // holder.foruse.setEnabled(true);
         // holder.foruse.setText("完成");

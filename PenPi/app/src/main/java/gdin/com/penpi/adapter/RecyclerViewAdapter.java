@@ -191,22 +191,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                                 if (orderReturn != null) {
                                     mPosition = position;
                                     handler.sendEmptyMessage(0x123);
-
-                                    // TODO 建立本地数据库SQLite
-//                                    order.setState("已抢");
-//                                    SQLiteDatabase db = dataHelper.getWritableDatabase();
-//                                    ContentValues values = new ContentValues();
-//                                    values.put(MyDatabaseHelper.TABLE_ORDER_ID,order.getId());
-//                                    values.put(MyDatabaseHelper.TABLE_STAART_PLACE,order.getStart_place());
-//                                    values.put(MyDatabaseHelper.TABLE_END_PLACE,order.getEnd_place());
-//                                    values.put(MyDatabaseHelper.TABLE_PEOPLE_NAME,order.getName());
-//                                    values.put(MyDatabaseHelper.TABLE_PHONE,order.getPhone_number());
-//                                    values.put(MyDatabaseHelper.TABLE_CHARGES,order.getCharges());
-//                                    values.put(MyDatabaseHelper.TABLE_REMARK,order.getRemark());
-//                                    values.put(MyDatabaseHelper.TABLE_STATE,order.getState());
-//                                    values.put(MyDatabaseHelper.TABLE_DATE,order.getDate());
-//                                    db.insert(MyDatabaseHelper.TABLE_IN_NAME,null,values);
-//                                    db.close();
                                 } else
                                     handler.sendEmptyMessage(0x124);
                             }

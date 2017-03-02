@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -18,22 +20,27 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.activity.EvaluationActivity;
 import gdin.com.penpi.adapter.OutRecordRecyclerAdapter;
+import gdin.com.penpi.adapter.RecyclerViewAdapter;
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.db.DBManger;
 import gdin.com.penpi.db.MyDatabaseHelper;
+import gdin.com.penpi.utils.ComparatorDate;
 import gdin.com.penpi.utils.OrderHandle;
+import gdin.com.penpi.utils.UserHandle;
 
 /**
  * Created by Administrator on 2016/11/30.
  */
-public class OutRecordFragment extends android.support.v4.app.Fragment {
+public class MySendRecordFragment extends android.support.v4.app.Fragment {
 
 
     public static final String ARG_PAGE = "ARG_PAGE";
@@ -46,72 +53,59 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
     private boolean flag = false;
     private Context mContext;
     MyDatabaseHelper dbhelper;
-    private List<Order> orderList3 = new ArrayList<>();
+    private List<Order> orderList = new ArrayList<>();
 
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x333) {
+                //对从服务器传入的orderList进行排序
+                ComparatorDate c = new ComparatorDate();
+                Collections.sort(orderList, c);
+                adapter = new OutRecordRecyclerAdapter(orderList);
+                mRecyclerView.setAdapter(adapter);
+            }
+            if (msg.what == 0x334) {
+                Toast.makeText(MySendRecordFragment.this.getActivity(), "你没有发单记录！", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
-    public static InRecordFragment newInstance(int page) {
+    public static MyTakeRecordFragment newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
-        InRecordFragment pageFragment = new InRecordFragment();
+        MyTakeRecordFragment pageFragment = new MyTakeRecordFragment();
         pageFragment.setArguments(args);
         return pageFragment;
     }
 
     private void initOrders() {
-        int i = 0;
-        dbhelper = DBManger.getInstance(mContext);
-        Cursor cursor = dbhelper.getReadableDatabase().rawQuery("select * from " + MyDatabaseHelper.TABLE_OUT_NAME, null);
-        while (cursor.moveToNext()){
-            Log.i("forsee", cursor.getString(0));
-            Order or= new Order();
-            // TODO
-//            or.setId(cursor.getString(0));
-//            or.setStart_place(cursor.getString(1));
-//            or.setEnd_place(cursor.getString(2));
-//            or.setName(cursor.getString(3));
-//            or.setPhone_number(cursor.getString(4));
-//            or.setCharges(cursor.getString(5));
-//            or.setRemark(cursor.getString(6));
-//            or.setState(cursor.getString(7));
-//            or.setDate(cursor.getString(8));
-            orderList3.add(or);
-            i++;
-        }
-        cursor.close();
-        dbhelper.close();
-        /*SharedPreferences pref = getActivity().getSharedPreferences("grab_order",getActivity().MODE_PRIVATE);
-        Map<String, ?> map = pref.getAll();
-        Iterator iterator = map.entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry entry = (Map.Entry)iterator.next();
-            list.add(entry.getValue().toString());
-        }*/
-        /** for (int i=0; i<list.size(); i++) {
-         order[i] = SpiltStringUtil.messageToOrder(list.get(i));
-         //Log.d("InRecordFragment",list.get(0));
-         }*/
-        //Log.d("InRecordFragment",map.toString());
-        //pref.getString();
-        /*for (int i = 0; i < list.size(); i++) {
-            orderList2.add(SpiltStringUtil.messageToOrder(list.get(i)));
-            Log.i("orderlist1", orderList2.get(i).getDate());
-            Log.i("orderlist2", orderList2.get(i).getCharges());
-        }
-        for (int i = 0; i < orders.length; i++) {
-            orderList.add(orders[i]);
-        }*/
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (orderList != null)
+                    orderList.clear();
+                orderList = new UserHandle().findMySendOrders(1);
+                if (orderList != null) {
+                    handler.sendEmptyMessage(0x333);
+                } else
+                    handler.sendEmptyMessage(0x334);
+            }
+        }).start();
     }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initOrders();
     }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         flag = false;
         view = inflater.inflate(R.layout.out_order_recycle, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rc_main);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
-        adapter = new OutRecordRecyclerAdapter(orderList3);
+        adapter = new OutRecordRecyclerAdapter(orderList);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -132,10 +126,10 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
                                 ContentValues values = new ContentValues();
                                 values.put(MyDatabaseHelper.TABLE_STATE, "完成");
                                 int result = db.update(MyDatabaseHelper.TABLE_OUT_NAME,
-                                        values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList3.get(position - 1 - indext).getOrderID() + "'", null);
+                                        values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList.get(position - 1 - indext).getOrderID() + "'", null);
                                 dbhelper.close();
 
-                                orderList3.get(position - 1 -indext).setState("完成");
+                                orderList.get(position - 1 - indext).setState("完成");
                                 bt.setEnabled(false);
                                 bt.setText("已完成");
 
@@ -144,7 +138,7 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
                                     public void run() {
                                         // TODO
                                         //SubmitUtil.changeOrderStatetoServlet(orderList3.get(position - 1 - indext).getOrderID(), "完成");
-                                        new OrderHandle().alterOrderState(orderList3.get(position - 1 - indext).getOrderID(), OrderHandle.HASGRAP);
+                                        new OrderHandle().alterOrderState(orderList.get(position - 1 - indext).getOrderID(), OrderHandle.HASGRAP);
                                         //SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢")
                                     }
                                 }).start();
@@ -164,7 +158,7 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
                                 bt.setText("完成");
 
 //                                flag = true;
-//                                Log.i("OutRecordFragment", Boolean.valueOf(flag).toString());
+//                                Log.i("MySendRecordFragment", Boolean.valueOf(flag).toString());
                             }
                         }).show();
 
@@ -176,5 +170,5 @@ public class OutRecordFragment extends android.support.v4.app.Fragment {
         return view;
 
 
-  }
+    }
 }

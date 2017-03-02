@@ -40,9 +40,8 @@ public class JacksonUtils {
 	public static <T> T readJson(String jsonData, Class<T> type) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-		T bean = null;
 		try {
-			bean = objectMapper.readValue(jsonData, type);
+			return objectMapper.readValue(jsonData, type);
 		} catch (JsonParseException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -50,7 +49,7 @@ public class JacksonUtils {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return bean;
+		return null;
 	}
 
 	/**

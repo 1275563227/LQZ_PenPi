@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import gdin.com.penpi.domain.Order;
+import gdin.com.penpi.domain.User;
 
 /**
  * 连接服务器之后接受数据并解析
@@ -24,7 +25,7 @@ public class OrderHandle {
         String responseData = Connect.connect(requestURL + "saveOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
-            Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
+            Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
                     return true;
@@ -39,7 +40,7 @@ public class OrderHandle {
         String responseData = Connect.connect(requestURL + "deleteOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
-            Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
+            Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
                     return true;
@@ -52,7 +53,7 @@ public class OrderHandle {
         String responseData = Connect.connect(requestURL + "findAllOrder", null);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
-            Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
+            Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
                     Order orders[] = JacksonUtils.readJson((String) map.get("returnInfo"), Order[].class);
@@ -69,7 +70,7 @@ public class OrderHandle {
         String responseData = Connect.connect(requestURL + "findOrderByID", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
-            Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
+            Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
                     return JacksonUtils.readJson((String) map.get("returnInfo"), Order.class);
@@ -85,7 +86,7 @@ public class OrderHandle {
         String responseData = Connect.connect(requestURL + "findOrderByState", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
-            Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
+            Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
                     Order orders[] = JacksonUtils.readJson((String) map.get("returnInfo"), Order[].class);
@@ -103,7 +104,7 @@ public class OrderHandle {
         String responseData = Connect.connect(requestURL + "alterOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
-            Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
+            Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
                     return JacksonUtils.readJson((String) map.get("returnInfo"), Order.class);
@@ -116,10 +117,13 @@ public class OrderHandle {
         Order order = new Order();
         order.setOrderID(ID);
         order.setState(state);
+        User user = new User();
+        user.setUserID(1);
+        order.setTakeOrderPeople(user);
         String responseData = Connect.connect(requestURL + "alterOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
-            Map<String, Object> map = JacksonUtils.readJson(responseData, Map.class);
+            Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
                     return JacksonUtils.readJson((String) map.get("returnInfo"), Order.class);
