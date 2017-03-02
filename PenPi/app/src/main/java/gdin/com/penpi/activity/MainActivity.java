@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -39,15 +40,11 @@ import java.util.List;
 import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.FragmentAdapter;
 import gdin.com.penpi.baidumap.MapMarkerOverlay;
-import gdin.com.penpi.client.Constants;
-import gdin.com.penpi.client.NotificationSettingsActivity;
-import gdin.com.penpi.client.ServiceManager;
 import gdin.com.penpi.db.DBManger;
 import gdin.com.penpi.db.MyDatabaseHelper;
 import gdin.com.penpi.fragment.MapShowFragment;
 import gdin.com.penpi.fragment.OrderShowFragment;
 import gdin.com.penpi.login.LoginActivity;
-import gdin.com.penpi.util.SubmitUtil;
 import gdin.com.penpi.transformer.DepthPageTransformer;
 
 /**
@@ -67,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
     private ActionBarDrawerToggle mDrawerToggle;        // 定义toolbar左上角的弹出左侧菜单按扭
 
-    private TextView school;                            // ToolBar显示学校
+    private TextView tv_school;                         // ToolBar显示学校
 
     private MenuItem messageRecord;                     // 设置消息记录
 
@@ -79,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
-                SubmitUtil.showToast(MainActivity.this, "与PN服务器连接成功");
+                Toast.makeText(MainActivity.this, "与PN服务器连接成功", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -95,26 +92,26 @@ public class MainActivity extends AppCompatActivity {
         /**
          * 判断是否与“长连接”连接成功
          */
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (!Constants.connectSucceed.contains("成功")) {
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    if (Constants.connectSucceed.contains("成功")) {
-                        handler.sendEmptyMessage(0x123);
-                    }
-                }
-            }
-        }).start();
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                while (!Constants.connectSucceed.contains("成功")) {
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    if (Constants.connectSucceed.contains("成功")) {
+//                        handler.sendEmptyMessage(0x123);
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     private void initView() {
         //MainActivity的布局文件中的主要控件初始化
-        school = (TextView) this.findViewById(R.id.tv_location);
+        tv_school = (TextView) this.findViewById(R.id.tv_location);
 
         mToolbar = (Toolbar) this.findViewById(R.id.tool_bar);
         mToolbar.setTitle("");
@@ -215,7 +212,7 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(intent);
                     break;
                 case R.id.config_name:
-                    ServiceManager.viewNotificationSettings(MainActivity.this);
+//                    ServiceManager.viewNotificationSettings(MainActivity.this);
                     break;
                 case R.id.outlogin_name:
                     intent = new Intent(MainActivity.this, LoginActivity.class);
@@ -240,8 +237,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.message:
-                Intent intent = new Intent(MainActivity.this, NotificationSettingsActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(MainActivity.this, NotificationSettingsActivity.class);
+//                startActivity(intent);
                 break;
             case android.R.id.home:
                 //主界面左上角的icon点击反应
@@ -313,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
         // 取得MapLocationList回传的数据
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
-                school.setText(data.getStringExtra("myLocation"));
+                tv_school.setText(data.getStringExtra("myLocation"));
                 PoiCitySearchOption poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(data.getStringExtra("myLocation"));
                 mViewPager.setCurrentItem(1);
                 mPoiSearch.searchInCity(poiCitySearchOption);

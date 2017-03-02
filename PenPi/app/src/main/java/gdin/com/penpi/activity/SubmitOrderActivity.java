@@ -1,12 +1,9 @@
 package gdin.com.penpi.activity;
 
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -18,16 +15,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.bean.Order;
-import gdin.com.penpi.bean.User;
-import gdin.com.penpi.db.DBManger;
+import gdin.com.penpi.domain.Order;
+import gdin.com.penpi.domain.User;
 import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.util.SubmitUtil;
+import gdin.com.penpi.utils.OrderHandle;
 
 /**
  * Created by Administrator on 2016/11/7.
@@ -56,7 +50,7 @@ public class SubmitOrderActivity extends AppCompatActivity {
     private double Vip_price;
     private double final_price;
 
-    private final Order order = new Order();
+//    private final Order order = new Order();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -214,38 +208,47 @@ public class SubmitOrderActivity extends AppCompatActivity {
             }
             final_price = Vip_price;
         }
-        SimpleDateFormat simFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        String orderId = UUID.randomUUID().toString().replaceAll("-", "");
-        order.setId(orderId);
-        order.setStart_place(et_start.getText().toString());
-        order.setEnd_place(et_end.getText().toString());
-        order.setName(et_name.getText().toString());
-        order.setPhone_number(et_phone_number.getText().toString());
-        order.setRemark(et_remark.getText().toString());
-        order.setCharges(Double.toString(final_price));
-        order.setState("未抢");
-        order.setDate(simFormat.format(new Date()));
+        final Order order = new Order();
+        order.setStartPlace(et_start.getText().toString());
+        order.setEndPlace(et_end.getText().toString());
+        User user = new User();
+        user.setUserID(1);
+//        user.setUsername(et_name.getText().toString());
+//        user.setPhoneNumber(et_phone_number.getText().toString());
+        order.setSendOrderPeople(user);
+        order.setSendOrderPeopleName(et_name.getText().toString());
+        try {
+            order.setSendOrderPeoplePhone(Integer.parseInt(et_phone_number.getText().toString().trim()));
+        }catch (NumberFormatException e){
+            e.printStackTrace();
+            order.setSendOrderPeoplePhone(null);
+        }
+        order.setCharges(final_price);
+        order.setState(OrderHandle.NOGRAP);
+        order.setRemark(et_remark.getText().toString().trim());
 
-        MyDatabaseHelper dataHelper;
-        SQLiteDatabase db;
-        dataHelper = DBManger.getInstance(SubmitOrderActivity.this);
-        db = dataHelper.getWritableDatabase();
-        ContentValues values = new ContentValues();
+        // TODO
+//        MyDatabaseHelper dataHelper;
+//        SQLiteDatabase db;
+//        dataHelper = DBManger.getInstance(SubmitOrderActivity.this);
+//        db = dataHelper.getWritableDatabase();
+//        ContentValues values = new ContentValues();
 
-        values.put(MyDatabaseHelper.TABLE_ORDER_ID,order.getId());
-        values.put(MyDatabaseHelper.TABLE_STAART_PLACE,order.getStart_place());
-        values.put(MyDatabaseHelper.TABLE_END_PLACE,order.getEnd_place());
-        values.put(MyDatabaseHelper.TABLE_PEOPLE_NAME,order.getName());
-        values.put(MyDatabaseHelper.TABLE_PHONE,order.getPhone_number());
-        values.put(MyDatabaseHelper.TABLE_CHARGES,order.getCharges());
-        values.put(MyDatabaseHelper.TABLE_REMARK,order.getRemark());
-        values.put(MyDatabaseHelper.TABLE_STATE,order.getState());
-        values.put(MyDatabaseHelper.TABLE_DATE,order.getDate());
-        db.insert(MyDatabaseHelper.TABLE_OUT_NAME,null,values);
-        db.close();
+//        values.put(MyDatabaseHelper.TABLE_ORDER_ID,order.getId());
+//        values.put(MyDatabaseHelper.TABLE_STAART_PLACE,order.getStart_place());
+//        values.put(MyDatabaseHelper.TABLE_END_PLACE,order.getEnd_place());
+//        values.put(MyDatabaseHelper.TABLE_PEOPLE_NAME,order.getName());
+//        values.put(MyDatabaseHelper.TABLE_PHONE,order.getPhone_number());
+//        values.put(MyDatabaseHelper.TABLE_CHARGES,order.getCharges());
+//        values.put(MyDatabaseHelper.TABLE_REMARK,order.getRemark());
+//        values.put(MyDatabaseHelper.TABLE_STATE,order.getState());
+//        values.put(MyDatabaseHelper.TABLE_DATE,order.getDate());
+//        db.insert(MyDatabaseHelper.TABLE_OUT_NAME,null,values);
+//        db.close();
 
-        new AlertDialog.Builder(SubmitOrderActivity.this).setTitle("提示")//设置对话框标题
+        new AlertDialog.Builder(SubmitOrderActivity.this)
+                .setTitle("提示") //设置对话框标题
                 .setMessage("预计消费：" + final_price)//设置显示的内容
                 .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加确定按钮
                     @Override
@@ -256,7 +259,8 @@ public class SubmitOrderActivity extends AppCompatActivity {
                             @Override
                             public void run() {
 
-                                SubmitUtil.addOrdertoServe(order);
+//                                SubmitUtil.addOrdertoServe(order);
+                                new OrderHandle().saveOrder(order);
                             }
                         }.start();
                         finish();

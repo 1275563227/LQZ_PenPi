@@ -16,7 +16,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.domain.Order;
 
 
 /**
@@ -97,13 +97,13 @@ public class OutRecordRecyclerAdapter extends RecyclerView.Adapter<OutRecordRecy
         // Log.i("forsee","----------------------------------------------------------------------------------------------------------------------");
         int legh = mOrderList.size();
         Order order = mOrderList.get(legh - position - 1);
-        holder.order_id.setText(order.getId().substring(0, 11));
-        holder.order_name.setText(order.getName());
-        holder.startPlace.setText(order.getStart_place());
-        holder.endPlace.setText(order.getEnd_place());
-        holder.telephone.setText(order.getPhone_number());
-        holder.charges.setText(order.getCharges());
-        holder.Date.setText(order.getDate());
+        holder.order_id.setText(order.getOrderID() + "");
+        holder.order_name.setText(order.getSendOrderPeopleName());
+        holder.startPlace.setText(order.getStartPlace());
+        holder.endPlace.setText(order.getEndPlace());
+        holder.telephone.setText(order.getSendOrderPeoplePhone() + "");
+        holder.charges.setText(String.valueOf(order.getCharges()));
+        holder.Date.setText(order.getSendOrderDate().toString());
         // holder.foruse.setEnabled(true);
         // holder.foruse.setText("完成");
 

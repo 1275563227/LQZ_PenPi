@@ -27,9 +27,9 @@ import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.RecyclerViewAdapter;
-import gdin.com.penpi.bean.Order;
-import gdin.com.penpi.util.ComparatorDate;
-import gdin.com.penpi.util.SubmitUtil;
+import gdin.com.penpi.domain.Order;
+import gdin.com.penpi.utils.ComparatorDate;
+import gdin.com.penpi.utils.OrderHandle;
 
 
 /**
@@ -82,7 +82,8 @@ public class OrderShowFragment extends Fragment {
                     if (orderList != null)
                         orderList.clear();
 
-                    orderList = SubmitUtil.getOrdersfromServe();
+                    // 获取未抢的订单
+                    orderList = new OrderHandle().findOrderByState(OrderHandle.NOGRAP);
                     Thread.sleep(1000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -153,7 +154,7 @@ public class OrderShowFragment extends Fragment {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                orderList = SubmitUtil.getOrdersfromServe();
+                orderList = new OrderHandle().findOrderByState(OrderHandle.NOGRAP);
                 if (orderList != null) {
                     handler.sendEmptyMessage(0x123);
                 } else
@@ -175,9 +176,9 @@ public class OrderShowFragment extends Fragment {
             }
             if (msg.what == 0x124) {
                 if (hasConnectInternet)
-                    SubmitUtil.showToast(getActivity(), "订单已被抢光");
+                    Toast.makeText(OrderShowFragment.this.getActivity(), "订单已被抢光", Toast.LENGTH_SHORT).show();
                 else
-                    SubmitUtil.showToast(getActivity(), "网络连接失败，请连接上网络！");
+                    Toast.makeText(OrderShowFragment.this.getActivity(), "网络连接失败，请连接上网络！", Toast.LENGTH_SHORT).show();
             }
         }
     };

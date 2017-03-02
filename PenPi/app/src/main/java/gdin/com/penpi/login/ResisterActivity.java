@@ -21,8 +21,8 @@ import android.widget.Toast;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import gdin.com.penpi.R;
-import gdin.com.penpi.bean.User;
-import gdin.com.penpi.util.ClearEditTextUtil;
+import gdin.com.penpi.domain.User;
+import gdin.com.penpi.utils.ClearEditTextUtil;
 
 public class ResisterActivity extends AppCompatActivity implements OnClickListener {
     String APPKEY = "189f9aed6f6f0";
@@ -152,9 +152,10 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
 
                         user = new User();
-                        user.setPhone_number(inputPhoneEt.getText().toString());
-                        user.setYZM(inputCodeEt.getText().toString());
-                        user.setPassword(passwordEt.getText().toString());
+                        // TODO
+//                        user.setPhone_number(inputPhoneEt.getText().toString());
+//                        user.setYZM(inputCodeEt.getText().toString());
+//                        user.setPassword(passwordEt.getText().toString());
 
                         Log.i("LOGIN", user.toString());
                         Intent intent = new Intent(ResisterActivity.this, LoginActivity.class);

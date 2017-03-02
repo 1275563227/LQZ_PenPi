@@ -1,8 +1,6 @@
 package gdin.com.penpi.adapter;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.CardView;
@@ -12,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
@@ -31,10 +30,11 @@ import java.util.List;
 import gdin.com.penpi.activity.MainActivity;
 import gdin.com.penpi.R;
 import gdin.com.penpi.baidumap.MapMarkerOverlay;
-import gdin.com.penpi.bean.Order;
+import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.db.DBManger;
 import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.util.SubmitUtil;
+import gdin.com.penpi.utils.FormatUtils;
+import gdin.com.penpi.utils.OrderHandle;
 
 
 /**
@@ -61,12 +61,12 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
-                SubmitUtil.showToast(mContext, "抢单成功，请在'我的记录'查看详细信息");
+                Toast.makeText(mContext, "抢单成功，请在'我的记录'查看详细信息", Toast.LENGTH_SHORT).show();
                 mOrderList.remove(mPosition);
                 notifyDataSetChanged();
             }
             if (msg.what == 0x124) {
-                SubmitUtil.showToast(mContext, "抢单失败，该订单已被其他人获取");
+                Toast.makeText(mContext, "抢单失败，该订单已被其他人获取", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -90,7 +90,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         }
     }
 
-    int i = 0;
+    private int i = 0;
 
     public RecyclerViewAdapter(List<Order> orderList) {
         mOrderList = orderList;
@@ -173,11 +173,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (mOrderList.size() != 0) {
             final Order order = mOrderList.get(position);
             if (order != null) {
-                holder.peopleName.setText(order.getName());
-                holder.startPlace.setText(order.getStart_place());
-                holder.endPlace.setText(order.getEnd_place());
-                holder.charges.setText(order.getCharges());
-                holder.date.setText(order.getDate());
+                holder.peopleName.setText(order.getSendOrderPeopleName());
+                holder.startPlace.setText(order.getStartPlace());
+                holder.endPlace.setText(order.getEndPlace());
+                holder.charges.setText(String.valueOf(order.getCharges()));
+                holder.date.setText(FormatUtils.formatTime(order.getSendOrderDate()));
                 /**
                  * 设置图片“抢”的点击事件
                  */
@@ -187,27 +187,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                boolean isChange = SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢");
-                                Log.i("RecyclerViewAdapter", isChange + "");
-                                mPosition = position;
-                                if (isChange) {
+                                Order orderReturn = new OrderHandle().alterOrderState(order.getOrderID(), OrderHandle.HASGRAP);
+                                if (orderReturn != null) {
+                                    mPosition = position;
                                     handler.sendEmptyMessage(0x123);
-
-                                    //建立本地数据库SQLite
-                                    order.setState("已抢");
-                                    SQLiteDatabase db = dataHelper.getWritableDatabase();
-                                    ContentValues values = new ContentValues();
-                                    values.put(MyDatabaseHelper.TABLE_ORDER_ID,order.getId());
-                                    values.put(MyDatabaseHelper.TABLE_STAART_PLACE,order.getStart_place());
-                                    values.put(MyDatabaseHelper.TABLE_END_PLACE,order.getEnd_place());
-                                    values.put(MyDatabaseHelper.TABLE_PEOPLE_NAME,order.getName());
-                                    values.put(MyDatabaseHelper.TABLE_PHONE,order.getPhone_number());
-                                    values.put(MyDatabaseHelper.TABLE_CHARGES,order.getCharges());
-                                    values.put(MyDatabaseHelper.TABLE_REMARK,order.getRemark());
-                                    values.put(MyDatabaseHelper.TABLE_STATE,order.getState());
-                                    values.put(MyDatabaseHelper.TABLE_DATE,order.getDate());
-                                    db.insert(MyDatabaseHelper.TABLE_IN_NAME,null,values);
-                                    db.close();
                                 } else
                                     handler.sendEmptyMessage(0x124);
                             }
@@ -221,14 +204,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                     @Override
                     public void onClick(View v) {
                         MainActivity.getViewPager().setCurrentItem(1);
-                        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getStart_place());
+                        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getStartPlace());
                         mPoiSearch.searchInCity(poiCitySearchOption);
                         try {
                             Thread.sleep(1500);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getEnd_place());
+                        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getEndPlace());
                         mPoiSearch.searchInCity(poiCitySearchOption);
                     }
                 });

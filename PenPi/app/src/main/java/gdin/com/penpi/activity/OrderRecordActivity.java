@@ -13,8 +13,8 @@ import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.adapter.SimpleFragmentPagerAdapter;
-import gdin.com.penpi.fragment.InRecordFragment;
-import gdin.com.penpi.fragment.OutRecordFragment;
+import gdin.com.penpi.fragment.MyTakeRecordFragment;
+import gdin.com.penpi.fragment.MySendRecordFragment;
 
 public class OrderRecordActivity extends AppCompatActivity {
 
@@ -40,8 +40,8 @@ public class OrderRecordActivity extends AppCompatActivity {
         });
 
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new OutRecordFragment());
-        fragments.add(new InRecordFragment());
+        fragments.add(new MySendRecordFragment());
+        fragments.add(new MyTakeRecordFragment());
 
         pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), fragments);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
