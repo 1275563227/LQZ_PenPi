@@ -3,8 +3,6 @@ package gdin.com.penpi.homeIndex;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -16,23 +14,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
-import com.baidu.mapapi.search.poi.PoiCitySearchOption;
-import com.baidu.mapapi.search.poi.PoiDetailResult;
-import com.baidu.mapapi.search.poi.PoiResult;
-import com.baidu.mapapi.search.poi.PoiSearch;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +27,6 @@ import gdin.com.penpi.R;
 import gdin.com.penpi.activity.PersonalPageActivity;
 import gdin.com.penpi.placeList.PlaceListActivity;
 import gdin.com.penpi.activity.SubmitOrderActivity;
-import gdin.com.penpi.baiduMap.MapMarkerOverlay;
 import gdin.com.penpi.dbUtils.DBManger;
 import gdin.com.penpi.dbUtils.MyDatabaseHelper;
 import gdin.com.penpi.login.LoginActivity;
@@ -70,17 +55,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private MyDatabaseHelper dataHelper;
 
-    private PoiSearch mPoiSearch = null;
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x123) {
-                Toast.makeText(HomeActivity.this, "与PN服务器连接成功", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,25 +62,6 @@ public class HomeActivity extends AppCompatActivity {
 
         //初始化控件及布局
         initView();
-
-        /**
-         * 判断是否与“长连接”连接成功
-         */
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                while (!Constants.connectSucceed.contains("成功")) {
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    if (Constants.connectSucceed.contains("成功")) {
-//                        handler.sendEmptyMessage(0x123);
-//                    }
-//                }
-//            }
-//        }).start();
     }
 
     private void initView() {
@@ -156,44 +111,6 @@ public class HomeActivity extends AppCompatActivity {
         //同时也要覆写PagerAdapter的getPageTitle方法，否则Tab没有title
         mTabLayout.setupWithViewPager(mViewPager);
         mTabLayout.setTabsFromPagerAdapter(adapter);
-
-        initPoiSearch();
-    }
-
-    /**
-     * 初始化学校地址的监听，【只是为了反地理编译，感觉不必要这么麻烦，以后再改】
-     */
-    private void initPoiSearch() {
-        mPoiSearch = PoiSearch.newInstance();
-        mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
-            @Override
-            public void onGetPoiResult(PoiResult poiResult) {
-                // 获取POI检索结果
-                if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-                    Log.i("ShowOrderAdapter", "未找到结果,请重新输入");
-                }
-                if (poiResult.getAllPoi() == null) {
-                    Log.i("ShowOrderAdapter", "未找到结果,请重新输入");
-                } else {
-                    LatLng poilocation = poiResult.getAllPoi().get(0).location;
-                    if (poilocation != null) {
-                        Double latitude = poilocation.latitude;
-                        Double longitude = poilocation.longitude;
-                        LatLng latLng = new LatLng(latitude, longitude);
-
-                        MapMarkerOverlay mapMarkerOverlay = MapMarkerOverlay.getMapMarkerOverlay();
-                        BaiduMap baiduMap = mapMarkerOverlay.getBaiduMap();
-                        baiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(latLng));
-                        baiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(17));
-                    }
-                }
-            }
-
-            @Override
-            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
-
-            }
-        });
     }
 
     private NavigationView.OnNavigationItemSelectedListener naviListener = new NavigationView.OnNavigationItemSelectedListener() {
@@ -311,9 +228,9 @@ public class HomeActivity extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
                 tv_school.setText(data.getStringExtra("myLocation"));
-                PoiCitySearchOption poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(data.getStringExtra("myLocation"));
-                mViewPager.setCurrentItem(1);
-                mPoiSearch.searchInCity(poiCitySearchOption);
+//                PoiCitySearchOption poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(data.getStringExtra("myLocation"));
+//                mViewPager.setCurrentItem(1);
+//                mPoiSearch.searchInCity(poiCitySearchOption);
             }
         }
     }

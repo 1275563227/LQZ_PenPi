@@ -14,19 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.geocode.GeoCodeResult;
-import com.baidu.mapapi.search.geocode.GeoCoder;
-import com.baidu.mapapi.search.geocode.OnGetGeoCoderResultListener;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeOption;
-import com.baidu.mapapi.search.geocode.ReverseGeoCodeResult;
-import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
-import com.baidu.mapapi.search.poi.PoiCitySearchOption;
-import com.baidu.mapapi.search.poi.PoiDetailResult;
-import com.baidu.mapapi.search.poi.PoiResult;
-import com.baidu.mapapi.search.poi.PoiSearch;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,10 +26,8 @@ import gdin.com.penpi.domain.PoiSearchResults;
  * 作用：
  *      改变EditText的地址，会刷出该地址附近的信息
  */
-public class PlaceListActivity extends AppCompatActivity implements OnGetPoiSearchResultListener {
+public class PlaceListActivity extends AppCompatActivity {
 
-    private PoiSearch mPoiSearch = null;
-    private PoiCitySearchOption poiCitySearchOption = null;
     private List<PoiSearchResults> list = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
@@ -69,16 +54,6 @@ public class PlaceListActivity extends AppCompatActivity implements OnGetPoiSear
             }
         });
 
-        mPoiSearch = PoiSearch.newInstance();
-        mPoiSearch.setOnGetPoiSearchResultListener(this);
-
-        /**
-         * 初始值
-         */
-        if (list != null)
-            list.clear();
-        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword("中山大道西293");
-        mPoiSearch.searchInCity(poiCitySearchOption);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new PlaceListAdapter(PlaceListActivity.this, list);
@@ -98,8 +73,8 @@ public class PlaceListActivity extends AppCompatActivity implements OnGetPoiSear
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String city = PlaceListActivity.this.city.getText().toString();
 //                mSuggestionSearch.requestSuggestion((new SuggestionSearchOption()).keyword(s.toString()).city(city));
-                poiCitySearchOption = new PoiCitySearchOption().city(city).keyword(place.getText().toString());
-                mPoiSearch.searchInCity(poiCitySearchOption);
+//                poiCitySearchOption = new PoiCitySearchOption().city(city).keyword(place.getText().toString());
+//                mPoiSearch.searchInCity(poiCitySearchOption);
             }
 
             @Override
@@ -110,64 +85,6 @@ public class PlaceListActivity extends AppCompatActivity implements OnGetPoiSear
                 }
             }
         });
-    }
-
-    @Override
-    public void onGetPoiResult(PoiResult poiResult) {
-
-        // 获取POI检索结果
-        if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-            Toast.makeText(PlaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
-            return;
-        }
-        list.clear();
-        if (poiResult.getAllPoi() == null) {
-            Toast.makeText(PlaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
-            return;
-        } else {
-            for (int i = 0; i < poiResult.getAllPoi().size(); i++) {
-                poiName = poiResult.getAllPoi().get(i).name;
-                poiAdd = poiResult.getAllPoi().get(i).address;
-                LatLng poilocation = poiResult.getAllPoi().get(i).location;
-
-                if (poilocation != null) {
-                    Double latitude = poilocation.latitude;
-                    Double longitude = poilocation.longitude;
-
-                    // 实例化一个地理编码查询对象
-                    GeoCoder geoCoder = GeoCoder.newInstance();
-                    // 设置反地理编码位置坐标
-                    ReverseGeoCodeOption op = new ReverseGeoCodeOption();
-                    op.location(poilocation);
-                    // 发起反地理编码请求(经纬度->地址信息)
-                    geoCoder.reverseGeoCode(op);
-                    geoCoder.setOnGetGeoCodeResultListener(new OnGetGeoCoderResultListener() {
-
-                        @Override
-                        public void onGetReverseGeoCodeResult(ReverseGeoCodeResult arg0) {
-                            poiAdd = arg0.getAddress();
-                        }
-
-                        @Override
-                        public void onGetGeoCodeResult(GeoCodeResult arg0) {
-                        }
-
-                    });
-                    PoiSearchResults results = new PoiSearchResults(poiName, poiAdd, latitude, longitude);
-                    list.add(results);
-                    Log.i("PlaceListActivity", list.toString());
-                } else {
-                    Toast.makeText(PlaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
-                }
-            }
-
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
-
     }
 
     public void setResultTo(String s) {

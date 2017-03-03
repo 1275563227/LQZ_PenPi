@@ -8,12 +8,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.mapapi.map.BaiduMap;
-
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.baiduMap.MapMarkerOverlay;
 import gdin.com.penpi.domain.PoiSearchResults;
 
 public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.ViewHolder> {
@@ -44,9 +41,9 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
                 public void onClick(View v) {
                     mContext.setResultTo(holder.mTextView1.getText().toString());
                     // 清楚百度地图的覆盖物
-                    MapMarkerOverlay mapMarkerOverlay = MapMarkerOverlay.getMapMarkerOverlay();
-                    BaiduMap baiduMap = mapMarkerOverlay.getBaiduMap();
-                    baiduMap.clear();
+//                    MapMarkerOverlay mapMarkerOverlay = MapMarkerOverlay.getMapMarkerOverlay();
+//                    BaiduMap baiduMap = mapMarkerOverlay.getBaiduMap();
+//                    baiduMap.clear();
                 }
             });
         }

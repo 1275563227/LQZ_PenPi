@@ -12,23 +12,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.baidu.mapapi.map.BaiduMap;
-import com.baidu.mapapi.map.BitmapDescriptor;
-import com.baidu.mapapi.map.BitmapDescriptorFactory;
-import com.baidu.mapapi.map.MapStatusUpdateFactory;
-import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.search.core.SearchResult;
-import com.baidu.mapapi.search.poi.OnGetPoiSearchResultListener;
-import com.baidu.mapapi.search.poi.PoiCitySearchOption;
-import com.baidu.mapapi.search.poi.PoiDetailResult;
-import com.baidu.mapapi.search.poi.PoiResult;
-import com.baidu.mapapi.search.poi.PoiSearch;
-
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.baiduMap.MapMarkerOverlay;
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.dbUtils.DBManger;
 import gdin.com.penpi.dbUtils.MyDatabaseHelper;
@@ -51,10 +37,6 @@ public class ShowOrderAdapter extends RecyclerView.Adapter<ShowOrderAdapter.View
     private int mPosition;
 
     private MyDatabaseHelper dataHelper;
-
-    private PoiSearch mPoiSearch = null;
-
-    private PoiCitySearchOption poiCitySearchOption = null;
 
     private Handler handler = new Handler() {
         @Override
@@ -93,63 +75,6 @@ public class ShowOrderAdapter extends RecyclerView.Adapter<ShowOrderAdapter.View
 
     public ShowOrderAdapter(List<Order> orderList) {
         mOrderList = orderList;
-        mPoiSearch = PoiSearch.newInstance();
-        mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
-            @Override
-            public void onGetPoiResult(PoiResult poiResult) {
-                // 获取POI检索结果
-                if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-                    Log.i("ShowOrderAdapter", "未找到结果,请重新输入");
-                }
-                if (poiResult.getAllPoi() == null) {
-                    Log.i("ShowOrderAdapter", "未找到结果,请重新输入");
-                } else {
-                    LatLng poilocation = poiResult.getAllPoi().get(0).location;
-                    if (poilocation != null) {
-                        Double latitude = poilocation.latitude;
-                        Double longitude = poilocation.longitude;
-                        LatLng latLng = new LatLng(latitude, longitude);
-
-                        MapMarkerOverlay mapMarkerOverlay = MapMarkerOverlay.getMapMarkerOverlay();
-                        BaiduMap baiduMap = mapMarkerOverlay.getBaiduMap();
-                        BitmapDescriptor icon = BitmapDescriptorFactory
-                                .fromResource(R.drawable.map_icon_start);
-
-                        i++;
-                        if (i == 1) {
-                            /**
-                             * 为百度地图添加覆盖物
-                             */
-                            MarkerOptions options = new MarkerOptions();
-                            options.position(latLng) // 位置
-                                    .title("start_place") // content_title
-                                    .icon(icon) // 图标
-                                    .draggable(true); // 设置图标可以拖动
-
-                            baiduMap.clear();
-                            baiduMap.addOverlay(options);
-                            Log.i("ShowOrderAdapter", "latLng start_place = " + latLng.toString());
-                            baiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(latLng));
-                            baiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(17));
-                        }
-                        if (i == 2) {
-                            i = 0;
-                            icon = BitmapDescriptorFactory
-                                    .fromResource(R.drawable.map_icon_end);
-                            MarkerOptions options = new MarkerOptions().icon(icon).title("end_place")
-                                    .position(latLng).draggable(true);
-                            baiduMap.addOverlay(options);
-                            Log.i("ShowOrderAdapter", "latLng end_place = " + latLng.toString());
-                        }
-                    }
-                }
-            }
-
-            @Override
-            public void onGetPoiDetailResult(PoiDetailResult poiDetailResult) {
-
-            }
-        });
     }
 
     @Override
@@ -203,15 +128,6 @@ public class ShowOrderAdapter extends RecyclerView.Adapter<ShowOrderAdapter.View
                     @Override
                     public void onClick(View v) {
                         HomeActivity.getViewPager().setCurrentItem(1);
-                        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getStartPlace());
-                        mPoiSearch.searchInCity(poiCitySearchOption);
-                        try {
-                            Thread.sleep(1500);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getEndPlace());
-                        mPoiSearch.searchInCity(poiCitySearchOption);
                     }
                 });
             }
