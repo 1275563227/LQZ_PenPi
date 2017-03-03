@@ -7,9 +7,9 @@ android {
     defaultConfig {
         applicationId "gdin.com.penpi"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 2
-        versionName "2.0.1"
+        versionName "2.1.1"
 
         // 极光推送加入以下两个：ndk manifestPlaceholders
         ndk {
@@ -78,4 +78,6 @@ dependencies {
 
     // jpush框架
     compile 'cn.jiguang:jpush:2.1.8'  // 此处以SDK 2.1.8版本为例
+//    compile 'cn.jiguang.sdk:jpush:3.0.0'  // 此处以JPush 3.0.0 版本为例。
+//    compile 'cn.jiguang.sdk:jcore:1.0.0'  // 此处以JCore 1.0.0 版本为例。
 }

@@ -15,13 +15,6 @@ public class WelcomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        /**
-         * Start the service
-         */
-//        ServiceManager serviceManager = new ServiceManager(this);
-//        serviceManager.setNotificationIcon(R.drawable.notification);
-//        serviceManager.startService();
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
