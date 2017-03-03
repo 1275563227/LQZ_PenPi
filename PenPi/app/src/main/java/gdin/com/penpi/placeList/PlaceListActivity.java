@@ -1,4 +1,4 @@
-package gdin.com.penpi.activity;
+package gdin.com.penpi.placeList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.adapter.SpaceListAdapter;
 import gdin.com.penpi.domain.PoiSearchResults;
 
 /**
@@ -40,14 +39,14 @@ import gdin.com.penpi.domain.PoiSearchResults;
  * 作用：
  *      改变EditText的地址，会刷出该地址附近的信息
  */
-public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSearchResultListener {
+public class PlaceListActivity extends AppCompatActivity implements OnGetPoiSearchResultListener {
 
     private PoiSearch mPoiSearch = null;
     private PoiCitySearchOption poiCitySearchOption = null;
     private List<PoiSearchResults> list = new ArrayList<>();
 
     private RecyclerView mRecyclerView;
-    private SpaceListAdapter adapter;
+    private PlaceListAdapter adapter;
     private EditText place;
     private TextView city;
 
@@ -82,7 +81,7 @@ public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSear
         mPoiSearch.searchInCity(poiCitySearchOption);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SpaceListAdapter(SpaceListActivity.this, list);
+        adapter = new PlaceListAdapter(PlaceListActivity.this, list);
         mRecyclerView.setAdapter(adapter);
 
 //        SharedPreferences preferences = getSharedPreferences("map_location", MODE_PRIVATE);
@@ -97,7 +96,7 @@ public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSear
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String city = SpaceListActivity.this.city.getText().toString();
+                String city = PlaceListActivity.this.city.getText().toString();
 //                mSuggestionSearch.requestSuggestion((new SuggestionSearchOption()).keyword(s.toString()).city(city));
                 poiCitySearchOption = new PoiCitySearchOption().city(city).keyword(place.getText().toString());
                 mPoiSearch.searchInCity(poiCitySearchOption);
@@ -118,12 +117,12 @@ public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSear
 
         // 获取POI检索结果
         if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-            Toast.makeText(SpaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
+            Toast.makeText(PlaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
             return;
         }
         list.clear();
         if (poiResult.getAllPoi() == null) {
-            Toast.makeText(SpaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
+            Toast.makeText(PlaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
             return;
         } else {
             for (int i = 0; i < poiResult.getAllPoi().size(); i++) {
@@ -156,9 +155,9 @@ public class SpaceListActivity extends AppCompatActivity implements OnGetPoiSear
                     });
                     PoiSearchResults results = new PoiSearchResults(poiName, poiAdd, latitude, longitude);
                     list.add(results);
-                    Log.i("SpaceListActivity", list.toString());
+                    Log.i("PlaceListActivity", list.toString());
                 } else {
-                    Toast.makeText(SpaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
+                    Toast.makeText(PlaceListActivity.this, "未找到结果,请重新输入", Toast.LENGTH_LONG).show();
                 }
             }
 

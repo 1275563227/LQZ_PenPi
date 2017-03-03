@@ -1,4 +1,4 @@
-package gdin.com.penpi.adapter;
+package gdin.com.penpi.myRecord;
 
 /**
  * Created by Administrator on 2016/11/30.
@@ -22,7 +22,7 @@ import gdin.com.penpi.domain.Order;
 /**
  * Created by Administrator on 2016/11/27.
  */
-public class OutRecordRecyclerAdapter extends RecyclerView.Adapter<OutRecordRecyclerAdapter.ViewHolder> {
+public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapter.ViewHolder> {
     /*private int[] colors = {R.color.color_0, R.color.color_1, R.color.color_2, R.color.color_3,
             R.color.color_4, R.color.color_5, R.color.color_6, R.color.color_7,
             R.color.color_8, R.color.color_9,};*/
@@ -76,7 +76,7 @@ public class OutRecordRecyclerAdapter extends RecyclerView.Adapter<OutRecordRecy
         }
     }
 
-    public OutRecordRecyclerAdapter(List<Order> orderList) {
+    public MySendRecordAdapter(List<Order> orderList) {
         mOrderList = orderList;
     }
 

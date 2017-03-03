@@ -1,4 +1,4 @@
-package gdin.com.penpi.utils;
+package gdin.com.penpi.commonUtils;
 
 import java.text.SimpleDateFormat;
 import java.util.Comparator;

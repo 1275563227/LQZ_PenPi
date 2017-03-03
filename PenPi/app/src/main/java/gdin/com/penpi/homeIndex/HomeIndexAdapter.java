@@ -1,4 +1,4 @@
-package gdin.com.penpi.adapter;
+package gdin.com.penpi.homeIndex;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -13,11 +13,11 @@ import java.util.List;
  * Time         : 15:32
  * Description  :
  */
-public class FragmentAdapter extends FragmentStatePagerAdapter {
+public class HomeIndexAdapter extends FragmentStatePagerAdapter {
     private List<Fragment> mFragments;
     private List<String> mTitles;
 
-    public FragmentAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
+    public HomeIndexAdapter(FragmentManager fm, List<Fragment> fragments, List<String> titles) {
         super(fm);
         mFragments = fragments;
         mTitles = titles;

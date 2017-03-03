@@ -1,4 +1,4 @@
-package gdin.com.penpi.adapter;
+package gdin.com.penpi.placeList;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,16 +13,15 @@ import com.baidu.mapapi.map.BaiduMap;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.baidumap.MapMarkerOverlay;
+import gdin.com.penpi.baiduMap.MapMarkerOverlay;
 import gdin.com.penpi.domain.PoiSearchResults;
-import gdin.com.penpi.activity.SpaceListActivity;
 
-public class SpaceListAdapter extends RecyclerView.Adapter<SpaceListAdapter.ViewHolder> {
+public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.ViewHolder> {
 
-    private SpaceListActivity mContext;
+    private PlaceListActivity mContext;
     private List<PoiSearchResults> list;
 
-    public SpaceListAdapter(SpaceListActivity context, List<PoiSearchResults> list) {
+    public PlaceListAdapter(PlaceListActivity context, List<PoiSearchResults> list) {
         this.mContext = context;
         this.list = list;
     }

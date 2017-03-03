@@ -71,19 +71,19 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.MainActivity" />
+        <activity android:name=".homeIndex.HomeActivity" />
         <activity
             android:name=".login.LoginActivity"
             android:theme="@style/ActivityItemTheme" />
         <activity android:name=".login.ResisterActivity" />
         <activity android:name=".activity.SubmitOrderActivity" />
-        <activity android:name=".activity.SpaceListActivity" />
+        <activity android:name=".placeList.PlaceListActivity" />
         <activity android:name=".activity.PersonalPageActivity" />
         <activity android:name=".activity.ChargesStandradActivity" />
         <activity android:name=".activity.OrderNotificationActivity" />
-        <activity android:name=".activity.OrderRecordActivity" />
+        <activity android:name=".myRecord.MyOrderRecordActivity" />
         <activity android:name=".activity.NoLoginActivity" />
-        <activity android:name=".activity.EvaluationActivity" />
+        <activity android:name=".myRecord.EvaluationActivity" />
 
         <receiver
             android:name=".jpush.MyReceiver"

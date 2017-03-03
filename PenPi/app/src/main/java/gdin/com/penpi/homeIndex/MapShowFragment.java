@@ -1,4 +1,4 @@
-package gdin.com.penpi.fragment;
+package gdin.com.penpi.homeIndex;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 
 import com.baidu.mapapi.map.MapView;
 
-import gdin.com.penpi.activity.MainActivity;
 import gdin.com.penpi.R;
-import gdin.com.penpi.baidumap.MapMarkerOverlay;
+import gdin.com.penpi.baiduMap.MapMarkerOverlay;
 
 
 public class MapShowFragment extends Fragment {
@@ -36,9 +35,9 @@ public class MapShowFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    MainActivity.mViewPager.requestDisallowInterceptTouchEvent(false);
+                    HomeActivity.mViewPager.requestDisallowInterceptTouchEvent(false);
                 } else {
-                    MainActivity.mViewPager.requestDisallowInterceptTouchEvent(true);
+                    HomeActivity.mViewPager.requestDisallowInterceptTouchEvent(true);
                 }
                 return false;
             }

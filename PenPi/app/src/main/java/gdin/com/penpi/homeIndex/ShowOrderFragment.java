@@ -1,4 +1,4 @@
-package gdin.com.penpi.fragment;
+package gdin.com.penpi.homeIndex;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -26,10 +26,9 @@ import java.util.Collections;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.adapter.RecyclerViewAdapter;
 import gdin.com.penpi.domain.Order;
-import gdin.com.penpi.utils.ComparatorDate;
-import gdin.com.penpi.utils.OrderHandle;
+import gdin.com.penpi.commonUtils.ComparatorDate;
+import gdin.com.penpi.commonUtils.OrderHandle;
 
 
 /**
@@ -42,11 +41,11 @@ import gdin.com.penpi.utils.OrderHandle;
  * 3、你想要控制Item增删的动画，请通过ItemAnimator
  * 4、你想要控制点击、长按事件
  */
-public class OrderShowFragment extends Fragment {
+public class ShowOrderFragment extends Fragment {
 
     private List<Order> orderList = new ArrayList<>();
 
-    private RecyclerViewAdapter adapter;
+    private ShowOrderAdapter adapter;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout swipeRefresh;
 
@@ -60,12 +59,12 @@ public class OrderShowFragment extends Fragment {
     private BroadcastReceiver connectionReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            ConnectivityManager connectMgr = (ConnectivityManager) OrderShowFragment.this.getActivity().getSystemService(OrderShowFragment.this.getActivity().CONNECTIVITY_SERVICE);
+            ConnectivityManager connectMgr = (ConnectivityManager) ShowOrderFragment.this.getActivity().getSystemService(ShowOrderFragment.this.getActivity().CONNECTIVITY_SERVICE);
             NetworkInfo mobNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
             NetworkInfo wifiNetInfo = connectMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
             if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
                 hasConnectInternet = false;
-                Toast.makeText(OrderShowFragment.this.getActivity(), "网络连接失败，请连接上网络！", Toast.LENGTH_LONG).show();
+                Toast.makeText(ShowOrderFragment.this.getActivity(), "网络连接失败，请连接上网络！", Toast.LENGTH_LONG).show();
             }
         }
     };
@@ -98,7 +97,7 @@ public class OrderShowFragment extends Fragment {
                             //刷新排序（时间）
                             ComparatorDate c = new ComparatorDate();
                             Collections.sort(orderList, c);
-                            adapter = new RecyclerViewAdapter(orderList);
+                            adapter = new ShowOrderAdapter(orderList);
                             mRecyclerView.setAdapter(adapter);
                         }
                         swipeRefresh.setRefreshing(false);
@@ -118,7 +117,7 @@ public class OrderShowFragment extends Fragment {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (isRefreshing) {
-                    Log.d("OrderShowFragment", String.valueOf(isRefreshing));
+                    Log.d("ShowOrderFragment", String.valueOf(isRefreshing));
                     return true;
                 } else {
                     return false;
@@ -138,7 +137,7 @@ public class OrderShowFragment extends Fragment {
         mRecyclerView = (RecyclerView) view.findViewById(R.id.recycler_view);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
 
-        adapter = new RecyclerViewAdapter(orderList);
+        adapter = new ShowOrderAdapter(orderList);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
@@ -171,14 +170,14 @@ public class OrderShowFragment extends Fragment {
                 //对从服务器传入的orderList进行排序
                 ComparatorDate c = new ComparatorDate();
                 Collections.sort(orderList, c);
-                adapter = new RecyclerViewAdapter(orderList);
+                adapter = new ShowOrderAdapter(orderList);
                 mRecyclerView.setAdapter(adapter);
             }
             if (msg.what == 0x124) {
                 if (hasConnectInternet)
-                    Toast.makeText(OrderShowFragment.this.getActivity(), "订单已被抢光", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ShowOrderFragment.this.getActivity(), "订单已被抢光", Toast.LENGTH_SHORT).show();
                 else
-                    Toast.makeText(OrderShowFragment.this.getActivity(), "网络连接失败，请连接上网络！", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ShowOrderFragment.this.getActivity(), "网络连接失败，请连接上网络！", Toast.LENGTH_SHORT).show();
             }
         }
     };

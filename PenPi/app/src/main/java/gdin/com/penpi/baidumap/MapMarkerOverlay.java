@@ -1,4 +1,4 @@
-package gdin.com.penpi.baidumap;
+package gdin.com.penpi.baiduMap;
 
 import android.content.Context;
 import android.view.View;

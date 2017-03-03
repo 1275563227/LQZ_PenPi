@@ -1,4 +1,4 @@
-package gdin.com.penpi.utils;
+package gdin.com.penpi.commonUtils;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;

@@ -9,17 +9,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.domain.Order;
-import gdin.com.penpi.db.DBManger;
-import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.utils.JacksonUtils;
-import gdin.com.penpi.utils.OrderHandle;
+import gdin.com.penpi.dbUtils.DBManger;
+import gdin.com.penpi.dbUtils.MyDatabaseHelper;
+import gdin.com.penpi.homeIndex.HomeActivity;
+import gdin.com.penpi.commonUtils.JacksonUtils;
+import gdin.com.penpi.commonUtils.OrderHandle;
 
 public class OrderNotificationActivity extends AppCompatActivity {
 
@@ -59,7 +59,7 @@ public class OrderNotificationActivity extends AppCompatActivity {
         mToolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(OrderNotificationActivity.this, MainActivity.class);
+                Intent intent = new Intent(OrderNotificationActivity.this, HomeActivity.class);
                 startActivity(intent);
                 finish();
             }

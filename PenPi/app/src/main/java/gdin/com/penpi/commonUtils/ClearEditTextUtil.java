@@ -1,4 +1,4 @@
-package gdin.com.penpi.utils;
+package gdin.com.penpi.commonUtils;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

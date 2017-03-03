@@ -22,7 +22,7 @@ import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import gdin.com.penpi.R;
 import gdin.com.penpi.domain.User;
-import gdin.com.penpi.utils.ClearEditTextUtil;
+import gdin.com.penpi.commonUtils.ClearEditTextUtil;
 
 public class ResisterActivity extends AppCompatActivity implements OnClickListener {
     String APPKEY = "189f9aed6f6f0";

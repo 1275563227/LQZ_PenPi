@@ -1,4 +1,4 @@
-package gdin.com.penpi.adapter;
+package gdin.com.penpi.homeIndex;
 
 import android.content.Context;
 import android.os.Handler;
@@ -27,14 +27,13 @@ import com.baidu.mapapi.search.poi.PoiSearch;
 
 import java.util.List;
 
-import gdin.com.penpi.activity.MainActivity;
 import gdin.com.penpi.R;
-import gdin.com.penpi.baidumap.MapMarkerOverlay;
+import gdin.com.penpi.baiduMap.MapMarkerOverlay;
 import gdin.com.penpi.domain.Order;
-import gdin.com.penpi.db.DBManger;
-import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.utils.FormatUtils;
-import gdin.com.penpi.utils.OrderHandle;
+import gdin.com.penpi.dbUtils.DBManger;
+import gdin.com.penpi.dbUtils.MyDatabaseHelper;
+import gdin.com.penpi.commonUtils.FormatUtils;
+import gdin.com.penpi.commonUtils.OrderHandle;
 
 
 /**
@@ -43,7 +42,7 @@ import gdin.com.penpi.utils.OrderHandle;
  * Time         : 09:47
  * Description  :
  */
-public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
+public class ShowOrderAdapter extends RecyclerView.Adapter<ShowOrderAdapter.ViewHolder> {
 
     private Context mContext;
 
@@ -92,7 +91,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     private int i = 0;
 
-    public RecyclerViewAdapter(List<Order> orderList) {
+    public ShowOrderAdapter(List<Order> orderList) {
         mOrderList = orderList;
         mPoiSearch = PoiSearch.newInstance();
         mPoiSearch.setOnGetPoiSearchResultListener(new OnGetPoiSearchResultListener() {
@@ -100,10 +99,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             public void onGetPoiResult(PoiResult poiResult) {
                 // 获取POI检索结果
                 if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-                    Log.i("RecyclerViewAdapter", "未找到结果,请重新输入");
+                    Log.i("ShowOrderAdapter", "未找到结果,请重新输入");
                 }
                 if (poiResult.getAllPoi() == null) {
-                    Log.i("RecyclerViewAdapter", "未找到结果,请重新输入");
+                    Log.i("ShowOrderAdapter", "未找到结果,请重新输入");
                 } else {
                     LatLng poilocation = poiResult.getAllPoi().get(0).location;
                     if (poilocation != null) {
@@ -129,7 +128,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
                             baiduMap.clear();
                             baiduMap.addOverlay(options);
-                            Log.i("RecyclerViewAdapter", "latLng start_place = " + latLng.toString());
+                            Log.i("ShowOrderAdapter", "latLng start_place = " + latLng.toString());
                             baiduMap.setMapStatus(MapStatusUpdateFactory.newLatLng(latLng));
                             baiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(17));
                         }
@@ -140,7 +139,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                             MarkerOptions options = new MarkerOptions().icon(icon).title("end_place")
                                     .position(latLng).draggable(true);
                             baiduMap.addOverlay(options);
-                            Log.i("RecyclerViewAdapter", "latLng end_place = " + latLng.toString());
+                            Log.i("ShowOrderAdapter", "latLng end_place = " + latLng.toString());
                         }
                     }
                 }
@@ -203,7 +202,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        MainActivity.getViewPager().setCurrentItem(1);
+                        HomeActivity.getViewPager().setCurrentItem(1);
                         poiCitySearchOption = new PoiCitySearchOption().city("广州").keyword(order.getStartPlace());
                         mPoiSearch.searchInCity(poiCitySearchOption);
                         try {

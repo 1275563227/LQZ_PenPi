@@ -1,10 +1,9 @@
-package gdin.com.penpi.fragment;
+package gdin.com.penpi.myRecord;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,7 +14,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,15 +25,12 @@ import java.util.Collections;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.activity.EvaluationActivity;
-import gdin.com.penpi.adapter.OutRecordRecyclerAdapter;
-import gdin.com.penpi.adapter.RecyclerViewAdapter;
 import gdin.com.penpi.domain.Order;
-import gdin.com.penpi.db.DBManger;
-import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.utils.ComparatorDate;
-import gdin.com.penpi.utils.OrderHandle;
-import gdin.com.penpi.utils.UserHandle;
+import gdin.com.penpi.dbUtils.DBManger;
+import gdin.com.penpi.dbUtils.MyDatabaseHelper;
+import gdin.com.penpi.commonUtils.ComparatorDate;
+import gdin.com.penpi.commonUtils.OrderHandle;
+import gdin.com.penpi.commonUtils.UserHandle;
 
 /**
  * Created by Administrator on 2016/11/30.
@@ -45,7 +40,7 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
 
     public static final String ARG_PAGE = "ARG_PAGE";
     private int mPage;
-    private OutRecordRecyclerAdapter adapter;
+    private MySendRecordAdapter adapter;
     private RecyclerView mRecyclerView;
     private SwipeRefreshLayout swipeRefresh;
     private View view;
@@ -62,7 +57,7 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
                 //对从服务器传入的orderList进行排序
                 ComparatorDate c = new ComparatorDate();
                 Collections.sort(orderList, c);
-                adapter = new OutRecordRecyclerAdapter(orderList);
+                adapter = new MySendRecordAdapter(orderList);
                 mRecyclerView.setAdapter(adapter);
             }
             if (msg.what == 0x334) {
@@ -105,11 +100,11 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
         view = inflater.inflate(R.layout.out_order_recycle, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rc_main);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
-        adapter = new OutRecordRecyclerAdapter(orderList);
+        adapter = new MySendRecordAdapter(orderList);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
 
-        adapter.setOnItemClickListener(new OutRecordRecyclerAdapter.OnItemClickListener() {
+        adapter.setOnItemClickListener(new MySendRecordAdapter.OnItemClickListener() {
             //此处实现onItemClick的接口
             @Override
             public void onItemClick(View view, final int position, final int indext) {
@@ -146,7 +141,7 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
                                 Intent intent = new Intent(getActivity(), EvaluationActivity.class);
                                 startActivity(intent);
 
-//                                Intent intent = new Intent(getActivity(), MainActivity.class);
+//                                Intent intent = new Intent(getActivity(), HomeActivity.class);
 //                                startActivity(intent);
                             }
                         })

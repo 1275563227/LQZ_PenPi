@@ -1,4 +1,4 @@
-package gdin.com.penpi.adapter;
+package gdin.com.penpi.myRecord;
 
 import android.content.Context;
 import android.support.v4.app.Fragment;
@@ -10,13 +10,13 @@ import java.util.List;
 /**
  * Created by Administrator on 2016/11/30.
  */
-public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
+public class MyOrderFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private Context context;
     private List<Fragment> mFragments;
     private static final String[] mTitles = {"发单记录", "抢单记录"};
 
-    public SimpleFragmentPagerAdapter(FragmentManager fm,  List<Fragment> fragments) {
+    public MyOrderFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
         super(fm);
         this.mFragments = fragments;
     }

@@ -98,18 +98,18 @@ public class MyReceiver extends BroadcastReceiver {
 		return sb.toString();
 	}
 	
-	//send msg to MainActivity
+	//send msg to HomeActivity
 	private void processCustomMessage(Context context, Bundle bundle) {
-//		if (MainActivity.isForeground) {
+//		if (HomeActivity.isForeground) {
 //			String message = bundle.getString(JPushInterface.EXTRA_MESSAGE);
 //			String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
-//			Intent msgIntent = new Intent(MainActivity.MESSAGE_RECEIVED_ACTION);
-//			msgIntent.putExtra(MainActivity.KEY_MESSAGE, message);
+//			Intent msgIntent = new Intent(HomeActivity.MESSAGE_RECEIVED_ACTION);
+//			msgIntent.putExtra(HomeActivity.KEY_MESSAGE, message);
 //			if (!ExampleUtil.isEmpty(extras)) {
 //				try {
 //					JSONObject extraJson = new JSONObject(extras);
 //					if (null != extraJson && extraJson.length() > 0) {
-//						msgIntent.putExtra(MainActivity.KEY_EXTRAS, extras);
+//						msgIntent.putExtra(HomeActivity.KEY_EXTRAS, extras);
 //					}
 //				} catch (JSONException e) {
 //

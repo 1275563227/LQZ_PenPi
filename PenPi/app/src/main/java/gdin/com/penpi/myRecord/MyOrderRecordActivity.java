@@ -1,4 +1,4 @@
-package gdin.com.penpi.activity;
+package gdin.com.penpi.myRecord;
 
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -12,13 +12,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.adapter.SimpleFragmentPagerAdapter;
-import gdin.com.penpi.fragment.MyTakeRecordFragment;
-import gdin.com.penpi.fragment.MySendRecordFragment;
 
-public class OrderRecordActivity extends AppCompatActivity {
+public class MyOrderRecordActivity extends AppCompatActivity {
 
-    private SimpleFragmentPagerAdapter pagerAdapter;
+    private MyOrderFragmentPagerAdapter pagerAdapter;
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private Toolbar mToolbar;
@@ -43,7 +40,7 @@ public class OrderRecordActivity extends AppCompatActivity {
         fragments.add(new MySendRecordFragment());
         fragments.add(new MyTakeRecordFragment());
 
-        pagerAdapter = new SimpleFragmentPagerAdapter(getSupportFragmentManager(), fragments);
+        pagerAdapter = new MyOrderFragmentPagerAdapter(getSupportFragmentManager(), fragments);
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         viewPager.setAdapter(pagerAdapter);

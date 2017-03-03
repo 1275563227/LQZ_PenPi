@@ -15,13 +15,13 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
 
-import java.util.Date;
-
 import gdin.com.penpi.R;
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.domain.User;
-import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.utils.OrderHandle;
+import gdin.com.penpi.dbUtils.MyDatabaseHelper;
+import gdin.com.penpi.homeIndex.HomeActivity;
+import gdin.com.penpi.commonUtils.OrderHandle;
+import gdin.com.penpi.placeList.PlaceListActivity;
 
 /**
  * Created by Administrator on 2016/11/7.
@@ -100,7 +100,7 @@ public class SubmitOrderActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Intent intent = new Intent(SubmitOrderActivity.this, SpaceListActivity.class);
+                    Intent intent = new Intent(SubmitOrderActivity.this, PlaceListActivity.class);
                     startActivityForResult(intent, 1);
                 }
                 return false;
@@ -112,7 +112,7 @@ public class SubmitOrderActivity extends AppCompatActivity {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-                    Intent intent = new Intent(SubmitOrderActivity.this, SpaceListActivity.class);
+                    Intent intent = new Intent(SubmitOrderActivity.this, PlaceListActivity.class);
                     startActivityForResult(intent, 2);
                 }
                 return false;
@@ -158,7 +158,7 @@ public class SubmitOrderActivity extends AppCompatActivity {
     }
 
     /**
-     * SpaceListActivity 的回调函数
+     * PlaceListActivity 的回调函数
      *
      * @param requestCode 请求码
      * @param resultCode
@@ -280,7 +280,7 @@ public class SubmitOrderActivity extends AppCompatActivity {
      * @param view
      */
     public void Return_Main(View view) {
-        Intent intent = new Intent(SubmitOrderActivity.this,MainActivity.class);
+        Intent intent = new Intent(SubmitOrderActivity.this,HomeActivity.class);
         startActivity(intent);
     }
 

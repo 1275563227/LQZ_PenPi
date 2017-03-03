@@ -1,4 +1,4 @@
-package gdin.com.penpi.activity;
+package gdin.com.penpi.homeIndex;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -38,19 +38,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.adapter.FragmentAdapter;
-import gdin.com.penpi.baidumap.MapMarkerOverlay;
-import gdin.com.penpi.db.DBManger;
-import gdin.com.penpi.db.MyDatabaseHelper;
-import gdin.com.penpi.fragment.MapShowFragment;
-import gdin.com.penpi.fragment.OrderShowFragment;
+import gdin.com.penpi.activity.PersonalPageActivity;
+import gdin.com.penpi.placeList.PlaceListActivity;
+import gdin.com.penpi.activity.SubmitOrderActivity;
+import gdin.com.penpi.baiduMap.MapMarkerOverlay;
+import gdin.com.penpi.dbUtils.DBManger;
+import gdin.com.penpi.dbUtils.MyDatabaseHelper;
 import gdin.com.penpi.login.LoginActivity;
-import gdin.com.penpi.transformer.DepthPageTransformer;
+import gdin.com.penpi.myRecord.MyOrderRecordActivity;
 
 /**
  * 首页的界面 包括抢单列表和显示地图
  */
-public class MainActivity extends AppCompatActivity {
+public class HomeActivity extends AppCompatActivity {
     //将ToolBar与TabLayout结合放入AppBarLayout
     private Toolbar mToolbar;
     //DrawerLayout中的左侧菜单控件
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
-                Toast.makeText(MainActivity.this, "与PN服务器连接成功", Toast.LENGTH_SHORT).show();
+                Toast.makeText(HomeActivity.this, "与PN服务器连接成功", Toast.LENGTH_SHORT).show();
             }
         }
     };
@@ -144,11 +144,11 @@ public class MainActivity extends AppCompatActivity {
         mTabLayout.addTab(mTabLayout.newTab().setText(titles.get(1)));
         //初始化ViewPager的数据集
         List<Fragment> fragments = new ArrayList<>();
-        fragments.add(new OrderShowFragment());
+        fragments.add(new ShowOrderFragment());
         fragments.add(new MapShowFragment());
 
         //创建ViewPager的adapter
-        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager(), fragments, titles);
+        HomeIndexAdapter adapter = new HomeIndexAdapter(getSupportFragmentManager(), fragments, titles);
         mViewPager.setAdapter(adapter);
         mViewPager.setPageTransformer(true,new DepthPageTransformer());
 
@@ -170,10 +170,10 @@ public class MainActivity extends AppCompatActivity {
             public void onGetPoiResult(PoiResult poiResult) {
                 // 获取POI检索结果
                 if (poiResult == null || poiResult.error == SearchResult.ERRORNO.RESULT_NOT_FOUND) {// 没有找到检索结果
-                    Log.i("RecyclerViewAdapter", "未找到结果,请重新输入");
+                    Log.i("ShowOrderAdapter", "未找到结果,请重新输入");
                 }
                 if (poiResult.getAllPoi() == null) {
-                    Log.i("RecyclerViewAdapter", "未找到结果,请重新输入");
+                    Log.i("ShowOrderAdapter", "未找到结果,请重新输入");
                 } else {
                     LatLng poilocation = poiResult.getAllPoi().get(0).location;
                     if (poilocation != null) {
@@ -203,19 +203,19 @@ public class MainActivity extends AppCompatActivity {
             Intent intent;
             switch (menuItem.getItemId()) {
                 case R.id.menu_name:
-                    intent = new Intent(MainActivity.this, PersonalPageActivity.class);
+                    intent = new Intent(HomeActivity.this, PersonalPageActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.record_name:
-                    dataHelper = DBManger.getInstance(MainActivity.this);
-                    intent = new Intent(MainActivity.this, OrderRecordActivity.class);
+                    dataHelper = DBManger.getInstance(HomeActivity.this);
+                    intent = new Intent(HomeActivity.this, MyOrderRecordActivity.class);
                     startActivity(intent);
                     break;
                 case R.id.config_name:
-//                    ServiceManager.viewNotificationSettings(MainActivity.this);
+//                    ServiceManager.viewNotificationSettings(HomeActivity.this);
                     break;
                 case R.id.outlogin_name:
-                    intent = new Intent(MainActivity.this, LoginActivity.class);
+                    intent = new Intent(HomeActivity.this, LoginActivity.class);
                     startActivity(intent);
                     break;
             }
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.message:
-//                Intent intent = new Intent(MainActivity.this, NotificationSettingsActivity.class);
+//                Intent intent = new Intent(HomeActivity.this, NotificationSettingsActivity.class);
 //                startActivity(intent);
                 break;
             case android.R.id.home:
@@ -251,7 +251,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK && event.getRepeatCount() == 0){
-            new AlertDialog.Builder(MainActivity.this).setTitle("温馨提示")//设置对话框标题
+            new AlertDialog.Builder(HomeActivity.this).setTitle("温馨提示")//设置对话框标题
                     .setMessage("是否退出？")//设置显示的内容
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {//添加确定按钮
                         @Override
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
      * 选择地点
      */
     public void space_list(View view) {
-        Intent intent = new Intent(MainActivity.this, SpaceListActivity.class);
+        Intent intent = new Intent(HomeActivity.this, PlaceListActivity.class);
         startActivityForResult(intent, 1);
     }
 
@@ -287,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
      * 调用 SubmitOrderActivity
      */
     public void map_add(View view) {
-        Intent intent = new Intent(MainActivity.this, SubmitOrderActivity.class);
+        Intent intent = new Intent(HomeActivity.this, SubmitOrderActivity.class);
         startActivity(intent);
     }
 
@@ -295,12 +295,12 @@ public class MainActivity extends AppCompatActivity {
      * 点击头像进入登录界面
      */
     public void register(View view) {
-        Intent intent = new Intent(MainActivity.this, LoginActivity.class);
+        Intent intent = new Intent(HomeActivity.this, LoginActivity.class);
         startActivity(intent);
     }
 
     /**
-     * SpaceListActivity 的回调
+     * PlaceListActivity 的回调
      * @param requestCode
      * @param resultCode
      * @param data

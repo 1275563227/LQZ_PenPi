@@ -1,4 +1,4 @@
-package gdin.com.penpi.activity;
+package gdin.com.penpi.myRecord;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.homeIndex.HomeActivity;
 
 public class EvaluationActivity extends AppCompatActivity {
 
@@ -35,7 +36,7 @@ public class EvaluationActivity extends AppCompatActivity {
         findViewById(R.id.order_evaluation_bt).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(EvaluationActivity.this, MainActivity.class);
+                Intent intent = new Intent(EvaluationActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });

@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import gdin.com.penpi.activity.MainActivity;
+import gdin.com.penpi.homeIndex.HomeActivity;
 import gdin.com.penpi.R;
 
 public class LoginActivity extends AppCompatActivity {
@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 startActivity(intent);
             }
         });

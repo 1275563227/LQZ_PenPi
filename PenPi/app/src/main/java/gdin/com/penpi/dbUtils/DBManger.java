@@ -1,4 +1,4 @@
-package gdin.com.penpi.db;
+package gdin.com.penpi.dbUtils;
 
 import android.content.Context;
 
