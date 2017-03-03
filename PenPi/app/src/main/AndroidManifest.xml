@@ -46,7 +46,10 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <!--设置震动-->
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!--设置闪光灯-->
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
 
     <!-- 允许程序读取或写入系统设置 -->
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
@@ -66,27 +69,25 @@
         <activity android:name=".activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".homeIndex.HomeActivity" />
         <activity
             android:name=".login.LoginActivity"
             android:theme="@style/ActivityItemTheme" />
         <activity android:name=".login.ResisterActivity" />
         <activity android:name=".activity.SubmitOrderActivity" />
-        <activity android:name=".placeList.PlaceListActivity" />
         <activity android:name=".activity.PersonalPageActivity" />
         <activity android:name=".activity.ChargesStandradActivity" />
         <activity android:name=".activity.OrderNotificationActivity" />
-        <activity android:name=".myRecord.MyOrderRecordActivity" />
         <activity android:name=".activity.NoLoginActivity" />
+        <activity android:name=".placeList.PlaceListActivity" />
+        <activity android:name=".myRecord.MyOrderRecordActivity" />
         <activity android:name=".myRecord.EvaluationActivity" />
 
         <receiver
-            android:name=".jpush.MyReceiver"
+            android:name=".jpush.PushReceiver"
             android:enabled="true"
             android:exported="false">
             <intent-filter>

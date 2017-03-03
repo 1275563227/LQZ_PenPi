@@ -228,25 +228,6 @@ public class SubmitOrderActivity extends AppCompatActivity {
         order.setState(OrderHandle.NOGRAP);
         order.setRemark(et_remark.getText().toString().trim());
 
-        // TODO
-//        MyDatabaseHelper dataHelper;
-//        SQLiteDatabase db;
-//        dataHelper = DBManger.getInstance(SubmitOrderActivity.this);
-//        db = dataHelper.getWritableDatabase();
-//        ContentValues values = new ContentValues();
-
-//        values.put(MyDatabaseHelper.TABLE_ORDER_ID,order.getId());
-//        values.put(MyDatabaseHelper.TABLE_STAART_PLACE,order.getStart_place());
-//        values.put(MyDatabaseHelper.TABLE_END_PLACE,order.getEnd_place());
-//        values.put(MyDatabaseHelper.TABLE_PEOPLE_NAME,order.getName());
-//        values.put(MyDatabaseHelper.TABLE_PHONE,order.getPhone_number());
-//        values.put(MyDatabaseHelper.TABLE_CHARGES,order.getCharges());
-//        values.put(MyDatabaseHelper.TABLE_REMARK,order.getRemark());
-//        values.put(MyDatabaseHelper.TABLE_STATE,order.getState());
-//        values.put(MyDatabaseHelper.TABLE_DATE,order.getDate());
-//        db.insert(MyDatabaseHelper.TABLE_OUT_NAME,null,values);
-//        db.close();
-
         new AlertDialog.Builder(SubmitOrderActivity.this)
                 .setTitle("提示") //设置对话框标题
                 .setMessage("预计消费：" + final_price)//设置显示的内容
