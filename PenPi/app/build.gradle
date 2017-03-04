@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "gdin.com.penpi"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 24
         versionCode 2
         versionName "2.1.1"
 
@@ -80,5 +80,5 @@ dependencies {
     // 此处以SDK 2.1.8版本为例
     //    compile 'cn.jiguang.sdk:jpush:3.0.0'  // 此处以JPush 3.0.0 版本为例。
     //    compile 'cn.jiguang.sdk:jcore:1.0.0'  // 此处以JCore 1.0.0 版本为例。
-    compile files('libs/AMap3DMap_4.1.3_AMapNavi_1.9.4_AMapSearch_4.0.0_AMapLocation_3.3.0_20170118.jar')
+    compile files('libs/AMap.jar')
 }

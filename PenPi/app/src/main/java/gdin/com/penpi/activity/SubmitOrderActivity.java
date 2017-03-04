@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.commonUtils.OrderHandle;
@@ -20,7 +21,7 @@ import gdin.com.penpi.domain.User;
 import gdin.com.penpi.homeIndex.HomeActivity;
 import gdin.com.penpi.placeList.PlaceListActivity;
 
-public class SubmitOrderActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener{
+public class SubmitOrderActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
 
     private EditText et_startPlace;
     private EditText et_endPlace;
@@ -82,7 +83,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
      */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.et_start:
                 // 设置开始地址
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
@@ -105,7 +106,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
     @Override
     public void onClick(View view) {
         Intent intent;
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.bt_submit_sure:
                 // 提交订单
                 sumbitOrder(view);
@@ -132,7 +133,10 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
         user.setUserID(1);
         order.setSendOrderPeople(user);
         order.setSendOrderPeopleName(et_userName.getText().toString().trim());
-        order.setSendOrderPeoplePhone(Integer.parseInt(et_phone_number.getText().toString().trim()));
+        if (!"".equals(et_phone_number.getText().toString().trim()))
+            order.setSendOrderPeoplePhone(Integer.parseInt(et_phone_number.getText().toString().trim()));
+        else
+            Toast.makeText(this, "电话号码不能为空", Toast.LENGTH_SHORT).show();
         order.setCharges(final_price);
         order.setState(OrderHandle.NOGRAP);
         order.setRemark(et_remark.getText().toString().trim());
@@ -160,7 +164,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
                 }).show();//在按键响应事件中显示此对话框
     }
 
-    public double calculatePrice(){
+    public double calculatePrice() {
         double common_price = 1;
         double vip_price = 2;
         double final_price = 0;

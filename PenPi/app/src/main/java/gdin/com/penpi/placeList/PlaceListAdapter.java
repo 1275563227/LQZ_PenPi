@@ -22,8 +22,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
         this.mContext = context;
     }
 
-    public void setAddresses(List<Address> addresses) {
-        this.addresses = addresses;
+    public void setAddresses(List<Address> list) {
+        this.addresses = list;
     }
 
     @Override
@@ -48,9 +48,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
 
     @Override
     public int getItemCount() {
-        if (addresses != null) {
+        if (addresses != null)
             return addresses.size();
-        }
         return 0;
     }
 

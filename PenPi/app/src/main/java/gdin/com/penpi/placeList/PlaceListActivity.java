@@ -40,7 +40,7 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void initView() {
-        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.place_list_cecyclerView);
+        final RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.place_list_cecyclerView);
         et_place = (EditText) findViewById(R.id.et_location2);
         TextView tv_city = (TextView) findViewById(R.id.tv_palce);
         if (map != null)
@@ -55,7 +55,7 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
         // 第一次设置
-        MyPoiSearch.getInstance(PlaceListActivity.this, adapter).searchWithKeyword("广东技术师范学院", "");
+        MyPoiSearch.getInstance(PlaceListActivity.this, adapter, mRecyclerView).searchWithKeyword("广东技术师范学院", "");
         et_place.setText("广东技术师范学院");
         et_place.addTextChangedListener(new TextWatcher() {
 
@@ -66,7 +66,7 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!"".equals(s.toString().trim()))
-                    MyPoiSearch.getInstance(PlaceListActivity.this, adapter).searchWithKeyword(s.toString(), "");
+                    MyPoiSearch.getInstance(PlaceListActivity.this, adapter, mRecyclerView).searchWithKeyword(s.toString(), "");
                 else
                     Toast.makeText(PlaceListActivity.this, "输入为空", Toast.LENGTH_SHORT).show();
             }
@@ -75,19 +75,6 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
             public void afterTextChanged(Editable s) {
             }
         });
-    }
-
-    public void setResultAndBack(String s) {
-
-        // 需要返回的数据存入到intent中
-        Intent intent = new Intent();
-        intent.putExtra("myLocation", s);
-
-        //设置返回数据
-        setResult(RESULT_OK, intent);
-
-        //关闭Activity
-        finish();
     }
 
     @Override
@@ -100,5 +87,18 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
                 et_place.setText("");
                 break;
         }
+    }
+
+    public void setResultAndBack(String s) {
+
+        // 需要返回的数据存入到intent中
+        Intent intent = new Intent();
+        intent.putExtra("myLocation", s);
+
+        //设置返回数据
+        this.setResult(RESULT_OK, intent);
+
+        //关闭Activity
+        finish();
     }
 }

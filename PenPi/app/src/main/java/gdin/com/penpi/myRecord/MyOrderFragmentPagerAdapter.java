@@ -1,18 +1,13 @@
 package gdin.com.penpi.myRecord;
 
-import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
-/**
- * Created by Administrator on 2016/11/30.
- */
 public class MyOrderFragmentPagerAdapter extends FragmentPagerAdapter {
 
-    private Context context;
     private List<Fragment> mFragments;
     private static final String[] mTitles = {"发单记录", "抢单记录"};
 

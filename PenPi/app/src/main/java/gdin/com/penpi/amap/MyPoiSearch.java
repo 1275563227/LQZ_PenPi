@@ -1,7 +1,9 @@
 package gdin.com.penpi.amap;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
@@ -17,17 +19,20 @@ public class MyPoiSearch implements PoiSearch.OnPoiSearchListener {
 
     private Context mContext;
     private PlaceListAdapter adapter;
+    private RecyclerView mRecyclerView;
     private static MyPoiSearch myPoiSearch;
 
-    public MyPoiSearch(Context mContext, PlaceListAdapter adapter) {
+    public MyPoiSearch(Context mContext, PlaceListAdapter adapter, RecyclerView mRecyclerView) {
         this.mContext = mContext;
         this.adapter = adapter;
+        this.mRecyclerView = mRecyclerView;
     }
 
-    public static MyPoiSearch getInstance(Context context, PlaceListAdapter adapter) {
+    public static MyPoiSearch getInstance(Context context, PlaceListAdapter adapter, RecyclerView mRecyclerView) {
         if (myPoiSearch == null) {
             synchronized (MyPoiSearch.class) {
-                if (myPoiSearch == null) myPoiSearch = new MyPoiSearch(context, adapter);
+                if (myPoiSearch == null)
+                    myPoiSearch = new MyPoiSearch(context, adapter, mRecyclerView);
             }
         }
         return myPoiSearch;
@@ -79,8 +84,10 @@ public class MyPoiSearch implements PoiSearch.OnPoiSearchListener {
                 Log.d("[MyPoiSearch]", title + "-------->" + text);
                 addresses.add(new Address(lon, lat, title, text));
             }
+            Toast.makeText(mContext, "刷新列表中...", Toast.LENGTH_SHORT).show();
             adapter.setAddresses(addresses);
-            adapter.notifyDataSetChanged();
+//            adapter.notifyDataSetChanged();
+            mRecyclerView.setAdapter(adapter);
         }
     }
 
