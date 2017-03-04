@@ -56,9 +56,9 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="100dp"
-                android:orientation="vertical"
                 android:focusable="false"
                 android:focusableInTouchMode="true"
+                android:orientation="vertical"
                 android:padding="16dp">
 
                 <LinearLayout
@@ -79,7 +79,7 @@
                         android:textSize="20sp" />
 
                     <gdin.com.penpi.commonUtils.ClearEditTextUtil
-                        android:id="@+id/numberEt"
+                        android:id="@+id/tv_login_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -115,7 +115,7 @@
                         android:textSize="20sp" />
 
                     <gdin.com.penpi.commonUtils.ClearEditTextUtil
-                        android:id="@+id/passwardEt"
+                        android:id="@+id/tv_login_password"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
@@ -135,7 +135,7 @@
                     android:background="@drawable/login_thread" />
 
                 <Button
-                    android:id="@+id/imglogin"
+                    android:id="@+id/bt_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="20dp"
@@ -149,7 +149,7 @@
                     android:layout_height="wrap_content">
 
                     <Button
-                        android:id="@+id/pw_button"
+                        android:id="@+id/bt_login_by_validate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
@@ -161,14 +161,14 @@
                         android:textSize="20dp" />
 
                     <Button
-                        android:id="@+id/resister_button"
+                        android:id="@+id/bt_login_register"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_marginEnd="183dp"
                         android:layout_marginRight="183dp"
-                        android:layout_toLeftOf="@+id/pw_button"
-                        android:layout_toStartOf="@+id/pw_button"
+                        android:layout_toLeftOf="@+id/bt_login_by_validate"
+                        android:layout_toStartOf="@+id/bt_login_by_validate"
                         android:background="@drawable/userlogin_otherlogin_button_selector"
                         android:paddingLeft="0dp"
                         android:text="@string/user_login_zc"

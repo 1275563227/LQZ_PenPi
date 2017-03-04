@@ -13,9 +13,9 @@ import org.apache.http.util.EntityUtils;
 
 public class Connect {
 
-//    public static String requestURL = "http://192.168.1.168:8080/PenPiServer/forAndroid/";
+    public static String requestURL = "http://192.168.1.168:8080/PenPiServer/forAndroid/";
 
-    public static String requestURL = "http://www.lqzcloud.cn/PenPiServer/forAndroid/";
+//    public static String requestURL = "http://www.lqzcloud.cn/PenPiServer/forAndroid/";
 
     public static String connect(String requestURL, Object value) {
 

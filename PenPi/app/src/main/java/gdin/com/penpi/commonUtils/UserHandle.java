@@ -18,17 +18,20 @@ public class UserHandle {
 
     private String requestURL = Connect.requestURL + "userAction_";
 
-    public boolean login(User user) {
+    public User login(String name, String password) {
+        User user = new User();
+        user.setUsername(name);
+        user.setPassword(password);
         String responseData = Connect.connect(requestURL + "login", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
-                    return true;
+                    return JacksonUtils.readJson((String) map.get("returnInfo"), User.class);
             }
         }
-        return false;
+        return null;
     }
 
     public boolean register(User user) {
