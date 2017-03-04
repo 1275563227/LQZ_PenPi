@@ -127,41 +127,56 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
     public void sumbitOrder(View view) {
         double final_price = calculatePrice();
         final Order order = new Order();
-        order.setStartPlace(et_startPlace.getText().toString().trim());
-        order.setEndPlace(et_endPlace.getText().toString().trim());
+        String errorInfo = "";
+
+        if (!"".equals(et_startPlace.getText().toString().trim()))
+            order.setStartPlace(et_startPlace.getText().toString().trim());
+        else
+            errorInfo += "快递地点-";
+
+        if (!"".equals(et_endPlace.getText().toString().trim()))
+            order.setEndPlace(et_endPlace.getText().toString().trim());
+        else
+            errorInfo += "送货地点-";
+
         User user = new User();
         user.setUserID(1);
         order.setSendOrderPeople(user);
         order.setSendOrderPeopleName(et_userName.getText().toString().trim());
+
         if (!"".equals(et_phone_number.getText().toString().trim()))
             order.setSendOrderPeoplePhone(Integer.parseInt(et_phone_number.getText().toString().trim()));
         else
-            Toast.makeText(this, "电话号码不能为空", Toast.LENGTH_SHORT).show();
+            errorInfo += "电话号码-";
+
         order.setCharges(final_price);
         order.setState(OrderHandle.NOGRAP);
         order.setRemark(et_remark.getText().toString().trim());
 
-        new AlertDialog.Builder(this)
-                .setTitle("提示") //设置对话框标题
-                .setMessage("预计消费：" + final_price)  //设置显示的内容
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        new Thread() {
-                            @Override
-                            public void run() {
-                                new OrderHandle().saveOrder(order);
-                            }
-                        }.start();
-                        finish();
-                    }
-                })
-                .setNegativeButton("返回", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+        if (errorInfo.length() > 0)
+            Toast.makeText(this, errorInfo + "不能为空", Toast.LENGTH_SHORT).show();
+        else
+            new AlertDialog.Builder(this)
+                    .setTitle("提示") //设置对话框标题
+                    .setMessage("预计消费：" + final_price)  //设置显示的内容
+                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            new Thread() {
+                                @Override
+                                public void run() {
+                                    new OrderHandle().saveOrder(order);
+                                }
+                            }.start();
+                            finish();
+                        }
+                    })
+                    .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
 
-                    }
-                }).show();//在按键响应事件中显示此对话框
+                        }
+                    }).show();//在按键响应事件中显示此对话框
     }
 
     public double calculatePrice() {

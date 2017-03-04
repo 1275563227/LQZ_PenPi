@@ -50,8 +50,26 @@ public class ShowOrderFragment extends Fragment {
     private SwipeRefreshLayout swipeRefresh;
 
     private boolean isRefreshing = false;
-
     private boolean hasConnectInternet = true;
+
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                //对从服务器传入的orderList进行排序
+                ComparatorDate c = new ComparatorDate();
+                Collections.sort(orderList, c);
+                adapter = new ShowOrderAdapter(orderList);
+                mRecyclerView.setAdapter(adapter);
+            }
+            if (msg.what == 0x124) {
+                if (hasConnectInternet)
+                    Toast.makeText(ShowOrderFragment.this.getActivity(), "订单已被抢光", Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(ShowOrderFragment.this.getActivity(), "网络连接失败，请连接上网络！", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     /**
      * 广播监听 判断网络是否连接成功
@@ -162,25 +180,6 @@ public class ShowOrderFragment extends Fragment {
         }).start();
         return view;
     }
-
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x123) {
-                //对从服务器传入的orderList进行排序
-                ComparatorDate c = new ComparatorDate();
-                Collections.sort(orderList, c);
-                adapter = new ShowOrderAdapter(orderList);
-                mRecyclerView.setAdapter(adapter);
-            }
-            if (msg.what == 0x124) {
-                if (hasConnectInternet)
-                    Toast.makeText(ShowOrderFragment.this.getActivity(), "订单已被抢光", Toast.LENGTH_SHORT).show();
-                else
-                    Toast.makeText(ShowOrderFragment.this.getActivity(), "网络连接失败，请连接上网络！", Toast.LENGTH_SHORT).show();
-            }
-        }
-    };
 
     @Override
     public void onDestroy() {
