@@ -42,10 +42,14 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     public static ViewPager mViewPager;     //v4中的ViewPager控件
 
-    private TextView tv_address;            // ToolBar显示的地址
+    private static TextView tv_address;            // ToolBar显示的地址
 
     public static ViewPager getViewPager() {
         return mViewPager;
+    }
+
+    public static String getAddress(){
+        return tv_address.getText().toString().trim();
     }
 
     @Override

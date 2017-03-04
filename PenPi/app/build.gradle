@@ -11,7 +11,7 @@ android {
     }
     defaultConfig {
         applicationId "gdin.com.penpi"
-        minSdkVersion 16
+        minSdkVersion 14
         targetSdkVersion 24
         versionCode 2
         versionName "2.1.1"
@@ -40,7 +40,6 @@ android {
     useLibrary 'org.apache.http.legacy' // httpClient
 }
 
-
 repositories {
     flatDir {
         dirs 'libs'
@@ -50,36 +49,28 @@ repositories {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    // 百度地图
-    //    compile files('libs/baidumapapi_v3_5_0.jar')
-    //    compile files('libs/locSDK_6.05.jar')
-    //    compile files('libs/nineoldandroids-2.4.0.jar')
-    //    support_library_demo
-    compile 'com.android.support:appcompat-v7:24.2.1'
+
     compile 'com.android.support:support-v4:24.2.1'
+    compile 'com.android.support:appcompat-v7:24.2.1'
     compile 'com.android.support:design:24.2.1'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.android.support:cardview-v7:24.2.1'
     compile 'com.android.support:gridlayout-v7:24.2.1'
-    //    GSON
-    //    compile 'com.google.code.gson:gson:2.6.2'
-    //    登录注册
+
+    // 登录注册
     compile files('libs/MobTools-2016.1012.1447.jar')
     compile files('libs/MobCommons-2016.1012.1447.jar')
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile files('libs/amsack.jar')
-    //    jackson框架
-    //    compile files('libs/jackson-annotations-2.2.1.jar')
-    //    compile files('libs/jackson-core-2.2.1.jar')
-    //    compile files('libs/jackson-core-asl-1.8.8.jar')
-    //    compile files('libs/jackson-databind-2.2.1.jar')
-    //    compile files('libs/jackson-mapper-asl-1.8.8.jar')
-    //    compile files('libs/jackson-module-jaxb-annotations-2.2.1.jar')
+
+    // jackson框架
     compile 'com.fasterxml.jackson.core:jackson-core:2.1.4'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.1.4'
+
     // jpush框架
     compile 'cn.jiguang:jpush:2.1.8'
+
     // 高德地图
     compile files('libs/AMap3DMap_4.1.3_AMapSearch_4.0.0_AMapLocation_3.3.0_20170118.jar')
 }

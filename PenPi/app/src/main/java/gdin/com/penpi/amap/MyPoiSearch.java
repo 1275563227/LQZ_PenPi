@@ -1,9 +1,7 @@
 package gdin.com.penpi.amap;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.amap.api.services.core.LatLonPoint;
 import com.amap.api.services.core.PoiItem;
@@ -19,23 +17,10 @@ public class MyPoiSearch implements PoiSearch.OnPoiSearchListener {
 
     private Context mContext;
     private PlaceListAdapter adapter;
-    private RecyclerView mRecyclerView;
-    private static MyPoiSearch myPoiSearch;
 
-    public MyPoiSearch(Context mContext, PlaceListAdapter adapter, RecyclerView mRecyclerView) {
+    public MyPoiSearch(Context mContext, PlaceListAdapter adapter) {
         this.mContext = mContext;
         this.adapter = adapter;
-        this.mRecyclerView = mRecyclerView;
-    }
-
-    public static MyPoiSearch getInstance(Context context, PlaceListAdapter adapter, RecyclerView mRecyclerView) {
-        if (myPoiSearch == null) {
-            synchronized (MyPoiSearch.class) {
-                if (myPoiSearch == null)
-                    myPoiSearch = new MyPoiSearch(context, adapter, mRecyclerView);
-            }
-        }
-        return myPoiSearch;
     }
 
     /**
@@ -52,8 +37,8 @@ public class MyPoiSearch implements PoiSearch.OnPoiSearchListener {
          *                    金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施
          */
         PoiSearch.Query query = new PoiSearch.Query(keyWord, "", city);
-//        query.setPageSize(10);        // 设置每页最多返回多少条poiitem
-//        query.setPageNum(currentPage);// 设置查询页码
+        query.setPageSize(10);        // 设置每页最多返回多少条poiitem
+        query.setPageNum(1);// 设置查询页码
         PoiSearch mPoiSearch = new PoiSearch(mContext, query);
         mPoiSearch.setOnPoiSearchListener(this);
         // 设置搜索区域为以lp点为圆心，其周围5000米范围
@@ -86,7 +71,6 @@ public class MyPoiSearch implements PoiSearch.OnPoiSearchListener {
             }
             adapter.setAddresses(addresses);
             adapter.notifyDataSetChanged();
-//            mRecyclerView.setAdapter(adapter);
         }
     }
 

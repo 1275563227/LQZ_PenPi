@@ -19,10 +19,10 @@ import gdin.com.penpi.domain.Address;
 
 public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.ViewHolder> {
 
-    private PlaceListActivity mContext;
+    private static PlaceListActivity mContext;
     private List<Address> addresses;
 
-    private Handler handler = new Handler() {
+    private static Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
@@ -31,9 +31,8 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
         }
     };
 
-    public PlaceListAdapter(PlaceListActivity context, List<Address> addresses) {
-        this.mContext = context;
-        this.addresses = addresses;
+    public PlaceListAdapter(PlaceListActivity context) {
+        mContext = context;
     }
 
     public void setAddresses(List<Address> list) {

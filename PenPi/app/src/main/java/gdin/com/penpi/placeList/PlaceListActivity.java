@@ -16,6 +16,7 @@ import java.util.Map;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.amap.MyPoiSearch;
+import gdin.com.penpi.homeIndex.HomeActivity;
 import gdin.com.penpi.homeIndex.MapShowFragment;
 
 /**
@@ -40,7 +41,7 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void initView() {
-        final RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.place_list_cecyclerView);
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.place_list_cecyclerView);
         et_place = (EditText) findViewById(R.id.et_location2);
         TextView tv_city = (TextView) findViewById(R.id.tv_palce);
         if (map != null)
@@ -51,12 +52,12 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.map_delete).setOnClickListener(this);
 
         // 设置RecyclerView的Adapter
-        adapter = new PlaceListAdapter(this, null);
+        adapter = new PlaceListAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
         // 第一次设置
-        MyPoiSearch.getInstance(PlaceListActivity.this, adapter, mRecyclerView).searchWithKeyword("广东技术师范学院", "");
-        et_place.setText("广东技术师范学院");
+        new MyPoiSearch(PlaceListActivity.this, adapter).searchWithKeyword(HomeActivity.getAddress(), "");
+        et_place.setText(HomeActivity.getAddress());
         et_place.addTextChangedListener(new TextWatcher() {
 
             @Override
@@ -66,7 +67,7 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!"".equals(s.toString().trim()))
-                    MyPoiSearch.getInstance(PlaceListActivity.this, adapter, mRecyclerView).searchWithKeyword(s.toString(), "");
+                    new MyPoiSearch(PlaceListActivity.this, adapter).searchWithKeyword(s.toString(), "");
                 else
                     Toast.makeText(PlaceListActivity.this, "输入为空", Toast.LENGTH_SHORT).show();
             }
