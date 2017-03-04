@@ -20,8 +20,6 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +32,6 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
     private AMap aMap;
     private OnLocationChangedListener mListener;
     private AMapLocationClient mlocationClient;
-    private AMapLocationClientOption mLocationOption;
     private static Map<String, String> map;
 
     @Override
@@ -65,8 +62,6 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
     /**
      * LocationSource接口
      * 激活定位
-     *
-     * @param onLocationChangedListener
      */
     @Override
     public void activate(OnLocationChangedListener onLocationChangedListener) {
@@ -78,15 +73,13 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
             mlocationClient.setLocationListener(this);
 
             //初始化定位参数
-            mLocationOption = new AMapLocationClientOption();
+            AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
             //设置定位模式为Hight_Accuracy高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
             mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             //设置是否返回地址信息（默认返回地址信息）
             mLocationOption.setNeedAddress(true);
             //设置是否只定位一次,默认为false
             mLocationOption.setOnceLocation(true);
-            //设置是否强制刷新WIFI，默认为强制刷新
-            mLocationOption.setWifiActiveScan(true);
             //设置是否允许模拟位置,默认为false，不允许模拟位置
             mLocationOption.setMockEnable(false);
             //设置定位间隔,单位毫秒,默认为2000ms
@@ -118,13 +111,11 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
     /**
      * AMapLocationListener接口
      * 定位成功后回调函数
-     *
-     * @param aMapLocation
      */
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation != null) {
-            if (aMapLocation != null && aMapLocation.getErrorCode() == 0) {
+            if (aMapLocation.getErrorCode() == 0) {
                 mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
 
                 // 提供一个Map给其他类用
@@ -157,8 +148,8 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
 //                aMapLocation.getGpsAccuracyStatus();//获取GPS的当前状态
 //                //获取定位时间
 //                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                Date date = new Date(aMapLocation.getTime());
-//                df.format(date);
+//                Date tv_date = new Date(aMapLocation.getTime());
+//                df.format(tv_date);
 
 
                 //设置缩放级别
@@ -168,18 +159,18 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
                 //点击定位按钮 能够将地图的中心移动到定位点
                 mListener.onLocationChanged(aMapLocation);
                 //获取定位信息
-                StringBuffer buffer = new StringBuffer();
-                buffer.append(aMapLocation.getCountry() + ""
+                String buffer = (aMapLocation.getCountry() + ""
                         + aMapLocation.getProvince() + ""
                         + aMapLocation.getCity() + ""
                         + aMapLocation.getProvince() + ""
                         + aMapLocation.getDistrict() + ""
                         + aMapLocation.getStreet() + ""
                         + aMapLocation.getStreetNum());
-                Toast.makeText(getActivity().getApplicationContext(), buffer.toString(), Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity().getApplicationContext(), buffer, Toast.LENGTH_LONG).show();
             }
 
         } else {
+            assert aMapLocation != null;
             String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
             Log.e("AmapErr", errText);
         }
@@ -187,8 +178,6 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
 
     /**
      * 提供一个接口给其他类用，以获得一些地图信息
-     *
-     * @return
      */
     public static Map<String, String> getMap() {
         return map;

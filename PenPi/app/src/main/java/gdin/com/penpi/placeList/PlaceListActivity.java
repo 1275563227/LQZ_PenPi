@@ -7,87 +7,77 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.domain.PoiSearchResults;
+import gdin.com.penpi.amap.MyPoiSearch;
+import gdin.com.penpi.homeIndex.MapShowFragment;
 
 /**
  * 点击首页ToolBar的“地址栏”时 调用该类
- *
+ * <p/>
  * 作用：
- *      改变EditText的地址，会刷出该地址附近的信息
+ * 改变EditText的地址，会刷出该地址附近的信息
  */
-public class PlaceListActivity extends AppCompatActivity {
+public class PlaceListActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private List<PoiSearchResults> list = new ArrayList<>();
-
-    private RecyclerView mRecyclerView;
     private PlaceListAdapter adapter;
-    private EditText place;
-    private TextView city;
+    private EditText et_place;
 
-    private String poiName;
-    private String poiAdd;
+    private Map<String, String> map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_list);
+        this.initView(); // 初始化界面
+        this.map = MapShowFragment.getMap();
+    }
 
-        place = (EditText) findViewById(R.id.et_location2);
-        city = (TextView) findViewById(R.id.tv_palce);
-        mRecyclerView = (RecyclerView) findViewById(R.id.list_RecyclerView_1);
-        ImageView iv_delete = (ImageView) findViewById(R.id.map_delete);
-        iv_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                place.setText("");
-            }
-        });
+    public void initView() {
+        RecyclerView mRecyclerView = (RecyclerView) findViewById(R.id.place_list_cecyclerView);
+        et_place = (EditText) findViewById(R.id.et_location2);
+        TextView tv_city = (TextView) findViewById(R.id.tv_palce);
+        if (map != null)
+            tv_city.setText(map.get("City"));
+        else
+            tv_city.setText("无");
+        findViewById(R.id.bt_place_list_srue).setOnClickListener(this);
+        findViewById(R.id.map_delete).setOnClickListener(this);
 
-
+        // 设置RecyclerView的Adapter
+        adapter = new PlaceListAdapter(this);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new PlaceListAdapter(PlaceListActivity.this, list);
         mRecyclerView.setAdapter(adapter);
+        // 第一次设置
+        MyPoiSearch.getInstance(PlaceListActivity.this, adapter).searchWithKeyword("广东技术师范学院", "");
+        et_place.setText("广东技术师范学院");
+        et_place.addTextChangedListener(new TextWatcher() {
 
-//        SharedPreferences preferences = getSharedPreferences("map_location", MODE_PRIVATE);
-//        String location = preferences.getString("location", "");
-//        place.setText(location);
-        place.setText("广东技术师范学院本部");
-        place.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String city = PlaceListActivity.this.city.getText().toString();
-//                mSuggestionSearch.requestSuggestion((new SuggestionSearchOption()).keyword(s.toString()).city(city));
-//                poiCitySearchOption = new PoiCitySearchOption().city(city).keyword(place.getText().toString());
-//                mPoiSearch.searchInCity(poiCitySearchOption);
+                if (!"".equals(s.toString().trim()))
+                    MyPoiSearch.getInstance(PlaceListActivity.this, adapter).searchWithKeyword(s.toString(), "");
+                else
+                    Toast.makeText(PlaceListActivity.this, "输入为空", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (place.getText().toString().equals("")) {
-                    list.clear();
-                    adapter.notifyDataSetChanged();
-                }
             }
         });
     }
 
-    public void setResultTo(String s) {
+    public void setResultAndBack(String s) {
 
         // 需要返回的数据存入到intent中
         Intent intent = new Intent();
@@ -98,5 +88,17 @@ public class PlaceListActivity extends AppCompatActivity {
 
         //关闭Activity
         finish();
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.bt_place_list_srue:
+                this.setResultAndBack(et_place.getText().toString().trim());
+                break;
+            case R.id.map_delete:
+                et_place.setText("");
+                break;
+        }
     }
 }

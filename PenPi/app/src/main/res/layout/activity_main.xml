@@ -35,9 +35,9 @@
                     android:gravity="center">
 
                     <LinearLayout
+                        android:id="@+id/ll_home_palce"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:onClick="space_list"
                         android:gravity="center">
 
                         <ImageView
@@ -61,7 +61,6 @@
                     </LinearLayout>
                 </RelativeLayout>
             </android.support.v7.widget.Toolbar>
-            <!--app:navigationIcon="@mipmap/ic_menu_black_24dp"-->
 
             <android.support.design.widget.TabLayout
                 android:id="@+id/tab_layout"
@@ -79,12 +78,11 @@
             app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
         <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab"
+            android:id="@+id/bt_home_save_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:layout_margin="16dp"
-            android:onClick="map_add"
             android:src="@drawable/map_add"
             app:borderWidth="0dp"
             app:layout_behavior="gdin.com.penpi.behavior.ScrollAwareFABBehavior"/>

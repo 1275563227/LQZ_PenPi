@@ -9,14 +9,15 @@ import gdin.com.penpi.R;
 
 public class ChargesStandradActivity extends AppCompatActivity {
 
-    private Toolbar mToolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_charges_standrad);
+        initView();
+    }
 
-        mToolbar = (Toolbar) findViewById(R.id.item_tool_bar);
+    public void initView(){
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.item_tool_bar);
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

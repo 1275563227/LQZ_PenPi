@@ -1,15 +1,11 @@
 package gdin.com.penpi.myRecord;
 
-import android.content.ContentValues;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,29 +21,17 @@ import java.util.Collections;
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.domain.Order;
-import gdin.com.penpi.dbUtils.DBManger;
-import gdin.com.penpi.dbUtils.MyDatabaseHelper;
 import gdin.com.penpi.commonUtils.ComparatorDate;
 import gdin.com.penpi.commonUtils.OrderHandle;
 import gdin.com.penpi.commonUtils.UserHandle;
+import gdin.com.penpi.domain.Order;
 
-/**
- * Created by Administrator on 2016/11/30.
- */
 public class MySendRecordFragment extends android.support.v4.app.Fragment {
 
-
     public static final String ARG_PAGE = "ARG_PAGE";
-    private int mPage;
     private MySendRecordAdapter adapter;
     private RecyclerView mRecyclerView;
-    private SwipeRefreshLayout swipeRefresh;
-    private View view;
 
-    private boolean flag = false;
-    private Context mContext;
-    MyDatabaseHelper dbhelper;
     private List<Order> orderList = new ArrayList<>();
 
     Handler handler = new Handler() {
@@ -96,8 +80,8 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        flag = false;
-        view = inflater.inflate(R.layout.out_order_recycle, container, false);
+        boolean flag = false;
+        View view = inflater.inflate(R.layout.out_order_recycle, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rc_main);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         adapter = new MySendRecordAdapter(orderList);
@@ -116,14 +100,6 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 //                                flag = true;
-                                dbhelper = DBManger.getInstance(mContext);
-                                SQLiteDatabase db = dbhelper.getWritableDatabase();
-                                ContentValues values = new ContentValues();
-                                values.put(MyDatabaseHelper.TABLE_STATE, "完成");
-                                int result = db.update(MyDatabaseHelper.TABLE_OUT_NAME,
-                                        values, MyDatabaseHelper.TABLE_ORDER_ID + "= '" + orderList.get(position - 1 - indext).getOrderID() + "'", null);
-                                dbhelper.close();
-
                                 orderList.get(position - 1 - indext).setState("完成");
                                 bt.setEnabled(false);
                                 bt.setText("已完成");
@@ -131,39 +107,22 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        // TODO
-                                        //SubmitUtil.changeOrderStatetoServlet(orderList3.get(position - 1 - indext).getOrderID(), "完成");
                                         new OrderHandle().alterOrderState(orderList.get(position - 1 - indext).getOrderID(), OrderHandle.HASGRAP);
-                                        //SubmitUtil.changeOrderStatetoServlet(order.getId(), "已抢")
                                     }
                                 }).start();
-
                                 Intent intent = new Intent(getActivity(), EvaluationActivity.class);
                                 startActivity(intent);
-
-//                                Intent intent = new Intent(getActivity(), HomeActivity.class);
-//                                startActivity(intent);
                             }
                         })
                         .setNegativeButton("返回", new DialogInterface.OnClickListener() {
-
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 bt.setEnabled(true);
                                 bt.setText("完成");
-
-//                                flag = true;
-//                                Log.i("MySendRecordFragment", Boolean.valueOf(flag).toString());
                             }
                         }).show();
-
-
             }
-
-
         });
         return view;
-
-
     }
 }

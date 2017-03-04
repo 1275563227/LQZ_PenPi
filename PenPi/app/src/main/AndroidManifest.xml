@@ -56,7 +56,6 @@
         <activity android:name=".activity.SubmitOrderActivity" />
         <activity android:name=".activity.PersonalPageActivity" />
         <activity android:name=".activity.ChargesStandradActivity" />
-        <activity android:name=".activity.OrderNotificationActivity" />
         <activity android:name=".activity.NoLoginActivity" />
         <activity android:name=".placeList.PlaceListActivity" />
         <activity android:name=".myRecord.MyOrderRecordActivity" />
