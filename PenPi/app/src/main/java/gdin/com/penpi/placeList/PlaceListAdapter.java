@@ -1,29 +1,43 @@
 package gdin.com.penpi.placeList;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.baidu.mapapi.map.BaiduMap;
+import android.widget.Toast;
 
 import java.util.List;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.baiduMap.MapMarkerOverlay;
-import gdin.com.penpi.domain.PoiSearchResults;
+import gdin.com.penpi.domain.Address;
 
 public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.ViewHolder> {
 
-    private PlaceListActivity mContext;
-    private List<PoiSearchResults> list;
+    private static PlaceListActivity mContext;
+    private List<Address> addresses;
 
-    public PlaceListAdapter(PlaceListActivity context, List<PoiSearchResults> list) {
-        this.mContext = context;
-        this.list = list;
+    private static Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                Toast.makeText(mContext, "正在更新...", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    public PlaceListAdapter(PlaceListActivity context) {
+        mContext = context;
+    }
+
+    public void setAddresses(List<Address> list) {
+        this.addresses = list;
+        handler.sendEmptyMessage(0x123);
     }
 
     @Override
@@ -34,48 +48,35 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-//        SharedPreferences preferences = mContext.getSharedPreferences("map_location", 0);
-
-        if (list.size() != 0) {
-            holder.mTextView1.setText(list.get(position).getmName());
-            holder.mTextView2.setText(list.get(position).getmAddress());
+        Log.d("[PlaceListAdapter]", "onBindViewHolder..." + position);
+        if (addresses.size() != 0) {
+            holder.tv_title.setText(addresses.get(position).getTitle());
+            holder.tv_content.setText(addresses.get(position).getText());
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mContext.setResultTo(holder.mTextView1.getText().toString());
-                    // 清楚百度地图的覆盖物
-                    MapMarkerOverlay mapMarkerOverlay = MapMarkerOverlay.getMapMarkerOverlay();
-                    BaiduMap baiduMap = mapMarkerOverlay.getBaiduMap();
-                    baiduMap.clear();
+                    mContext.setResultAndBack(holder.tv_title.getText().toString().trim());
                 }
             });
         }
-//        else
-//            holder.mTextView1.setText(preferences.getString("poi" + position, "text"));
-
     }
 
     @Override
     public int getItemCount() {
-        if (list.size() != 0) {
-            return list.size();
-        }
-//        else {
-//            SharedPreferences preferences = mContext.getSharedPreferences("map_location", 0);
-//            return preferences.getInt("poiSize", 5);
-//        }
+        if (addresses != null)
+            return addresses.size();
         return 0;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView mTextView1;
-        public TextView mTextView2;
+        public TextView tv_title;
+        public TextView tv_content;
         public ImageView imageView;
 
         public ViewHolder(LinearLayout view) {
             super(view);
-            mTextView1 = (TextView) view.findViewById(R.id.tv_title_show);
-            mTextView2 = (TextView) view.findViewById(R.id.tv_content_show);
+            tv_title = (TextView) view.findViewById(R.id.tv_title_show);
+            tv_content = (TextView) view.findViewById(R.id.tv_content_show);
             imageView = (ImageView) view.findViewById(R.id.iv_list_show);
         }
     }

@@ -11,14 +11,11 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-/**
- * Created by Administrator on 2017/2/25.
- */
 public class Connect {
 
-    public static String requestURL = "http://192.168.1.168:8080/PenPiServer/forAndroid/";
+//    public static String requestURL = "http://192.168.1.168:8080/PenPiServer/forAndroid/";
 
-//    public static String requestURL = "http://www.lqzcloud.cn/PenPiServer/forAndroid/";
+    public static String requestURL = "http://www.lqzcloud.cn/PenPiServer/forAndroid/";
 
     public static String connect(String requestURL, Object value) {
 

@@ -9,13 +9,6 @@ import android.view.MenuItem;
 
 import gdin.com.penpi.R;
 
-
-/**
- * Author       : yanbo
- * Date         : 2015-06-02
- * Time         : 10:15
- * Description  :
- */
 public class PersonalPageActivity extends AppCompatActivity {
 
     @Override
