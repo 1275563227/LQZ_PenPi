@@ -16,7 +16,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
-import com.amap.api.maps.MapView;
+import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 
@@ -28,7 +28,7 @@ import gdin.com.penpi.R;
 
 public class MapShowFragment extends Fragment implements LocationSource, AMapLocationListener {
 
-    private MapView mapView;
+    private TextureMapView mapView;
     private AMap aMap;
     private OnLocationChangedListener mListener;
     private AMapLocationClient mlocationClient;
@@ -41,7 +41,7 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
         super.onCreate(savedInstanceState);
         View view = inflater.inflate(R.layout.fragment_map_show, container, false);//设置对应的XML布局文件
 
-        mapView = (MapView) view.findViewById(R.id.map);
+        mapView = (TextureMapView) view.findViewById(R.id.map);
         mapView.onCreate(savedInstanceState);// 此方法必须重写
         aMap = mapView.getMap();
         // 设置定位监听

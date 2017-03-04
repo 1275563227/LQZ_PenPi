@@ -24,6 +24,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <!--用于获取wifi的获取权限，wifi信息会用来进行网络定位-->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
     <!--用于申请调用A-GPS模块-->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"/>
     <!--用于申请获取蓝牙信息进行室内定位-->
@@ -39,7 +40,7 @@
         android:theme="@style/AppTheme">
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="1179923e296a21a8305c9f3a80aa54ed"/>
+            android:value="112865323e2f51acfb5ac430c42940ab"/>
 
         <activity android:name=".homeIndex.HomeActivity">
             <intent-filter>

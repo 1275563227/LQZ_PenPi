@@ -51,7 +51,7 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
         findViewById(R.id.map_delete).setOnClickListener(this);
 
         // 设置RecyclerView的Adapter
-        adapter = new PlaceListAdapter(this);
+        adapter = new PlaceListAdapter(this, null);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerView.setAdapter(adapter);
         // 第一次设置

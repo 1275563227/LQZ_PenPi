@@ -84,10 +84,9 @@ public class MyPoiSearch implements PoiSearch.OnPoiSearchListener {
                 Log.d("[MyPoiSearch]", title + "-------->" + text);
                 addresses.add(new Address(lon, lat, title, text));
             }
-            Toast.makeText(mContext, "刷新列表中...", Toast.LENGTH_SHORT).show();
             adapter.setAddresses(addresses);
-//            adapter.notifyDataSetChanged();
-            mRecyclerView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+//            mRecyclerView.setAdapter(adapter);
         }
     }
 

@@ -1,12 +1,16 @@
 package gdin.com.penpi.placeList;
 
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -18,12 +22,23 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
     private PlaceListActivity mContext;
     private List<Address> addresses;
 
-    public PlaceListAdapter(PlaceListActivity context) {
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                Toast.makeText(mContext, "正在更新...", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
+
+    public PlaceListAdapter(PlaceListActivity context, List<Address> addresses) {
         this.mContext = context;
+        this.addresses = addresses;
     }
 
     public void setAddresses(List<Address> list) {
         this.addresses = list;
+        handler.sendEmptyMessage(0x123);
     }
 
     @Override
@@ -34,6 +49,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
+        Log.d("[PlaceListAdapter]", "onBindViewHolder..." + position);
         if (addresses.size() != 0) {
             holder.tv_title.setText(addresses.get(position).getTitle());
             holder.tv_content.setText(addresses.get(position).getText());
