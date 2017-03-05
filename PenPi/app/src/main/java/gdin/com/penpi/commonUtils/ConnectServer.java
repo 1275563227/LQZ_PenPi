@@ -11,11 +11,13 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
-public class Connect {
+public class ConnectServer {
 
     public static String requestURL = "http://192.168.1.168:8080/PenPiServer/forAndroid/";
 
-//    public static String requestURL = "http://www.lqzcloud.cn/PenPiServer/forAndroid/";
+    public static String imgURL = "http://192.168.1.168:8080/PenPiServer/upload/";
+
+    //public static String requestURL = "http://www.lqzcloud.cn/PenPiServer/forAndroid/";
 
     public static String connect(String requestURL, Object value) {
 
@@ -34,7 +36,7 @@ public class Connect {
             // 方法二
             if (value != null) {
                 String jsonData = JacksonUtils.writeJSON(value);
-                Log.i(Connect.class.getName(), "sendData = " + jsonData);
+                Log.i(ConnectServer.class.getName(), "sendData = " + jsonData);
                 httpPost.setEntity(new StringEntity(jsonData, HTTP.UTF_8));
             }
             HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -45,14 +47,14 @@ public class Connect {
                 response = EntityUtils.toString(httpEntity, HTTP.UTF_8);
             }
             if (response != null && response.length() > 0){
-                Log.i(Connect.class.getName(), "responseData = " + response);
+                Log.i(ConnectServer.class.getName(), "responseData = " + response);
                 return response;
             }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        Log.i(Connect.class.getName(), "response = null");
+        Log.i(ConnectServer.class.getName(), "response = null");
         return null;
     }
 }

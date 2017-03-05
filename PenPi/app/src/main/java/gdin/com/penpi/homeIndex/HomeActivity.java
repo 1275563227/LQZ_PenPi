@@ -1,8 +1,14 @@
 package gdin.com.penpi.homeIndex;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
@@ -14,30 +20,34 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.activity.PersonalPageActivity;
-import gdin.com.penpi.commonUtils.JacksonUtils;
-import gdin.com.penpi.domain.Address;
-import gdin.com.penpi.placeList.PlaceListActivity;
 import gdin.com.penpi.activity.SubmitOrderActivity;
+import gdin.com.penpi.commonUtils.ChoseHeadImage;
+import gdin.com.penpi.commonUtils.JacksonUtils;
+import gdin.com.penpi.commonUtils.MyBitmap;
+import gdin.com.penpi.domain.User;
 import gdin.com.penpi.login.LoginActivity;
 import gdin.com.penpi.myRecord.MyOrderRecordActivity;
+import gdin.com.penpi.placeList.PlaceListActivity;
 
 /**
  * 首页的界面 包括抢单列表和显示地图
  */
-public class HomeActivity extends AppCompatActivity implements View.OnClickListener{
+public class HomeActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private NavigationView mNavigationView; //DrawerLayout中的左侧菜单控件
@@ -46,20 +56,36 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     public static ViewPager mViewPager;     //v4中的ViewPager控件
 
+    private ImageView personHead;
+    private Bitmap personHeadBitmap;
+
     private static TextView tv_address;            // ToolBar显示的地址
+
+    private User user;
 
     public static ViewPager getViewPager() {
         return mViewPager;
     }
 
-    public static String getAddress(){
+    public static String getAddress() {
         return tv_address.getText().toString().trim();
     }
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                if (personHeadBitmap != null)
+                    personHead.setImageBitmap(personHeadBitmap);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        user = LoginActivity.getUser();
         initView();
     }
 
@@ -125,13 +151,27 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
         //获取头布局文件
         View headerView = mNavigationView.getHeaderView(0);
-        headerView.findViewById(R.id.people_head_image).setOnClickListener(this);
+        personHead = (ImageView) headerView.findViewById(R.id.cv_drawer_people_head);
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    personHeadBitmap = MyBitmap.getImageBitmap(user.getUsername() + "/head_image.jpg");
+                    handler.sendEmptyMessage(0x123);
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        personHead.setOnClickListener(this);
+        TextView tv_username = (TextView) headerView.findViewById(R.id.cv_drawer_people_username);
+        tv_username.setText(user.getUsername());
     }
 
     @Override
     public void onClick(View view) {
         Intent intent;
-        switch (view.getId()){
+        switch (view.getId()) {
             case R.id.ll_home_palce:
                 // 选择地点
                 intent = new Intent(HomeActivity.this, PlaceListActivity.class);
@@ -142,10 +182,25 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                 intent = new Intent(HomeActivity.this, SubmitOrderActivity.class);
                 startActivity(intent);
                 break;
-            case R.id.people_head_image:
+            case R.id.cv_drawer_people_head:
                 // 点击头像进入登录界面
-                intent = new Intent(HomeActivity.this, LoginActivity.class);
-                startActivity(intent);
+                Dialog dialog = new AlertDialog.Builder(HomeActivity.this)
+                        .setTitle("确定要更换照片？")
+                        .setPositiveButton("相册", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ChoseHeadImage.fromGallery(HomeActivity.this);
+                            }
+                        })
+                        .setNegativeButton("拍照", new DialogInterface.OnClickListener() {
+
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ChoseHeadImage.fromCameraCapture(HomeActivity.this);
+                            }
+                        }).create();
+                dialog.show();
                 break;
         }
     }
@@ -231,14 +286,40 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * PlaceListActivity 的回调,取得MapLocationList回传的数据
+     *
      * @param requestCode 1:返回地址标题
      */
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         if (requestCode == 1 && resultCode == RESULT_OK) {
-            Map map = JacksonUtils.readJson(data.getStringExtra("address"), Map.class);
+            Map map = JacksonUtils.readJson(intent.getStringExtra("address"), Map.class);
             assert map != null;
-            tv_address.setText((String)map.get("title"));
+            tv_address.setText((String) map.get("title"));
         }
+
+        // --------------------以下是头像点击事件弹出对话框的回调-------------------------
+        switch (requestCode) {
+            case ChoseHeadImage.CODE_GALLERY_REQUEST:
+                ChoseHeadImage.cropRawPhoto(intent.getData(), this);
+                break;
+
+            case ChoseHeadImage.CODE_CAMERA_REQUEST:
+                if (ChoseHeadImage.hasSdcard()) {
+                    File tempFile = new File(Environment.getExternalStorageDirectory(), ChoseHeadImage.IMAGE_FILE_NAME);
+                    ChoseHeadImage.cropRawPhoto(Uri.fromFile(tempFile), this);
+                } else {
+                    Toast.makeText(getApplication(), "没有SDCard!", Toast.LENGTH_LONG).show();
+                }
+                break;
+
+            case ChoseHeadImage.CODE_RESULT_REQUEST:
+                if (intent != null) {
+                    ChoseHeadImage.setImageToHeadView(intent, personHead);
+                }
+                break;
+        }
+        // --------------------以上是头像点击事件弹出对话框的回调-------------------------
+
+        super.onActivityResult(requestCode, resultCode, intent);
     }
 }

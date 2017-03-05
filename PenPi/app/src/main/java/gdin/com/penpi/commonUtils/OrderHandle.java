@@ -16,13 +16,13 @@ import gdin.com.penpi.domain.User;
  */
 public class OrderHandle {
 
-    private String requestURL = Connect.requestURL + "orderAction_";
+    private String requestURL = ConnectServer.requestURL + "orderAction_";
 
     public final static String NOGRAP = "未抢";
     public final static String HASGRAP = "已抢";
 
     public boolean saveOrder(Order order) {
-        String responseData = Connect.connect(requestURL + "saveOrder", order);
+        String responseData = ConnectServer.connect(requestURL + "saveOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
@@ -37,7 +37,7 @@ public class OrderHandle {
     public boolean deleteOrder(Integer ID) {
         Order order = new Order();
         order.setOrderID(ID);
-        String responseData = Connect.connect(requestURL + "deleteOrder", order);
+        String responseData = ConnectServer.connect(requestURL + "deleteOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
@@ -50,7 +50,7 @@ public class OrderHandle {
     }
 
     public List<Order> findAllOrder() {
-        String responseData = Connect.connect(requestURL + "findAllOrder", null);
+        String responseData = ConnectServer.connect(requestURL + "findAllOrder", null);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
@@ -67,7 +67,7 @@ public class OrderHandle {
     public Order findOrderByID(Integer ID) {
         Order order = new Order();
         order.setOrderID(ID);
-        String responseData = Connect.connect(requestURL + "findOrderByID", order);
+        String responseData = ConnectServer.connect(requestURL + "findOrderByID", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
@@ -83,7 +83,7 @@ public class OrderHandle {
     public List<Order> findOrderByState(String state) {
         Order order = new Order();
         order.setState(state);
-        String responseData = Connect.connect(requestURL + "findOrderByState", order);
+        String responseData = ConnectServer.connect(requestURL + "findOrderByState", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
@@ -101,7 +101,7 @@ public class OrderHandle {
     }
 
     public Order alterOrder(Order order) {
-        String responseData = Connect.connect(requestURL + "alterOrder", order);
+        String responseData = ConnectServer.connect(requestURL + "alterOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
@@ -120,7 +120,7 @@ public class OrderHandle {
         User user = new User();
         user.setUserID(1);
         order.setTakeOrderPeople(user);
-        String responseData = Connect.connect(requestURL + "alterOrder", order);
+        String responseData = ConnectServer.connect(requestURL + "alterOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);

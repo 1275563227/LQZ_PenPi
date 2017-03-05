@@ -16,13 +16,13 @@ import gdin.com.penpi.domain.User;
  */
 public class UserHandle {
 
-    private String requestURL = Connect.requestURL + "userAction_";
+    private String requestURL = ConnectServer.requestURL + "userAction_";
 
     public User login(String name, String password) {
         User user = new User();
         user.setUsername(name);
         user.setPassword(password);
-        String responseData = Connect.connect(requestURL + "login", user);
+        String responseData = ConnectServer.connect(requestURL + "login", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
@@ -38,7 +38,7 @@ public class UserHandle {
         user.setPhoneNumber(phone);
         user.setPassword(password);
         Log.d("666666666666", user.toString());
-        String responseData = Connect.connect(requestURL + "register", user);
+        String responseData = ConnectServer.connect(requestURL + "register", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
@@ -50,7 +50,7 @@ public class UserHandle {
     }
 
     public boolean saveUser(User user) {
-        String responseData = Connect.connect(requestURL + "saveUser", user);
+        String responseData = ConnectServer.connect(requestURL + "saveUser", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
@@ -62,7 +62,7 @@ public class UserHandle {
     }
 
     public boolean deleteUser(User user) {
-        String responseData = Connect.connect(requestURL + "deleteUser", user);
+        String responseData = ConnectServer.connect(requestURL + "deleteUser", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
@@ -74,7 +74,7 @@ public class UserHandle {
     }
 
     public List<User> findAllUser() {
-        String responseData = Connect.connect(requestURL + "findAllUser", null);
+        String responseData = ConnectServer.connect(requestURL + "findAllUser", null);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
@@ -90,7 +90,7 @@ public class UserHandle {
     public User findUserByID(Integer ID) {
         User user = new User();
         user.setUserID(ID);
-        String responseData = Connect.connect(requestURL + "findUserByID", user);
+        String responseData = ConnectServer.connect(requestURL + "findUserByID", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
@@ -104,7 +104,7 @@ public class UserHandle {
     public List<Order> findMySendOrders(Integer ID) {
         User user = new User();
         user.setUserID(ID);
-        String responseData = Connect.connect(requestURL + "findMySendOrders", user);
+        String responseData = ConnectServer.connect(requestURL + "findMySendOrders", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
@@ -120,7 +120,7 @@ public class UserHandle {
     public List<Order> findMyTakeOrders(Integer ID) {
         User user = new User();
         user.setUserID(ID);
-        String responseData = Connect.connect(requestURL + "findMyTakeOrders", user);
+        String responseData = ConnectServer.connect(requestURL + "findMyTakeOrders", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
@@ -134,7 +134,7 @@ public class UserHandle {
     }
 
     public boolean alterUser(User user) {
-        String responseData = Connect.connect(requestURL + "alterUser", user);
+        String responseData = ConnectServer.connect(requestURL + "alterUser", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {

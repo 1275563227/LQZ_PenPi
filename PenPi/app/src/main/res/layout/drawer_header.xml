@@ -7,14 +7,14 @@
     android:padding="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/people_head_image"
+        android:id="@+id/cv_drawer_people_head"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_centerInParent="true"
         android:src="@drawable/header_icon" />
 
     <TextView
-        android:id="@+id/username"
+        android:id="@+id/cv_drawer_people_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
