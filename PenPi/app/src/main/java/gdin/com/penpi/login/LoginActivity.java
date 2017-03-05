@@ -40,6 +40,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             if (msg.what == 0x123) {
                 Toast.makeText(LoginActivity.this, "登录成功！", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             }
             if (msg.what == 0x124) {
@@ -80,10 +81,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (v.getId()) {
             case R.id.bt_login:
                 // 登录
-                EditText tv_login_name = (EditText) findViewById(R.id.tv_login_name);
-                EditText tv_login_password = (EditText) findViewById(R.id.tv_login_password);
-                final String name = tv_login_name.getText().toString().trim();
-                final String pawword = tv_login_password.getText().toString().trim();
+                EditText et_login_name = (EditText) findViewById(R.id.tv_login_name);
+                EditText et_login_password = (EditText) findViewById(R.id.tv_login_password);
+                final String name = et_login_name.getText().toString().trim();
+                final String pawword = et_login_password.getText().toString().trim();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -97,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 break;
             case R.id.bt_login_register:
                 // 注册
-                Intent intent = new Intent(LoginActivity.this, ResisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
                 break;
         }

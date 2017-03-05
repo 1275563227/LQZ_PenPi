@@ -17,7 +17,7 @@ public class Order {
 
     private User sendOrderPeople; // 发订单的人,外键
     private String sendOrderPeopleName; // 发订单的人名，即收件名
-    private Integer sendOrderPeoplePhone; // 发订单的人的电话，即收件电话
+    private String sendOrderPeoplePhone; // 发订单的人的电话，即收件电话
     private Date sendOrderDate; // 发订单的时间
 
     private User takeOrderPeople; // 拿订单的人
@@ -88,11 +88,11 @@ public class Order {
         this.sendOrderPeopleName = sendOrderPeopleName;
     }
 
-    public Integer getSendOrderPeoplePhone() {
+    public String getSendOrderPeoplePhone() {
         return sendOrderPeoplePhone;
     }
 
-    public void setSendOrderPeoplePhone(Integer sendOrderPeoplePhone) {
+    public void setSendOrderPeoplePhone(String sendOrderPeoplePhone) {
         this.sendOrderPeoplePhone = sendOrderPeoplePhone;
     }
 

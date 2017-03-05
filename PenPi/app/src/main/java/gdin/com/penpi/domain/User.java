@@ -13,11 +13,11 @@ public class User {
 
     private String username;
     private String password;
-    private Integer phoneNumber;
-    private String gender; // 性别
-    private String authority; // 权限
-    private Date loginTime; // 登录时间
-    private Date logoutTime; // 退出时间
+    private String phoneNumber;
+    private String gender;      // 性别
+    private String authority;   // 权限
+    private Date loginTime;     // 登录时间
+    private Date logoutTime;    // 退出时间
 
     @Override
     public String toString() {
@@ -57,11 +57,11 @@ public class User {
         this.password = password;
     }
 
-    public Integer getPhoneNumber() {
+    public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    public void setPhoneNumber(Integer phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
 

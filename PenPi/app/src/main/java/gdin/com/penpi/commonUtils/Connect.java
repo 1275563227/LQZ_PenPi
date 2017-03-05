@@ -34,7 +34,7 @@ public class Connect {
             // 方法二
             if (value != null) {
                 String jsonData = JacksonUtils.writeJSON(value);
-                Log.i(Connect.class.getName(), "jsonData = " + jsonData);
+                Log.i(Connect.class.getName(), "sendData = " + jsonData);
                 httpPost.setEntity(new StringEntity(jsonData, HTTP.UTF_8));
             }
             HttpResponse httpResponse = httpClient.execute(httpPost);
@@ -45,7 +45,7 @@ public class Connect {
                 response = EntityUtils.toString(httpEntity, HTTP.UTF_8);
             }
             if (response != null && response.length() > 0){
-                Log.i(Connect.class.getName(), "response = " + response);
+                Log.i(Connect.class.getName(), "responseData = " + response);
                 return response;
             }
 

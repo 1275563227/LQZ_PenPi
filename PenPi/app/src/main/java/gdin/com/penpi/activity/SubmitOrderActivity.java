@@ -145,7 +145,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
         order.setSendOrderPeopleName(et_userName.getText().toString().trim());
 
         if (!"".equals(et_phone_number.getText().toString().trim()))
-            order.setSendOrderPeoplePhone(Integer.parseInt(et_phone_number.getText().toString().trim()));
+            order.setSendOrderPeoplePhone(et_phone_number.getText().toString().trim());
         else
             errorInfo += "电话号码-";
 

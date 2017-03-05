@@ -24,7 +24,6 @@ public class UserHandle {
         user.setPassword(password);
         String responseData = Connect.connect(requestURL + "login", user);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -34,10 +33,13 @@ public class UserHandle {
         return null;
     }
 
-    public boolean register(User user) {
+    public boolean register(String phone, String password) {
+        User user = new User();
+        user.setPhoneNumber(phone);
+        user.setPassword(password);
+        Log.d("666666666666", user.toString());
         String responseData = Connect.connect(requestURL + "register", user);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -50,7 +52,6 @@ public class UserHandle {
     public boolean saveUser(User user) {
         String responseData = Connect.connect(requestURL + "saveUser", user);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -63,7 +64,6 @@ public class UserHandle {
     public boolean deleteUser(User user) {
         String responseData = Connect.connect(requestURL + "deleteUser", user);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -76,7 +76,6 @@ public class UserHandle {
     public List<User> findAllUser() {
         String responseData = Connect.connect(requestURL + "findAllUser", null);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
@@ -93,7 +92,6 @@ public class UserHandle {
         user.setUserID(ID);
         String responseData = Connect.connect(requestURL + "findUserByID", user);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -108,7 +106,6 @@ public class UserHandle {
         user.setUserID(ID);
         String responseData = Connect.connect(requestURL + "findMySendOrders", user);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "findMySendOrders responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
@@ -125,7 +122,6 @@ public class UserHandle {
         user.setUserID(ID);
         String responseData = Connect.connect(requestURL + "findMyTakeOrders", user);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "findMyTakeOrders responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
@@ -140,7 +136,6 @@ public class UserHandle {
     public boolean alterUser(User user) {
         String responseData = Connect.connect(requestURL + "alterUser", user);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))

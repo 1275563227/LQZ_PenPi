@@ -37,7 +37,7 @@ public class MyPoiSearch implements PoiSearch.OnPoiSearchListener {
          *                    金融保险服务|公司企业|道路附属设施|地名地址信息|公共设施
          */
         PoiSearch.Query query = new PoiSearch.Query(keyWord, "", city);
-        query.setPageSize(10);        // 设置每页最多返回多少条poiitem
+        query.setPageSize(30);        // 设置每页最多返回多少条poiitem
         query.setPageNum(1);// 设置查询页码
         PoiSearch mPoiSearch = new PoiSearch(mContext, query);
         mPoiSearch.setOnPoiSearchListener(this);

@@ -21,48 +21,57 @@ import android.widget.Toast;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import gdin.com.penpi.R;
+import gdin.com.penpi.commonUtils.UserHandle;
 import gdin.com.penpi.domain.User;
 import gdin.com.penpi.commonUtils.ClearEditTextUtil;
 
-public class ResisterActivity extends AppCompatActivity implements OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements OnClickListener {
     String APPKEY = "189f9aed6f6f0";
     String APPSECRETE = "5353a661e3caac3429057bccb5614af9";
 
-    // 手机号输入框
-    private ClearEditTextUtil inputPhoneEt;
+    private ClearEditTextUtil et_phoneNumber; // 手机号输入框
+    private ClearEditTextUtil et_password;
+    private EditText et_inputCode;            // 验证码输入框
+    private Button bt_submitCode;             // 获取验证码按钮
 
-    // 验证码输入框
-    private EditText inputCodeEt;
-    private ClearEditTextUtil passwordEt;
+    private String phoneNums;
 
-    // 获取验证码按钮
-    private Button requestCodeBtn;
+    private User user = new User();
 
-    // 注册按钮
-    private Button commitBtn;
-    private User user;
-    //
-    int i = 30;
+    private int i = 30;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                Toast.makeText(RegisterActivity.this, "注册成功", Toast.LENGTH_SHORT).show();
+            }
+            if (msg.what == 0x124) {
+                Toast.makeText(RegisterActivity.this, "注册失败,已存在该用户", Toast.LENGTH_SHORT).show();
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_register);
-
-        init();
+        initView();
     }
 
     /**
      * 初始化控件
      */
-    private void init() {
-        inputPhoneEt = (ClearEditTextUtil) findViewById(R.id.register_input_phone_et);
-        inputCodeEt = (EditText) findViewById(R.id.register_input_code_et);
-        requestCodeBtn = (Button) findViewById(R.id.register_request_code_btn);
-        commitBtn = (Button) findViewById(R.id.register_commit_btn);
-        passwordEt = (ClearEditTextUtil) findViewById(R.id.passward);
-        requestCodeBtn.setOnClickListener(this);
-        commitBtn.setOnClickListener(this);
+    private void initView() {
+        et_phoneNumber = (ClearEditTextUtil) findViewById(R.id.register_input_phone_et);
+        et_password = (ClearEditTextUtil) findViewById(R.id.passward);
+        et_inputCode = (EditText) findViewById(R.id.register_input_code_et);
+        bt_submitCode = (Button) findViewById(R.id.register_request_code_btn);
+        bt_submitCode.setOnClickListener(this);
+        findViewById(R.id.register_commit_btn).setOnClickListener(this);
 
         // 启动短信验证sdk
         SMSSDK.initSDK(this, APPKEY, APPSECRETE);
@@ -73,7 +82,7 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
                 msg.arg1 = event;
                 msg.arg2 = result;
                 msg.obj = data;
-                handler.sendMessage(msg);
+                handlerSMSSD.sendMessage(msg);
             }
         };
         //注册回调监听接口
@@ -82,23 +91,23 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
 
     @Override
     public void onClick(View v) {
-        String phoneNums = inputPhoneEt.getText().toString();
+        phoneNums = et_phoneNumber.getText().toString();
         switch (v.getId()) {
             case R.id.register_request_code_btn:
                 // 1. 通过规则判断手机号
-                if (!judgePhoneNums(phoneNums)) {
+                if (!judgePhoneNums(phoneNums))
                     return;
-                } // 2. 通过sdk发送短信验证
+                // 2. 通过sdk发送短信验证
                 SMSSDK.getVerificationCode("86", phoneNums);
 
                 // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
-                requestCodeBtn.setClickable(false);
-                requestCodeBtn.setText("重新发送(" + i + ")");
+                bt_submitCode.setClickable(false);
+                bt_submitCode.setText("重新发送(" + i + ")");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
                         for (; i > 0; i--) {
-                            handler.sendEmptyMessage(-9);
+                            handlerSMSSD.sendEmptyMessage(-9);
                             if (i <= 0) {
                                 break;
                             }
@@ -108,39 +117,31 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
                                 e.printStackTrace();
                             }
                         }
-                        handler.sendEmptyMessage(-8);
+                        handlerSMSSD.sendEmptyMessage(-8);
                     }
                 }).start();
                 break;
 
             case R.id.register_commit_btn:
                 //将收到的验证码和手机号提交再次核对
-
-                if (passwordEt.getText().toString().length() == 0 ||
-                        passwordEt.getText().length() < 6 || passwordEt.getText().length() > 16) {
-                    Toast.makeText(getApplicationContext(), "密码格式错误",
-                            Toast.LENGTH_SHORT).show();
+                if (et_password.getText().toString().length() == 0 || et_password.getText().length() < 6 || et_password.getText().length() > 16) {
+                    Toast.makeText(getApplicationContext(), "密码长度有误，需在6~16位！", Toast.LENGTH_SHORT).show();
                 } else {
-                    SMSSDK.submitVerificationCode("86", phoneNums, inputCodeEt
-                            .getText().toString());
+                    SMSSDK.submitVerificationCode("86", phoneNums, et_inputCode.getText().toString().trim());
                 }
-
-
                 //createProgressBar();
                 break;
         }
     }
 
-    /**
-     *
-     */
-    Handler handler = new Handler() {
+    private Handler handlerSMSSD = new Handler() {
+        @Override
         public void handleMessage(Message msg) {
             if (msg.what == -9) {
-                requestCodeBtn.setText("重新发送(" + i + ")");
+                bt_submitCode.setText("重新发送(" + i + ")");
             } else if (msg.what == -8) {
-                requestCodeBtn.setText("获取验证码");
-                requestCodeBtn.setClickable(true);
+                bt_submitCode.setText("获取验证码");
+                bt_submitCode.setClickable(true);
                 i = 30;
             } else {
                 int event = msg.arg1;
@@ -151,15 +152,17 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
                     // 短信注册成功后，返回MainActivity,然后提示
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
 
-                        user = new User();
-                        // TODO
-//                        user.setPhone_number(inputPhoneEt.getText().toString());
-//                        user.setYZM(inputCodeEt.getText().toString());
-//                        user.setPassword(passwordEt.getText().toString());
-
-                        Log.i("LOGIN", user.toString());
-                        Intent intent = new Intent(ResisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        // 用户名和电话用同一个，可以在以后的用户设置改
+                        user.setUsername(phoneNums);
+                        user.setPassword(et_password.getText().toString().trim());
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (new UserHandle().register(user.getPhoneNumber() ,user.getPassword())){
+                                    handler.sendEmptyMessage(0x123);
+                                } else handler.sendEmptyMessage(0x124);
+                            }
+                        }).start();
 
                     } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                         Toast.makeText(getApplicationContext(), "正在获取验证码", Toast.LENGTH_SHORT).show();
@@ -176,8 +179,6 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
 
     /**
      * 判断手机号码是否合理
-     *
-     * @param phoneNums
      */
     private boolean judgePhoneNums(String phoneNums) {
         if (isMatchLength(phoneNums, 11)
@@ -190,17 +191,11 @@ public class ResisterActivity extends AppCompatActivity implements OnClickListen
 
     /**
      * 判断一个字符串的位数
-     *
-     * @param str
-     * @param length
-     * @return
      */
     public static boolean isMatchLength(String str, int length) {
-        if (str.isEmpty()) {
+        if (str.isEmpty())
             return false;
-        } else {
-            return str.length() == length ? true : false;
-        }
+        return str.length() == length ? true : false;
     }
 
     /**

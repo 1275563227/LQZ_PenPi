@@ -22,7 +22,7 @@
         <activity
             android:name=".login.LoginActivity"
             android:theme="@style/ActivityItemTheme" />
-        <activity android:name=".login.ResisterActivity" />
+        <activity android:name=".login.RegisterActivity" />
         <activity android:name=".homeIndex.HomeActivity" />
         <activity android:name=".activity.SubmitOrderActivity" />
         <activity android:name=".activity.PersonalPageActivity" />
