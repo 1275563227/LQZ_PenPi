@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.List;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.amap.MakeMarker;
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.commonUtils.ComparatorDate;
 import gdin.com.penpi.commonUtils.OrderHandle;
@@ -43,7 +44,7 @@ import gdin.com.penpi.commonUtils.OrderHandle;
  */
 public class ShowOrderFragment extends Fragment {
 
-    private List<Order> orderList = new ArrayList<>();
+    private static List<Order> orderList = new ArrayList<>();
 
     private ShowOrderAdapter adapter;
     private RecyclerView mRecyclerView;
@@ -52,7 +53,7 @@ public class ShowOrderFragment extends Fragment {
     private boolean isRefreshing = false;
     private boolean hasConnectInternet = true;
 
-    Handler handler = new Handler() {
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
@@ -61,6 +62,8 @@ public class ShowOrderFragment extends Fragment {
                 Collections.sort(orderList, c);
                 adapter = new ShowOrderAdapter(orderList);
                 mRecyclerView.setAdapter(adapter);
+                // 添加订单的覆盖物
+                new MakeMarker(getActivity(), MapShowFragment.getaMap()).addMarker(orderList);
             }
             if (msg.what == 0x124) {
                 if (hasConnectInternet)
@@ -109,15 +112,10 @@ public class ShowOrderFragment extends Fragment {
                     @Override
                     public void run() {
 
-                        if (orderList == null) {
+                        if (orderList != null)
+                            handler.sendEmptyMessage(0x123);
+                        else
                             handler.sendEmptyMessage(0x124);
-                        } else {
-                            //刷新排序（时间）
-                            ComparatorDate c = new ComparatorDate();
-                            Collections.sort(orderList, c);
-                            adapter = new ShowOrderAdapter(orderList);
-                            mRecyclerView.setAdapter(adapter);
-                        }
                         swipeRefresh.setRefreshing(false);
                         isRefreshing = false;
                     }

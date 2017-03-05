@@ -14,6 +14,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,9 +23,12 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.activity.PersonalPageActivity;
+import gdin.com.penpi.commonUtils.JacksonUtils;
+import gdin.com.penpi.domain.Address;
 import gdin.com.penpi.placeList.PlaceListActivity;
 import gdin.com.penpi.activity.SubmitOrderActivity;
 import gdin.com.penpi.login.LoginActivity;
@@ -226,15 +230,15 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * PlaceListActivity 的回调
+     * PlaceListActivity 的回调,取得MapLocationList回传的数据
+     * @param requestCode 1:返回地址标题
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // 取得MapLocationList回传的数据
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-                tv_address.setText(data.getStringExtra("myLocation"));
-            }
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Map map = JacksonUtils.readJson(data.getStringExtra("address"), Map.class);
+            assert map != null;
+            tv_address.setText((String)map.get("title"));
         }
     }
 }

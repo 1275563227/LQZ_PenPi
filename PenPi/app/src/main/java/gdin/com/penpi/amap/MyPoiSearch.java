@@ -42,7 +42,7 @@ public class MyPoiSearch implements PoiSearch.OnPoiSearchListener {
         PoiSearch mPoiSearch = new PoiSearch(mContext, query);
         mPoiSearch.setOnPoiSearchListener(this);
         // 设置搜索区域为以lp点为圆心，其周围5000米范围
-//        mPoiSearch.setBound(new PoiSearch.SearchBound(point, 5000, true));
+        //mPoiSearch.setBound(new PoiSearch.SearchBound(point, 5000, true));
         mPoiSearch.searchPOIAsyn();
     }
 

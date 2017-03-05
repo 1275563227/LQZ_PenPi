@@ -37,7 +37,7 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_space_list);
         this.initView(); // 初始化界面
-        this.map = MapShowFragment.getMap();
+        this.map = MapShowFragment.getAddressMap();
     }
 
     public void initView() {
@@ -90,13 +90,13 @@ public class PlaceListActivity extends AppCompatActivity implements View.OnClick
         }
     }
 
-    public void setResultAndBack(String s) {
+    public void setResultAndBack(String temp) {
 
         // 需要返回的数据存入到intent中
         Intent intent = new Intent();
-        intent.putExtra("myLocation", s);
+        intent.putExtra("address", temp);
 
-        //设置返回数据
+        // 设置返回数据
         this.setResult(RESULT_OK, intent);
 
         //关闭Activity

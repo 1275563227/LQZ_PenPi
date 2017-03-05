@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.amap.MakeMarker;
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.commonUtils.FormatUtils;
 import gdin.com.penpi.commonUtils.OrderHandle;
@@ -90,7 +92,9 @@ public class ShowOrderAdapter extends RecyclerView.Adapter<ShowOrderAdapter.View
                 holder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        // 跳转到地图界面
                         HomeActivity.getViewPager().setCurrentItem(1);
+                        new MakeMarker(mContext, MapShowFragment.getaMap()).addMarker(mOrderList.get(position));
                     }
                 });
             }
@@ -118,7 +122,7 @@ public class ShowOrderAdapter extends RecyclerView.Adapter<ShowOrderAdapter.View
 
         public ViewHolder(View view) {
             super(view);
-            cv_cardView = (CardView) view;
+            cv_cardView = (CardView) view.findViewById(R.id.card_view_order_show);
             tv_userName = (TextView) view.findViewById(R.id.people_name);
             tv_startPlace = (TextView) view.findViewById(R.id.start_place);
             tv_endPlace = (TextView) view.findViewById(R.id.end_place);

@@ -15,6 +15,7 @@ import android.widget.Toast;
 import java.util.List;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.commonUtils.JacksonUtils;
 import gdin.com.penpi.domain.Address;
 
 public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.ViewHolder> {
@@ -47,7 +48,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
         Log.d("[PlaceListAdapter]", "onBindViewHolder..." + position);
         if (addresses.size() != 0) {
             holder.tv_title.setText(addresses.get(position).getTitle());
@@ -55,7 +56,7 @@ public class PlaceListAdapter extends RecyclerView.Adapter<PlaceListAdapter.View
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    mContext.setResultAndBack(holder.tv_title.getText().toString().trim());
+                    mContext.setResultAndBack(JacksonUtils.writeJSON(addresses.get(position)));
                 }
             });
         }

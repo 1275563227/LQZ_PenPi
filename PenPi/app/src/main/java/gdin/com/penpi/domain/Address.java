@@ -1,6 +1,8 @@
 package gdin.com.penpi.domain;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Address {
 
     private double longitude;   //经度

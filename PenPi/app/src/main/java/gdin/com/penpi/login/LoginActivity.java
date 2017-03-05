@@ -83,6 +83,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 // 登录
                 EditText et_login_name = (EditText) findViewById(R.id.tv_login_name);
                 EditText et_login_password = (EditText) findViewById(R.id.tv_login_password);
+                et_login_name.setText("admin");
+                et_login_password.setText("admin");
                 final String name = et_login_name.getText().toString().trim();
                 final String pawword = et_login_password.getText().toString().trim();
                 new Thread(new Runnable() {

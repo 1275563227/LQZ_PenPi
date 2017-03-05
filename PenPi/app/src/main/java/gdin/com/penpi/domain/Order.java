@@ -1,5 +1,6 @@
 package gdin.com.penpi.domain;
 
+import com.amap.api.maps.model.LatLng;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.Date;
@@ -14,6 +15,8 @@ public class Order {
 
     private String startPlace;
     private String endPlace;
+    private String latLngStrat; // 发单地址的经纬度
+    private String latLngEnd; // 收货地址的经纬度
 
     private User sendOrderPeople; // 发订单的人,外键
     private String sendOrderPeopleName; // 发订单的人名，即收件名
@@ -35,9 +38,11 @@ public class Order {
                 "orderID=" + orderID +
                 ", startPlace='" + startPlace + '\'' +
                 ", endPlace='" + endPlace + '\'' +
+                ", latLngStrat='" + latLngStrat + '\'' +
+                ", latLngEnd='" + latLngEnd + '\'' +
                 ", sendOrderPeople=" + sendOrderPeople +
                 ", sendOrderPeopleName='" + sendOrderPeopleName + '\'' +
-                ", sendOrderPeoplePhone=" + sendOrderPeoplePhone +
+                ", sendOrderPeoplePhone='" + sendOrderPeoplePhone + '\'' +
                 ", sendOrderDate=" + sendOrderDate +
                 ", takeOrderPeople=" + takeOrderPeople +
                 ", takeOrderDate=" + takeOrderDate +
@@ -70,6 +75,22 @@ public class Order {
 
     public void setEndPlace(String endPlace) {
         this.endPlace = endPlace;
+    }
+
+    public String getLatLngStrat() {
+        return latLngStrat;
+    }
+
+    public void setLatLngStrat(String latLngStrat) {
+        this.latLngStrat = latLngStrat;
+    }
+
+    public String getLatLngEnd() {
+        return latLngEnd;
+    }
+
+    public void setLatLngEnd(String latLngEnd) {
+        this.latLngEnd = latLngEnd;
     }
 
     public User getSendOrderPeople() {

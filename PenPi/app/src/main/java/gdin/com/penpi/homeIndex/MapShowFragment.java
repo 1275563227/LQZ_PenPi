@@ -1,5 +1,6 @@
 package gdin.com.penpi.homeIndex;
 
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.TextureMapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
 
@@ -25,14 +27,17 @@ import java.util.Map;
 
 import gdin.com.penpi.R;
 
-
 public class MapShowFragment extends Fragment implements LocationSource, AMapLocationListener {
 
     private TextureMapView mapView;
-    private AMap aMap;
+    private static AMap aMap;
     private OnLocationChangedListener mListener;
     private AMapLocationClient mlocationClient;
-    private static Map<String, String> map;
+    private static Map<String, String> addressMap;
+
+    public static AMap getaMap() {
+        return aMap;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,6 +60,7 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
         MyLocationStyle myLocationStyle = new MyLocationStyle();
         myLocationStyle.strokeColor(Color.argb(0, 0, 0, 0));    // 设置圆形的边框颜色
         myLocationStyle.radiusFillColor(Color.argb(0, 0, 0, 0));// 设置圆形的填充颜色
+        myLocationStyle.myLocationIcon(BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(getActivity().getResources(), R.drawable.map_location)));
         aMap.setMyLocationStyle(myLocationStyle);
         return view;
     }
@@ -83,7 +89,7 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
             //设置是否允许模拟位置,默认为false，不允许模拟位置
             mLocationOption.setMockEnable(false);
             //设置定位间隔,单位毫秒,默认为2000ms
-            mLocationOption.setInterval(10000);
+            mLocationOption.setInterval(60000);
 
             //设置定位参数
             mlocationClient.setLocationOption(mLocationOption);
@@ -111,52 +117,40 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
     /**
      * AMapLocationListener接口
      * 定位成功后回调函数
+     *
+     * @param aMapLocation aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
+     *                     aMapLocation.getLatitude();//获取纬度
+     *                     aMapLocation.getLongitude();//获取经度
+     *                     aMapLocation.getAccuracy();//获取精度信息
+     *                     aMapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息
+     *                     aMapLocation.getCountry();//国家信息
+     *                     aMapLocation.getProvince();//省信息
+     *                     aMapLocation.getCity();//城市信息
+     *                     aMapLocation.getDistrict();//城区信息
+     *                     aMapLocation.getStreet();//街道信息
+     *                     aMapLocation.getStreetNum();//街道门牌号信息
+     *                     aMapLocation.getCityCode();//城市编码
+     *                     aMapLocation.getAdCode();//地区编码
+     *                     aMapLocation.getAoiName();//获取当前定位点的AOI信息
+     *                     aMapLocation.getBuildingId();//获取当前室内定位的建筑物Id
+     *                     aMapLocation.getFloor();//获取当前室内定位的楼层
+     *                     aMapLocation.getGpsAccuracyStatus();//获取GPS的当前状态
+     *                     //获取定位时间
+     *                     SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+     *                     Date tv_date = new Date(aMapLocation.getTime());
+     *                     df.format(tv_date);
      */
     @Override
     public void onLocationChanged(AMapLocation aMapLocation) {
         if (mListener != null && aMapLocation != null) {
             if (aMapLocation.getErrorCode() == 0) {
-                mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点
-
-                // 提供一个Map给其他类用
-                map = new HashMap<>();
-                map.put("Latitude", String.valueOf(aMapLocation.getLatitude()));
-                map.put("Longitude", String.valueOf(aMapLocation.getLongitude()));
-                map.put("Address", aMapLocation.getAddress());
-                map.put("Country", aMapLocation.getCountry());
-                map.put("Province", aMapLocation.getProvince());
-                map.put("City", aMapLocation.getCity());
-                map.put("District", aMapLocation.getDistrict());
-                map.put("Street", aMapLocation.getStreet());
-
-//                aMapLocation.getLocationType();//获取当前定位结果来源，如网络定位结果，详见定位类型表
-//                aMapLocation.getLatitude();//获取纬度
-//                aMapLocation.getLongitude();//获取经度
-//                aMapLocation.getAccuracy();//获取精度信息
-//                aMapLocation.getAddress();//地址，如果option中设置isNeedAddress为false，则没有此结果，网络定位结果中会有地址信息，GPS定位不返回地址信息
-//                aMapLocation.getCountry();//国家信息
-//                aMapLocation.getProvince();//省信息
-//                aMapLocation.getCity();//城市信息
-//                aMapLocation.getDistrict();//城区信息
-//                aMapLocation.getStreet();//街道信息
-//                aMapLocation.getStreetNum();//街道门牌号信息
-//                aMapLocation.getCityCode();//城市编码
-//                aMapLocation.getAdCode();//地区编码
-//                aMapLocation.getAoiName();//获取当前定位点的AOI信息
-//                aMapLocation.getBuildingId();//获取当前室内定位的建筑物Id
-//                aMapLocation.getFloor();//获取当前室内定位的楼层
-//                aMapLocation.getGpsAccuracyStatus();//获取GPS的当前状态
-//                //获取定位时间
-//                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//                Date tv_date = new Date(aMapLocation.getTime());
-//                df.format(tv_date);
-
+                mListener.onLocationChanged(aMapLocation);// 显示系统小蓝点->点击定位按钮 能够将地图的中心移动到定位点
 
                 //设置缩放级别
                 aMap.moveCamera(CameraUpdateFactory.zoomTo(17));
                 //将地图移动到定位点
                 aMap.moveCamera(CameraUpdateFactory.changeLatLng(new LatLng(aMapLocation.getLatitude(), aMapLocation.getLongitude())));
-                //点击定位按钮 能够将地图的中心移动到定位点
+
                 mListener.onLocationChanged(aMapLocation);
                 //获取定位信息
                 String buffer = (aMapLocation.getCountry() + ""
@@ -167,8 +161,18 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
                         + aMapLocation.getStreet() + ""
                         + aMapLocation.getStreetNum());
                 Toast.makeText(getActivity().getApplicationContext(), buffer, Toast.LENGTH_LONG).show();
-            }
 
+                // 提供一个Map给其他类用
+                addressMap = new HashMap<>();
+                addressMap.put("Latitude", String.valueOf(aMapLocation.getLatitude()));
+                addressMap.put("Longitude", String.valueOf(aMapLocation.getLongitude()));
+                addressMap.put("Address", aMapLocation.getAddress());
+                addressMap.put("Country", aMapLocation.getCountry());
+                addressMap.put("Province", aMapLocation.getProvince());
+                addressMap.put("City", aMapLocation.getCity());
+                addressMap.put("District", aMapLocation.getDistrict());
+                addressMap.put("Street", aMapLocation.getStreet());
+            }
         } else {
             assert aMapLocation != null;
             String errText = "定位失败," + aMapLocation.getErrorCode() + ": " + aMapLocation.getErrorInfo();
@@ -179,8 +183,8 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
     /**
      * 提供一个接口给其他类用，以获得一些地图信息
      */
-    public static Map<String, String> getMap() {
-        return map;
+    public static Map<String, String> getAddressMap() {
+        return addressMap;
     }
 
     @Override

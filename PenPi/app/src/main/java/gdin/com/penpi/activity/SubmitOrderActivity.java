@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -14,7 +15,12 @@ import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.amap.api.maps.model.LatLng;
+
+import java.util.Map;
+
 import gdin.com.penpi.R;
+import gdin.com.penpi.commonUtils.JacksonUtils;
 import gdin.com.penpi.commonUtils.OrderHandle;
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.domain.User;
@@ -36,6 +42,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
     private RadioButton rb_common;
     private RadioButton rb_Vip;
 
+    private LatLng latLngStrat; // 发单地址的经纬度
+    private LatLng latLngEnd; // 收货地址的经纬度
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -144,6 +152,11 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
         order.setSendOrderPeople(user);
         order.setSendOrderPeopleName(et_userName.getText().toString().trim());
 
+        if (latLngStrat != null && latLngEnd != null) {
+            order.setLatLngStrat(JacksonUtils.writeJSON(latLngStrat));
+            order.setLatLngEnd(JacksonUtils.writeJSON(latLngEnd));
+        }
+
         if (!"".equals(et_phone_number.getText().toString().trim()))
             order.setSendOrderPeoplePhone(et_phone_number.getText().toString().trim());
         else
@@ -213,18 +226,23 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
     }
 
     /**
-     * PlaceListActivity 的回调函数
+     * PlaceListActivity 的回调函数,取得MapLocationList回传的数据
+     *
+     * @param requestCode 1:开始地址  2:结束地址
      */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // 取得MapLocationList回传的数据
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK)
-                et_startPlace.setText(data.getStringExtra("myLocation"));
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+            Map map = JacksonUtils.readJson(data.getStringExtra("address"), Map.class);
+            assert map != null;
+            et_startPlace.setText((String) map.get("title"));
+            latLngStrat = new LatLng((Double) map.get("latitude"), (Double) map.get("longitude"));
         }
-        if (requestCode == 2) {
-            if (resultCode == RESULT_OK)
-                et_endPlace.setText(data.getStringExtra("myLocation"));
+        if (requestCode == 2 && resultCode == RESULT_OK) {
+            Map map = JacksonUtils.readJson(data.getStringExtra("address"), Map.class);
+            assert map != null;
+            et_endPlace.setText((String) map.get("title"));
+            latLngEnd = new LatLng((Double) map.get("latitude"), (Double) map.get("longitude"));
         }
     }
 }
