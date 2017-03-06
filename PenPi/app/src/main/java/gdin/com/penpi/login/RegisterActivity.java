@@ -153,7 +153,7 @@ public class RegisterActivity extends AppCompatActivity implements OnClickListen
                     if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {// 提交验证码成功
 
                         // 用户名和电话用同一个，可以在以后的用户设置改
-                        user.setUsername(phoneNums);
+                        user.setPhoneNumber(phoneNums);
                         user.setPassword(et_password.getText().toString().trim());
                         new Thread(new Runnable() {
                             @Override

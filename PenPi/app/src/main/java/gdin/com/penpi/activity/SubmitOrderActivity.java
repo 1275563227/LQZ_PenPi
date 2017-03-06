@@ -25,6 +25,7 @@ import gdin.com.penpi.commonUtils.OrderHandle;
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.domain.User;
 import gdin.com.penpi.homeIndex.HomeActivity;
+import gdin.com.penpi.login.LoginActivity;
 import gdin.com.penpi.placeList.PlaceListActivity;
 
 public class SubmitOrderActivity extends AppCompatActivity implements View.OnTouchListener, View.OnClickListener {
@@ -45,10 +46,13 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
     private LatLng latLngStrat; // 发单地址的经纬度
     private LatLng latLngEnd; // 收货地址的经纬度
 
+    private User user;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_submit_order);
+        user = LoginActivity.getUser();
         this.initView();
     }
 
@@ -147,8 +151,6 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
         else
             errorInfo += "送货地点-";
 
-        User user = new User();
-        user.setUserID(1);
         order.setSendOrderPeople(user);
         order.setSendOrderPeopleName(et_userName.getText().toString().trim());
 

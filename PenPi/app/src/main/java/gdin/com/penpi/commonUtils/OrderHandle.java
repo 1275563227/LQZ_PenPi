@@ -9,6 +9,7 @@ import java.util.Map;
 
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.domain.User;
+import gdin.com.penpi.login.LoginActivity;
 
 /**
  * 连接服务器之后接受数据并解析
@@ -117,9 +118,7 @@ public class OrderHandle {
         Order order = new Order();
         order.setOrderID(ID);
         order.setState(state);
-        User user = new User();
-        user.setUserID(1);
-        order.setTakeOrderPeople(user);
+        order.setTakeOrderPeople(LoginActivity.getUser());
         String responseData = ConnectServer.connect(requestURL + "alterOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
             Log.d(getClass().getName(), "responseData = " + responseData);
