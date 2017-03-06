@@ -1,19 +1,15 @@
 package gdin.com.penpi.myRecord;
 
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -22,19 +18,22 @@ import java.util.List;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.commonUtils.ComparatorDate;
-import gdin.com.penpi.commonUtils.OrderHandle;
 import gdin.com.penpi.commonUtils.UserHandle;
 import gdin.com.penpi.domain.Order;
+import gdin.com.penpi.login.LoginActivity;
 
 public class MySendRecordFragment extends android.support.v4.app.Fragment {
 
-    public static final String ARG_PAGE = "ARG_PAGE";
-    private MySendRecordAdapter adapter;
+    private static MySendRecordAdapter adapter;
     private RecyclerView mRecyclerView;
 
     private List<Order> orderList = new ArrayList<>();
 
-    Handler handler = new Handler() {
+    public static MySendRecordAdapter getAdapter() {
+        return adapter;
+    }
+
+    private Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             if (msg.what == 0x333) {
@@ -50,22 +49,13 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
         }
     };
 
-    public static MyTakeRecordFragment newInstance(int page) {
-        Bundle args = new Bundle();
-        args.putInt(ARG_PAGE, page);
-        MyTakeRecordFragment pageFragment = new MyTakeRecordFragment();
-        pageFragment.setArguments(args);
-        return pageFragment;
-    }
-
     private void initOrders() {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (orderList != null)
-                    orderList.clear();
-                orderList = new UserHandle().findMySendOrders(1);
                 if (orderList != null) {
+                    orderList.clear();
+                    orderList = new UserHandle().findMySendOrders(LoginActivity.getUser().getUserID());
                     handler.sendEmptyMessage(0x333);
                 } else
                     handler.sendEmptyMessage(0x334);
@@ -80,49 +70,12 @@ public class MySendRecordFragment extends android.support.v4.app.Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        boolean flag = false;
         View view = inflater.inflate(R.layout.out_order_recycle, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rc_main);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         adapter = new MySendRecordAdapter(orderList);
         mRecyclerView.setAdapter(adapter);
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-
-        adapter.setOnItemClickListener(new MySendRecordAdapter.OnItemClickListener() {
-            //此处实现onItemClick的接口
-            @Override
-            public void onItemClick(View view, final int position, final int indext) {
-
-                final Button bt = (Button) view.findViewById(R.id.foruse_icon);
-
-                new AlertDialog.Builder(getActivity()).setTitle("确定付款？")
-                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-//                                flag = true;
-                                orderList.get(position - 1 - indext).setState("完成");
-                                bt.setEnabled(false);
-                                bt.setText("已完成");
-
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        new OrderHandle().alterOrderState(orderList.get(position - 1 - indext).getOrderID(), OrderHandle.HASGRAP);
-                                    }
-                                }).start();
-                                Intent intent = new Intent(getActivity(), EvaluationActivity.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("返回", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                bt.setEnabled(true);
-                                bt.setText("完成");
-                            }
-                        }).show();
-            }
-        });
         return view;
     }
 }

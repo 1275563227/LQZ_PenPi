@@ -1,10 +1,11 @@
 package gdin.com.penpi.myRecord;
 
-/**
- * Created by Administrator on 2016/11/30.
- */
-
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,34 +17,118 @@ import android.widget.TextView;
 import java.util.List;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.commonUtils.FormatUtils;
+import gdin.com.penpi.commonUtils.OrderHandle;
 import gdin.com.penpi.domain.Order;
 
-
-/**
- * Created by Administrator on 2016/11/27.
- */
 public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapter.ViewHolder> {
-    /*private int[] colors = {R.color.color_0, R.color.color_1, R.color.color_2, R.color.color_3,
-            R.color.color_4, R.color.color_5, R.color.color_6, R.color.color_7,
-            R.color.color_8, R.color.color_9,};*/
 
     private Context mContext;
-
     private List<Order> mOrderList;
 
-    public OnItemClickListener mOnItemClickListener;
+    private int orderID;
 
-    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
-        mOnItemClickListener = itemClickListener;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                Intent intent = new Intent(mContext, EvaluationActivity.class);
+                intent.putExtra("orderID", orderID);
+                mContext.startActivity(intent);
+                MySendRecordAdapter.this.notifyDataSetChanged();
+                MyTakeRecordFragment.getAdapter().notifyDataSetChanged();
+            }
+        }
+    };
+
+    public MySendRecordAdapter(List<Order> orderList) {
+        mOrderList = orderList;
     }
 
-
-    //定义OnItemClickListener的接口,便于在实例化的时候实现它的点击效果
-    public interface OnItemClickListener {
-        void onItemClick(View view, int itemCount, int position);
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if (mContext == null) {
+            mContext = parent.getContext();
+        }
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_out_order_recycle, parent, false);
+        return new ViewHolder(view);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @Override
+    public void onBindViewHolder(final ViewHolder holder, int position) {
+        final Order order = mOrderList.get(position);
+        holder.order_id.setText(String.valueOf(order.getOrderID()));
+        holder.order_name.setText(order.getSendOrderPeopleName());
+        holder.startPlace.setText(order.getStartPlace());
+        holder.endPlace.setText(order.getEndPlace());
+        holder.telephone.setText(order.getSendOrderPeoplePhone());
+        holder.charges.setText(String.valueOf(order.getCharges()));
+        holder.Date.setText(FormatUtils.formatTime(order.getSendOrderDate()));
+
+        switch (order.getState()) {
+            case "未抢":
+                holder.foruse.setEnabled(false);
+                holder.foruse.setText("未抢");
+                break;
+            case "已抢":
+                holder.foruse.setEnabled(false);
+                holder.foruse.setText("已抢");
+                break;
+            case "已送达":
+                holder.foruse.setEnabled(true);
+                holder.foruse.setText("已送达,待付款");
+                break;
+            case "已付款":
+                holder.foruse.setEnabled(true);
+                holder.foruse.setText("已付款,待评价");
+                break;
+            case "已完成":
+                holder.foruse.setEnabled(false);
+                holder.foruse.setText("已完成");
+                break;
+        }
+
+        holder.itemView.findViewById(R.id.foruse_icon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ("已送达".equals(order.getState()) || "已付款".equals(order.getState())) {
+                    new AlertDialog.Builder(mContext).setTitle("确定付款？")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            order.setState("已付款");
+                                            Order temp = new OrderHandle().alterOrder(order);
+                                            if (temp != null) {
+                                                orderID = order.getOrderID();
+                                                handler.sendEmptyMessage(0x123);
+                                            }
+                                        }
+                                    }).start();
+                                }
+                            })
+                            .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * 返回RecyclerView子项的数目
+     * 当用户提交订单信息，Item数目+1，并刷新RecyclerView
+     */
+    @Override
+    public int getItemCount() {
+        return mOrderList.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView order_id;
         TextView order_name;
@@ -65,64 +150,6 @@ public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapte
             charges = (TextView) view.findViewById(R.id.order_charges_name);
             Date = (TextView) view.findViewById(R.id.date_name);
             foruse = (Button) view.findViewById(R.id.foruse_icon);
-            foruse.setOnClickListener(this);
-        }
-
-        public void onClick(View v) {
-            if (mOnItemClickListener != null) {
-                //此处调用的是onItemClick方法，而这个方法是会在RecyclerAdapter被实例化的时候实现
-                mOnItemClickListener.onItemClick(v, getItemCount(), getPosition());
-            }
         }
     }
-
-    public MySendRecordAdapter(List<Order> orderList) {
-        mOrderList = orderList;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        if (mContext == null) {
-            mContext = parent.getContext();
-        }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_out_order_recycle, parent, false);
-        final ViewHolder holder = new ViewHolder(view);
-
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        // Log.i("forsee","----------------------------------------------------------------------------------------------------------------------");
-        int legh = mOrderList.size();
-        Order order = mOrderList.get(legh - position - 1);
-        holder.order_id.setText(order.getOrderID() + "");
-        holder.order_name.setText(order.getSendOrderPeopleName());
-        holder.startPlace.setText(order.getStartPlace());
-        holder.endPlace.setText(order.getEndPlace());
-        holder.telephone.setText(order.getSendOrderPeoplePhone() + "");
-        holder.charges.setText(String.valueOf(order.getCharges()));
-        holder.Date.setText(order.getSendOrderDate().toString());
-        // holder.foruse.setEnabled(true);
-        // holder.foruse.setText("完成");
-
-        if (order.getState().equals("完成")) {
-            holder.foruse.setText("已完成");
-            holder.foruse.setEnabled(false);
-        } else {
-            holder.foruse.setEnabled(true);
-            holder.foruse.setText("完成");
-        }
-    }
-
-    @Override
-    /*
-    * 返回RecyclerView子项的数目
-    * 当用户提交订单信息，Item数目+1，并刷新RecyclerView
-    * */
-    public int getItemCount() {
-        return mOrderList.size();
-    }
-
 }

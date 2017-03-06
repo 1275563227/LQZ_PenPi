@@ -1,10 +1,10 @@
 package gdin.com.penpi.myRecord;
 
-/**
- * Created by Administrator on 2016/11/30.
- */
-
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Handler;
+import android.os.Message;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,37 +12,114 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.commonUtils.FormatUtils;
+import gdin.com.penpi.commonUtils.OrderHandle;
 import gdin.com.penpi.domain.Order;
 
-/**
- * Created by Administrator on 2016/11/27.
- */
 public class MyTakeRecordAdapter extends RecyclerView.Adapter<MyTakeRecordAdapter.ViewHolder> {
-    /*private int[] colors = {R.color.color_0, R.color.color_1, R.color.color_2, R.color.color_3,
-            R.color.color_4, R.color.color_5, R.color.color_6, R.color.color_7,
-            R.color.color_8, R.color.color_9,};*/
 
     private Context mContext;
-
     private List<Order> mOrderList;
 
-    public OnItemClickListener mOnItemClickListener;
-
-    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
-        mOnItemClickListener = itemClickListener;
+    public MyTakeRecordAdapter(List<Order> orderList) {
+        mOrderList = orderList;
     }
 
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                Toast.makeText(mContext, "已送达", Toast.LENGTH_SHORT).show();
+                MyTakeRecordAdapter.this.notifyDataSetChanged();
+                MySendRecordFragment.getAdapter().notifyDataSetChanged();
+            }
+        }
+    };
 
-    //定义OnItemClickListener的接口,便于在实例化的时候实现它的点击效果
-    public interface OnItemClickListener {
-        void onItemClick(View view, int position, int indext);
+    @Override
+    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
+        if (mContext == null) {
+            mContext = parent.getContext();
+        }
+        View view = LayoutInflater.from(mContext).inflate(R.layout.item_out_order_recycle, parent, false);
+
+        return new ViewHolder(view);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        final Order order = mOrderList.get(position);
+        holder.order_id.setText(String.valueOf(order.getOrderID()));
+        holder.startPlace.setText(order.getStartPlace());
+        holder.endPlace.setText(order.getEndPlace());
+        holder.order_name.setText(order.getSendOrderPeopleName());
+        holder.telephone.setText(order.getSendOrderPeoplePhone());
+        holder.Date.setText(FormatUtils.formatTime(order.getSendOrderDate()));
+        holder.charges.setText(String.valueOf(order.getCharges()));
+
+        switch (order.getState()) {
+            case "已抢":
+                holder.foruse.setEnabled(true);
+                holder.foruse.setText("确认送达？");
+                break;
+            case "已送达":
+                holder.foruse.setEnabled(false);
+                holder.foruse.setText("已送达,待付款");
+                break;
+            case "已付款":
+                holder.foruse.setEnabled(false);
+                holder.foruse.setText("已付款,待评价");
+                break;
+            case "已完成":
+                holder.foruse.setEnabled(false);
+                holder.foruse.setText("已完成");
+                break;
+        }
+
+        holder.itemView.findViewById(R.id.foruse_icon).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if ("已抢".equals(order.getState())) {
+                    new AlertDialog.Builder(mContext).setTitle("确定送达？")
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            order.setState("已送达");
+                                            Order temp = new OrderHandle().alterOrder(order);
+                                            if (temp != null) handler.sendEmptyMessage(0x123);
+                                        }
+                                    }).start();
+                                }
+                            })
+                            .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                }
+                            }).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * 返回RecyclerView子项的数目
+     * 当用户提交订单信息，Item数目+1，并刷新RecyclerView
+     */
+    @Override
+    public int getItemCount() {
+        return mOrderList.size();
+    }
+
+    public class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView order_id;
         TextView order_name;
@@ -64,76 +141,6 @@ public class MyTakeRecordAdapter extends RecyclerView.Adapter<MyTakeRecordAdapte
             charges = (TextView) view.findViewById(R.id.order_charges_name);
             Date = (TextView) view.findViewById(R.id.date_name);
             foruse = (Button) view.findViewById(R.id.foruse_icon);
-            foruse.setOnClickListener(this);
-        }
-
-        public void onClick(View v) {
-            if (mOnItemClickListener != null) {
-                //此处调用的是onItemClick方法，而这个方法是会在RecyclerAdapter被实例化的时候实现
-                mOnItemClickListener.onItemClick(v, getItemCount(), getPosition());
-            }
         }
     }
-
-    public MyTakeRecordAdapter(List<Order> orderList) {
-        mOrderList = orderList;
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        if (mContext == null) {
-            mContext = parent.getContext();
-        }
-        View view = LayoutInflater.from(mContext).inflate(R.layout.item_out_order_recycle, parent, false);
-        final ViewHolder holder = new ViewHolder(view);
-
-        return holder;
-    }
-
-    @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
-        // Log.i("forsee","----------------------------------------------------------------------------------------------------------------------");
-        int legh = mOrderList.size();
-        Order order = mOrderList.get(legh - position - 1);
-        holder.order_id.setText(order.getOrderID() + "");
-        holder.startPlace.setText(order.getStartPlace());
-        holder.endPlace.setText(order.getEndPlace());
-        holder.order_name.setText(order.getSendOrderPeopleName());
-        holder.telephone.setText(order.getSendOrderPeoplePhone() + "");
-        holder.Date.setText(order.getSendOrderDate().toString());
-        holder.charges.setText(String.valueOf(order.getCharges()));
-
-
-        if (order.getState().equals("完成")) {
-            holder.foruse.setText("待审核");
-            holder.foruse.setEnabled(false);
-        } else {
-            holder.foruse.setEnabled(true);
-            holder.foruse.setText("完成");
-        }
-
-        /*if (order.isReceive()){
-           if (order.isComplete()){
-               holder.foruse.setText("已完成");
-               holder.foruse.setEnabled(false);
-           } else if (!order.isComplete()){
-               holder.foruse.setEnabled(true);
-               holder.foruse.setText("确认收货");
-           }
-        }else if(!order.isReceive()){
-            holder.foruse.setText("待接单");
-            holder.foruse.setEnabled(false);
-        }*/
-    }
-
-    @Override
-    /*
-    * 返回RecyclerView子项的数目
-    * 当用户提交订单信息，Item数目+1，并刷新RecyclerView
-    * */
-    public int getItemCount() {
-        return mOrderList.size();
-    }
-
 }

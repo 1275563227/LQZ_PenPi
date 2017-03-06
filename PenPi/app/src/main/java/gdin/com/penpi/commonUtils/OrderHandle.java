@@ -25,7 +25,6 @@ public class OrderHandle {
     public boolean saveOrder(Order order) {
         String responseData = ConnectServer.connect(requestURL + "saveOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -40,7 +39,6 @@ public class OrderHandle {
         order.setOrderID(ID);
         String responseData = ConnectServer.connect(requestURL + "deleteOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -53,7 +51,6 @@ public class OrderHandle {
     public List<Order> findAllOrder() {
         String responseData = ConnectServer.connect(requestURL + "findAllOrder", null);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
@@ -70,7 +67,6 @@ public class OrderHandle {
         order.setOrderID(ID);
         String responseData = ConnectServer.connect(requestURL + "findOrderByID", order);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
@@ -86,14 +82,10 @@ public class OrderHandle {
         order.setState(state);
         String responseData = ConnectServer.connect(requestURL + "findOrderByState", order);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate")) {
                     Order orders[] = JacksonUtils.readJson((String) map.get("returnInfo"), Order[].class);
-//                    for (Order o: orders) {
-//                        Log.i(getClass().getName(), o.toString());
-//                    }
                     return new ArrayList<>(Arrays.asList(orders));
                 }
             }
@@ -104,7 +96,6 @@ public class OrderHandle {
     public Order alterOrder(Order order) {
         String responseData = ConnectServer.connect(requestURL + "alterOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))
@@ -121,7 +112,6 @@ public class OrderHandle {
         order.setTakeOrderPeople(LoginActivity.getUser());
         String responseData = ConnectServer.connect(requestURL + "alterOrder", order);
         if (responseData != null && responseData.charAt(0) == '{') {
-            Log.d(getClass().getName(), "responseData = " + responseData);
             Map map = JacksonUtils.readJson(responseData, Map.class);
             if (map != null && map.size() > 0) {
                 if ((Boolean) map.get("validate"))

@@ -226,6 +226,7 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.outlogin_name:
                     intent = new Intent(HomeActivity.this, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     break;
             }
