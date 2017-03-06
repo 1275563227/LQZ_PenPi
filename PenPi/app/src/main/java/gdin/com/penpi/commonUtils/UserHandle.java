@@ -1,7 +1,5 @@
 package gdin.com.penpi.commonUtils;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +35,6 @@ public class UserHandle {
         User user = new User();
         user.setPhoneNumber(phone);
         user.setPassword(password);
-        Log.d("666666666666", user.toString());
         String responseData = ConnectServer.connect(requestURL + "register", user);
         if (responseData != null && responseData.charAt(0) == '{') {
             Map map = JacksonUtils.readJson(responseData, Map.class);

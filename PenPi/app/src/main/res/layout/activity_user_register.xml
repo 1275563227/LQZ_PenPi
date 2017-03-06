@@ -1,191 +1,204 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/login_background"
+    android:background="#FFFFFF"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
+    android:paddingTop="@dimen/activity_vertical_margin">
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:orientation="vertical"
-        android:focusable="false"
-        android:focusableInTouchMode="true"
-        android:weightSum="1">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:gravity="center"
-                android:text="@string/register"
-                android:textSize="20dp" />
-
-        </RelativeLayout>
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="100dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:text="@string/login_name" />
-
-            <gdin.com.penpi.commonUtils.ClearEditTextUtil
-                android:textColorHint="#CCCCCC"
-                android:id="@+id/register_input_phone_et"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@null"
-                android:ems="10"
-                android:hint="@string/login_name_hint"
-                android:inputType="textPersonName" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/imageView5"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/login_thread" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:orientation="vertical"
             android:weightSum="1">
 
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:text="@string/login_yan" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <EditText
-                android:textColorHint="#CCCCCC"
-                android:id="@+id/register_input_code_et"
-                android:layout_width="180dp"
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:text="@string/register"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+
+            <ImageView
+                android:id="@+id/imageView4"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="10dp"
+                android:src="@drawable/logo" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@null"
-                android:ems="10"
-                android:hint="@string/login_yan_hint"
-                android:inputType="textPersonName" />
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/login_name" />
+
+                <gdin.com.penpi.commonUtils.ClearEditTextUtil
+                    android:id="@+id/register_input_phone_et"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@null"
+                    android:ems="10"
+                    android:hint="@string/login_name_hint"
+                    android:inputType="textPersonName"
+                    android:textColorHint="#CCCCCC" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView5"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/login_thread" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                android:weightSum="1">
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/login_yan" />
+
+                <EditText
+                    android:id="@+id/register_input_code_et"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@null"
+                    android:ems="10"
+                    android:hint="@string/login_yan_hint"
+                    android:inputType="textPersonName"
+                    android:textColorHint="#CCCCCC" />
+
+                <Button
+                    android:id="@+id/register_request_code_btn"
+                    android:layout_width="match_parent"
+                    android:layout_height="32dp"
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/userlogin_login_button_selector"
+                    android:text="@string/login_get_yan"
+                    android:textColor="#FFFFFF"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/login_thread" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:layout_marginRight="10dp"
+                    android:text="@string/login_pwd" />
+
+                <gdin.com.penpi.commonUtils.ClearEditTextUtil
+                    android:id="@+id/passward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:background="@null"
+                    android:ems="10"
+                    android:hint="@string/login_pwd_hint"
+                    android:inputType="textPassword"
+                    android:textColorHint="#CCCCCC" />
+
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@drawable/login_thread" />
 
             <Button
-                android:id="@+id/register_request_code_btn"
+                android:id="@+id/register_commit_btn"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
-                android:layout_gravity="bottom"
-                android:background="#30000000"
-                android:text="@string/login_get_yan"
-                android:textSize="10sp" />
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/userlogin_login_button_selector"
+                android:text="注册"
+                android:textColor="#FFFFFF" />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_marginTop="60dp">
+
+                <TextView
+                    android:id="@+id/textView8"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="30dp"
+                    android:text="@string/login_statement_1" />
+
+                <TextView
+                    android:id="@+id/textView9"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="38dp"
+                    android:text="@string/login_statement_2" />
+            </RelativeLayout>
 
         </LinearLayout>
+    </ScrollView>
 
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/login_thread" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:layout_marginRight="10dp"
-                android:text="@string/login_pwd" />
-
-            <gdin.com.penpi.commonUtils.ClearEditTextUtil
-                android:id="@+id/passward"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="bottom"
-                android:background="@null"
-                android:ems="10"
-                android:hint="@string/login_pwd_hint"
-                android:inputType="textPassword"
-                android:textColorHint="#CCCCCC" />
-
-        </LinearLayout>
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@drawable/login_thread" />
-
-        <Button
-            android:id="@+id/register_commit_btn"
-            android:layout_width="match_parent"
-            android:layout_height="62dp"
-            android:layout_marginTop="20dp"
-            android:text="注册"/>
-
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="111dp">
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="23dp"
-                android:text="@string/login_statement_1" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:layout_marginBottom="38dp"
-                android:text="@string/login_statement_2" />
-        </RelativeLayout>
-
-    </LinearLayout>
-</ScrollView>
 </RelativeLayout>

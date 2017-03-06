@@ -35,8 +35,7 @@ public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapte
                 Intent intent = new Intent(mContext, EvaluationActivity.class);
                 intent.putExtra("orderID", orderID);
                 mContext.startActivity(intent);
-                MySendRecordAdapter.this.notifyDataSetChanged();
-                MyTakeRecordFragment.getAdapter().notifyDataSetChanged();
+                notifyDataSetChanged();
             }
         }
     };

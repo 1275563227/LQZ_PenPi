@@ -24,6 +24,7 @@ public class MyBitmap {
         URL imgUrl;
         Bitmap bitmap = null;
         String finallyUrl = ConnectServer.imgURL + url;
+        Log.d("[MyBitmap]", "getImageBitmap = " + finallyUrl);
         try {
             imgUrl = new URL(finallyUrl);
             HttpURLConnection conn = (HttpURLConnection) imgUrl.openConnection();

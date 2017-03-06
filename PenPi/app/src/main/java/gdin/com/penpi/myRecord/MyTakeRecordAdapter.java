@@ -2,6 +2,7 @@ package gdin.com.penpi.myRecord;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AlertDialog;
@@ -20,6 +21,8 @@ import gdin.com.penpi.R;
 import gdin.com.penpi.commonUtils.FormatUtils;
 import gdin.com.penpi.commonUtils.OrderHandle;
 import gdin.com.penpi.domain.Order;
+import gdin.com.penpi.homeIndex.HomeActivity;
+import gdin.com.penpi.login.LoginActivity;
 
 public class MyTakeRecordAdapter extends RecyclerView.Adapter<MyTakeRecordAdapter.ViewHolder> {
 
@@ -35,8 +38,9 @@ public class MyTakeRecordAdapter extends RecyclerView.Adapter<MyTakeRecordAdapte
         public void handleMessage(Message msg) {
             if (msg.what == 0x123) {
                 Toast.makeText(mContext, "已送达", Toast.LENGTH_SHORT).show();
-                MyTakeRecordAdapter.this.notifyDataSetChanged();
-                MySendRecordFragment.getAdapter().notifyDataSetChanged();
+                notifyDataSetChanged();
+                Intent intent = new Intent(mContext, HomeActivity.class);
+                mContext.startActivity(intent);
             }
         }
     };

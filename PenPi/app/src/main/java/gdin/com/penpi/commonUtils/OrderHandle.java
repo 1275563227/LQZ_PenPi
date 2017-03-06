@@ -1,14 +1,11 @@
 package gdin.com.penpi.commonUtils;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 import gdin.com.penpi.domain.Order;
-import gdin.com.penpi.domain.User;
 import gdin.com.penpi.login.LoginActivity;
 
 /**

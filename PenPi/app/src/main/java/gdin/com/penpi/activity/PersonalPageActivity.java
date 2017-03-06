@@ -1,15 +1,36 @@
 package gdin.com.penpi.activity;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.commonUtils.MyBitmap;
+import gdin.com.penpi.login.LoginActivity;
 
 public class PersonalPageActivity extends AppCompatActivity {
+
+    private ImageView personHead;
+    private Bitmap personHeadBitmap;
+
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 0x123) {
+                if (personHeadBitmap != null)
+                    personHead.setImageBitmap(personHeadBitmap);
+            }
+        }
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +47,22 @@ public class PersonalPageActivity extends AppCompatActivity {
         CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(" ");
+
+        TextView tv_userName = (TextView)findViewById(R.id.user_name);
+        tv_userName.setText(LoginActivity.getUser().getUsername());
+
+        personHead = (ImageView) findViewById(R.id.user_detail_icon);
+        try {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    personHeadBitmap = MyBitmap.getImageBitmap(LoginActivity.getUser().getUsername() + "/head_image.jpg");
+                    handler.sendEmptyMessage(0x123);
+                }
+            }).start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

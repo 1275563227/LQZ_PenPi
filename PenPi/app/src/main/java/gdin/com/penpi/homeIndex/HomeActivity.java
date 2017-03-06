@@ -35,6 +35,7 @@ import java.util.Map;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.activity.PersonalPageActivity;
+import gdin.com.penpi.activity.SettingActivity;
 import gdin.com.penpi.activity.SubmitOrderActivity;
 import gdin.com.penpi.commonUtils.ChoseHeadImage;
 import gdin.com.penpi.commonUtils.JacksonUtils;
@@ -223,6 +224,8 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(intent);
                     break;
                 case R.id.config_name:
+                    intent = new Intent(HomeActivity.this, SettingActivity.class);
+                    startActivity(intent);
                     break;
                 case R.id.outlogin_name:
                     intent = new Intent(HomeActivity.this, LoginActivity.class);
