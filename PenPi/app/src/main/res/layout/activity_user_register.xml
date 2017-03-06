@@ -185,7 +185,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="10dp"
                     android:text="@string/login_statement_1" />
 
                 <TextView
@@ -194,7 +194,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="38dp"
+                    android:layout_marginBottom="5dp"
                     android:text="@string/login_statement_2" />
             </RelativeLayout>
 

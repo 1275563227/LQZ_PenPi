@@ -40,7 +40,8 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/item_app_bar_layout">
 
-            <include layout="@layout/charges_standrad" />
+            <include layout="@layout/include_charges_standrad" />
+
         </ScrollView>
     </RelativeLayout>
 

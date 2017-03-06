@@ -50,7 +50,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/item_app_bar_layout">
 
-            <include layout="@layout/submit_order" />
+            <include layout="@layout/include_submit_order" />
         </ScrollView>
     </RelativeLayout>
 

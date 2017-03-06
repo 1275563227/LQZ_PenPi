@@ -77,7 +77,7 @@ public class MyTakeRecordFragment extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.out_order_recycle, container, false);
+        View view = inflater.inflate(R.layout.list_out_order_recycle, container, false);
         mRecyclerView = (RecyclerView) view.findViewById(R.id.rc_main);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(mRecyclerView.getContext()));
         adapter = new MyTakeRecordAdapter(orders);
