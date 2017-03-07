@@ -59,4 +59,6 @@ dependencies {
     compile 'cn.jiguang:jpush:2.1.8'
     // 高德地图
     compile files('libs/AMap3DMap_4.1.3_AMapNavi_1.9.4_AMapSearch_4.0.0_AMapLocation_3.3.0_20170118.jar')
+    // 支付模块
+    compile files('libs/BmobPay_v3.1.1_170111.jar')
 }

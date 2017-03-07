@@ -19,6 +19,7 @@ import java.util.List;
 import gdin.com.penpi.R;
 import gdin.com.penpi.commonUtils.FormatUtils;
 import gdin.com.penpi.commonUtils.OrderHandle;
+import gdin.com.penpi.commonUtils.Wappay;
 import gdin.com.penpi.domain.Order;
 
 public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapter.ViewHolder> {
@@ -91,8 +92,8 @@ public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapte
             @Override
             public void onClick(View v) {
                 if ("已送达".equals(order.getState()) || "已付款".equals(order.getState())) {
-                    new AlertDialog.Builder(mContext).setTitle("确定付款？")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    new AlertDialog.Builder(mContext).setTitle("选择支付类型")
+                            .setPositiveButton("支付宝", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     new Thread(new Runnable() {
@@ -108,9 +109,10 @@ public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapte
                                     }).start();
                                 }
                             })
-                            .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("微信", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    new Wappay(mContext, order).pay(false);
                                 }
                             }).show();
                 }
