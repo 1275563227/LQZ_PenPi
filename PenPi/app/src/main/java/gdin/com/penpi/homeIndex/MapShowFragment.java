@@ -89,7 +89,7 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
             //设置是否允许模拟位置,默认为false，不允许模拟位置
             mLocationOption.setMockEnable(false);
             //设置定位间隔,单位毫秒,默认为2000ms
-            mLocationOption.setInterval(60000);
+            mLocationOption.setInterval(300000);
 
             //设置定位参数
             mlocationClient.setLocationOption(mLocationOption);

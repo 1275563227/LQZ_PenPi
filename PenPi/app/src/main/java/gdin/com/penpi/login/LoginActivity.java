@@ -111,6 +111,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     editor.putString("userName", null);
                     editor.putString("userPassword", null);
+                    editor.putBoolean("isRemember", isRemember.isChecked());
                     editor.commit();
                 }
                 new Thread(new Runnable() {
