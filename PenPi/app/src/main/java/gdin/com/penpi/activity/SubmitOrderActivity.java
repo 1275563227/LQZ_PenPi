@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -130,7 +129,7 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
                 break;
             case R.id.bt_sumbit_charges_standrad:
                 // 查看收费标准
-                intent = new Intent(SubmitOrderActivity.this, ChargesStandradActivity.class);
+                intent = new Intent(SubmitOrderActivity.this, ChargesStandardActivity.class);
                 startActivity(intent);
                 break;
         }

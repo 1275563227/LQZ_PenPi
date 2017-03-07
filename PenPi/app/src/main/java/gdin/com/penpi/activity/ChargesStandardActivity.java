@@ -7,7 +7,7 @@ import android.view.View;
 
 import gdin.com.penpi.R;
 
-public class ChargesStandradActivity extends AppCompatActivity {
+public class ChargesStandardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

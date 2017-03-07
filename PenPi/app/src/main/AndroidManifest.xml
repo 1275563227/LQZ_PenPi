@@ -39,7 +39,6 @@
         <activity android:name=".activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -52,10 +51,11 @@
             android:exported="true" />
         <activity android:name=".activity.SubmitOrderActivity" />
         <activity android:name=".activity.PersonalPageActivity" />
-        <activity android:name=".activity.ChargesStandradActivity" />
-        <activity android:name=".placeList.PlaceListActivity" />
+        <activity android:name=".activity.ChargesStandardActivity" />
+        <activity android:name=".activity.SettingActivity"/>
         <activity android:name=".myRecord.MyOrderRecordActivity" />
         <activity android:name=".myRecord.EvaluationActivity" />
+        <activity android:name=".placeList.PlaceListActivity" />
 
         <!-- 高德地图定位服务 -->
         <service android:name="com.amap.api.location.APSService" />
@@ -76,7 +76,6 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".activity.SettingActivity"></activity>
     </application>
 
 </manifest>

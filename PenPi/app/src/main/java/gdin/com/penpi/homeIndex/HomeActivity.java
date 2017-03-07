@@ -229,8 +229,9 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     break;
                 case R.id.outlogin_name:
                     intent = new Intent(HomeActivity.this, LoginActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
+                    finish();
                     break;
             }
             //关闭DrawerLayout回到主界面选中的tab的fragment页
