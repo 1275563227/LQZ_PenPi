@@ -8,8 +8,8 @@ android {
         applicationId "gdin.com.penpi"
         minSdkVersion 14
         targetSdkVersion 24
-        versionCode 2
-        versionName "2.1.1"
+        versionCode 1
+        versionName "2.0"
 
         // 极光推送加入以下两个：ndk manifestPlaceholders
         ndk {

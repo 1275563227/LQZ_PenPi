@@ -1,6 +1,7 @@
 package gdin.com.penpi.activity;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -48,7 +49,7 @@ public class PersonalPageActivity extends AppCompatActivity {
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
         collapsingToolbar.setTitle(" ");
 
-        TextView tv_userName = (TextView)findViewById(R.id.user_name);
+        TextView tv_userName = (TextView) findViewById(R.id.user_name);
         tv_userName.setText(LoginActivity.getUser().getUsername());
 
         personHead = (ImageView) findViewById(R.id.user_detail_icon);
@@ -57,6 +58,8 @@ public class PersonalPageActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     personHeadBitmap = MyBitmap.getImageBitmap(LoginActivity.getUser().getUsername() + "/head_image.jpg");
+                    if (personHeadBitmap == null)
+                        personHeadBitmap = BitmapFactory.decodeResource(PersonalPageActivity.this.getResources(), R.drawable.header_icon);
                     handler.sendEmptyMessage(0x123);
                 }
             }).start();

@@ -72,8 +72,7 @@
                             android:layout_width="@dimen/image_icon_size"
                             android:layout_height="@dimen/image_icon_size"
                             android:layout_centerVertical="true"
-                            android:layout_marginLeft="25dip"
-                            android:src="@drawable/header_icon" />
+                            android:layout_marginLeft="25dip" />
 
                         <TextView
                             android:id="@+id/user_name"
@@ -84,7 +83,6 @@
                             android:gravity="center_vertical"
                             android:maxWidth="150dip"
                             android:text="昵称"
-                            android:textColor="@color/md_black_1000"
                             android:textSize="@dimen/text_size_16sp" />
 
                     </RelativeLayout>

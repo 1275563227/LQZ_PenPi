@@ -1,12 +1,15 @@
 package gdin.com.penpi.login;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.SimpleAdapter;
@@ -26,7 +29,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private List<Map<String, Object>> dataList;
     private int icon[] = {R.drawable.login_chat, R.drawable.login_qq, R.drawable.login_weibo};
-    private String iconname[] = {"微信", "QQ", "微博"};
+    private String iconName[] = {" 微信", " QQ", " 微博"};
+    private SharedPreferences sharedPreferences;
+
+    private EditText et_login_name;
+    private EditText et_login_password;
+    private CheckBox isRemember;
 
     private static User user;
 
@@ -55,6 +63,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_login);
 
+        sharedPreferences = this.getSharedPreferences("userInfo", Context.MODE_WORLD_READABLE);
+
         GridView GV = (GridView) findViewById(R.id.gird1);
         dataList = new ArrayList<>();
         SimpleAdapter sim_adapter = new SimpleAdapter(this, getData(), R.layout.item_login, new String[]{"pic", "text"}, new int[]{R.id.pic, R.id.text});
@@ -62,7 +72,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         findViewById(R.id.bt_login).setOnClickListener(this);
         findViewById(R.id.bt_login_register).setOnClickListener(this);
-
+        isRemember = (CheckBox) findViewById(R.id.cb_login_remember);
+        isRemember.setChecked(sharedPreferences.getBoolean("isRemember", false));
+        // 登录
+        et_login_name = (EditText) findViewById(R.id.tv_login_name);
+        et_login_password = (EditText) findViewById(R.id.tv_login_password);
+        et_login_name.setText(sharedPreferences.getString("userName", null));
+        et_login_password.setText(sharedPreferences.getString("userPassword", null));
         // 设置返回
         Toolbar loginToolbar = (Toolbar) this.findViewById(R.id.login_tool_bar);
         loginToolbar.setTitle("");
@@ -81,17 +97,26 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.bt_login:
-                // 登录
-                EditText et_login_name = (EditText) findViewById(R.id.tv_login_name);
-                EditText et_login_password = (EditText) findViewById(R.id.tv_login_password);
+
                 //et_login_name.setText("admin");
                 //et_login_password.setText("admin");
                 final String name = et_login_name.getText().toString().trim();
-                final String pawword = et_login_password.getText().toString().trim();
+                final String password = et_login_password.getText().toString().trim();
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                if (isRemember.isChecked()) {
+                    editor.putString("userName", name);
+                    editor.putString("userPassword", password);
+                    editor.putBoolean("isRemember", isRemember.isChecked());
+                    editor.commit();
+                } else {
+                    editor.putString("userName", null);
+                    editor.putString("userPassword", null);
+                    editor.commit();
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        User temp = new UserHandle().login(name, pawword);
+                        User temp = new UserHandle().login(name, password);
                         if (temp != null) {
                             user = temp;
                             handler.sendEmptyMessage(0x123);
@@ -113,7 +138,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         for (int j = 0; j < 3; j++) {
             Map<String, Object> map = new HashMap<>();
             map.put("pic", icon[j]);
-            map.put("text", iconname[j]);
+            map.put("text", iconName[j]);
             dataList.add(map);
         }
 
