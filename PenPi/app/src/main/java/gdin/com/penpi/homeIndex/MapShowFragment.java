@@ -8,7 +8,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -18,6 +17,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.TextureMapView;
+import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MyLocationStyle;
@@ -55,6 +55,9 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
         aMap.setMyLocationEnabled(true);
         // 设置定位的类型为定位模式，有定位、跟随或地图根据面向方向旋转几种
         aMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
+
+        UiSettings mUiSettings = aMap.getUiSettings();//实例化UiSettings类对象
+        mUiSettings.setZoomControlsEnabled(false);
 
         // --------------------设置样式------------------------
         MyLocationStyle myLocationStyle = new MyLocationStyle();
@@ -160,7 +163,7 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
                         + aMapLocation.getDistrict() + ""
                         + aMapLocation.getStreet() + ""
                         + aMapLocation.getStreetNum());
-                Toast.makeText(getActivity().getApplicationContext(), buffer, Toast.LENGTH_LONG).show();
+                //Toast.makeText(getActivity().getApplicationContext(), buffer, Toast.LENGTH_LONG).show();
 
                 // 提供一个Map给其他类用
                 addressMap = new HashMap<>();

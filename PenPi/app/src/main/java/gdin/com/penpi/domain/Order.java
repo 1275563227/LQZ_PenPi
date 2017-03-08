@@ -1,8 +1,8 @@
 package gdin.com.penpi.domain;
 
-import com.amap.api.maps.model.LatLng;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -10,7 +10,7 @@ import java.util.Date;
  * 发布订单信息的一个bean
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class Order {
+public class Order implements Serializable{
     private Integer orderID;
 
     private String startPlace;

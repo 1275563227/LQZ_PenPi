@@ -61,6 +61,8 @@
         <activity android:name=".myRecord.MyOrderRecordActivity" />
         <activity android:name=".myRecord.EvaluationActivity" />
         <activity android:name=".placeList.PlaceListActivity" />
+        <activity android:name="cn.bmob.pay.v3.act.PayAct" />
+        <activity android:name=".activity.PayActivity"/>
 
         <!-- 高德地图定位服务 -->
         <service android:name="com.amap.api.location.APSService" />
