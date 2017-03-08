@@ -8,6 +8,7 @@ import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,28 +18,15 @@ import android.widget.TextView;
 import java.util.List;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.activity.PayActivity;
 import gdin.com.penpi.commonUtils.FormatUtils;
-import gdin.com.penpi.commonUtils.OrderHandle;
+import gdin.com.penpi.commonUtils.JacksonUtils;
 import gdin.com.penpi.domain.Order;
 
 public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Order> mOrderList;
-
-    private int orderID;
-
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 0x123) {
-                Intent intent = new Intent(mContext, EvaluationActivity.class);
-                intent.putExtra("orderID", orderID);
-                mContext.startActivity(intent);
-                notifyDataSetChanged();
-            }
-        }
-    };
 
     public MySendRecordAdapter(List<Order> orderList) {
         mOrderList = orderList;
@@ -91,26 +79,19 @@ public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapte
             @Override
             public void onClick(View v) {
                 if ("已送达".equals(order.getState()) || "已付款".equals(order.getState())) {
-                    new AlertDialog.Builder(mContext).setTitle("确定付款？")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                    new AlertDialog.Builder(mContext).setTitle("确认付款？")
+                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            order.setState("已付款");
-                                            Order temp = new OrderHandle().alterOrder(order);
-                                            if (temp != null) {
-                                                orderID = order.getOrderID();
-                                                handler.sendEmptyMessage(0x123);
-                                            }
-                                        }
-                                    }).start();
+                                    Intent intent = new Intent(mContext, PayActivity.class);
+                                    intent.putExtra("order", JacksonUtils.writeJSON(order));
+                                    mContext.startActivity(intent);
                                 }
                             })
-                            .setNegativeButton("返回", new DialogInterface.OnClickListener() {
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+
                                 }
                             }).show();
                 }

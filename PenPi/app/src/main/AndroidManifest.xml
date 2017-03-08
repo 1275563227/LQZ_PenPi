@@ -25,6 +25,11 @@
     <!-- 用于申请调用A-GPS模块 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
+    <!-- 支付权限 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
     <application
         android:name=".application.MyApplication"
         android:allowBackup="true"
@@ -56,6 +61,8 @@
         <activity android:name=".myRecord.MyOrderRecordActivity" />
         <activity android:name=".myRecord.EvaluationActivity" />
         <activity android:name=".placeList.PlaceListActivity" />
+        <activity android:name="cn.bmob.pay.v3.act.PayAct" />
+        <activity android:name=".activity.PayActivity"/>
 
         <!-- 高德地图定位服务 -->
         <service android:name="com.amap.api.location.APSService" />

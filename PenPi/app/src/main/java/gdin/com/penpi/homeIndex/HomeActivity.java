@@ -270,11 +270,11 @@ public class HomeActivity extends AppCompatActivity implements View.OnClickListe
                     .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Intent startMain = new Intent(Intent.ACTION_MAIN);
-                            startMain.addCategory(Intent.CATEGORY_HOME);
-                            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                            //别忘了这行，否则退出不起作用 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                            startActivity(startMain);
+//                            Intent startMain = new Intent(Intent.ACTION_MAIN);
+//                            startMain.addCategory(Intent.CATEGORY_HOME);
+//                            startMain.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                            //别忘了这行，否则退出不起作用 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                            startActivity(startMain);
                             System.exit(0);//退出程序
                         }
                     })
