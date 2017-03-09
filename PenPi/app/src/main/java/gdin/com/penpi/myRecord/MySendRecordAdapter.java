@@ -3,12 +3,9 @@ package gdin.com.penpi.myRecord;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -78,7 +75,7 @@ public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapte
         holder.itemView.findViewById(R.id.foruse_icon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if ("已送达".equals(order.getState()) || "已付款".equals(order.getState())) {
+                if ("已送达".equals(order.getState())) {
                     new AlertDialog.Builder(mContext).setTitle("确认付款？")
                             .setPositiveButton("确认", new DialogInterface.OnClickListener() {
                                 @Override
@@ -94,6 +91,23 @@ public class MySendRecordAdapter extends RecyclerView.Adapter<MySendRecordAdapte
 
                                 }
                             }).show();
+                } else if ("已付款".equals(order.getState())) {
+                    new AlertDialog.Builder(mContext).setTitle("确认评价？")
+                            .setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(mContext, EvaluationActivity.class);
+                                    intent.putExtra("order", JacksonUtils.writeJSON(order));
+                                    mContext.startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+
                 }
             }
         });

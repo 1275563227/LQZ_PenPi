@@ -45,13 +45,16 @@
                     android:textStyle="bold" />
             </android.support.v7.widget.Toolbar>
         </android.support.design.widget.AppBarLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/item_app_bar_layout">
 
             <include layout="@layout/include_submit_order" />
+
         </ScrollView>
+
     </RelativeLayout>
 
 

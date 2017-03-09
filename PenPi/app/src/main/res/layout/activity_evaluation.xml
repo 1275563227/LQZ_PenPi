@@ -115,6 +115,9 @@
                     android:id="@+id/order_evaluation_reset_bt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginRight="5dp"
+                    android:background="@drawable/userlogin_login_button_selector"
+                    android:textColor="#FFFFFF"
                     android:layout_weight="0.5"
                     android:text="重置" />
 
@@ -122,6 +125,9 @@
                     android:id="@+id/order_evaluation_bt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:background="@drawable/userlogin_login_button_selector"
+                    android:textColor="#FFFFFF"
                     android:layout_weight="0.5"
                     android:text="提交" />
 

@@ -77,6 +77,7 @@ public class PayActivity extends AppCompatActivity implements RadioGroup.OnCheck
 
     /**
      * 初始化toolbar和控件
+     *
      * @throws ParseException
      */
     public void initView() throws ParseException {
@@ -116,7 +117,7 @@ public class PayActivity extends AppCompatActivity implements RadioGroup.OnCheck
         TextView tv_end_time = (TextView) findViewById(R.id.tv_pay_end_time);
 
         Intent intent = getIntent();
-        order =JacksonUtils.readJson(intent.getStringExtra("order"), Order.class);
+        order = JacksonUtils.readJson(intent.getStringExtra("order"), Order.class);
 
         assert order != null;
         tv_id.setText(String.valueOf(order.getOrderID()));
@@ -160,6 +161,7 @@ public class PayActivity extends AppCompatActivity implements RadioGroup.OnCheck
         }
         return false;
     }
+
     private static final int REQUESTPERMISSION = 101;
 
     private void installApk(String s) {
@@ -180,11 +182,12 @@ public class PayActivity extends AppCompatActivity implements RadioGroup.OnCheck
                     installBmobPayPlugin("bp.db");
                 } else {
                     //提示没有权限，安装不了
-                    Toast.makeText(PayActivity.this,"您拒绝了权限，这样无法安装支付插件",Toast.LENGTH_LONG).show();
+                    Toast.makeText(PayActivity.this, "您拒绝了权限，这样无法安装支付插件", Toast.LENGTH_LONG).show();
                 }
             }
         }
     }
+
     /**
      * 调用支付
      *
@@ -244,68 +247,68 @@ public class PayActivity extends AppCompatActivity implements RadioGroup.OnCheck
             e.printStackTrace();
         }
 
-        BP.pay(String.valueOf(order.getOrderID()), order.getTakeOrderPeople().getUsername(),
-                order.getCharges(), alipayOrWechatPay, new PListener() {
+        BP.pay("订单编号：" + order.getOrderID(), order.getTakeOrderPeople().getUsername(),
+                0.02, alipayOrWechatPay, new PListener() {
 
-            // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
-            @Override
-            public void unknow() {
-                Toast.makeText(PayActivity.this, "支付结果未知,请稍后手动查询", Toast.LENGTH_SHORT)
-                        .show();
-//                tv.append(name + "'s pay status is unknow\n\n");
-                hideDialog();
-            }
-
-            // 支付成功,如果金额较大请手动查询确认
-            @Override
-            public void succeed() {
-                Toast.makeText(PayActivity.this, "支付成功!", Toast.LENGTH_SHORT).show();
-//                tv.append(name + "'s pay status is success\n\n");
-                hideDialog();
-                new Thread(new Runnable() {
+                    // 因为网络等原因,支付结果未知(小概率事件),出于保险起见稍后手动查询
                     @Override
-                    public void run() {
-
-                        order.setState("已付款");
-                        Order temp = new OrderHandle().alterOrder(order);
-                        if (temp != null) {
-                            handler.sendEmptyMessage(0x123);
-                        }
+                    public void unknow() {
+                        Toast.makeText(PayActivity.this, "支付结果未知,请稍后手动查询", Toast.LENGTH_SHORT)
+                                .show();
+//                tv.append(name + "'s pay status is unknow\n\n");
+                        hideDialog();
                     }
-                }).start();
-            }
 
-            // 无论成功与否,返回订单号
-            @Override
-            public void orderId(String orderId) {
-                // 此处应该保存订单号,比如保存进数据库等,以便以后查询
+                    // 支付成功,如果金额较大请手动查询确认
+                    @Override
+                    public void succeed() {
+                        Toast.makeText(PayActivity.this, "支付成功!", Toast.LENGTH_SHORT).show();
+//                tv.append(name + "'s pay status is success\n\n");
+                        hideDialog();
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+
+                                order.setState("已付款");
+                                Order temp = new OrderHandle().alterOrder(order);
+                                if (temp != null) {
+                                    handler.sendEmptyMessage(0x123);
+                                }
+                            }
+                        }).start();
+                    }
+
+                    // 无论成功与否,返回订单号
+                    @Override
+                    public void orderId(String orderId) {
+                        // 此处应该保存订单号,比如保存进数据库等,以便以后查询
 //                order.setText(orderId);
 //                tv.append(name + "'s orderid is " + orderId + "\n\n");
-                showDialog("获取订单成功!请等待跳转到支付页面~");
-            }
+                        showDialog("获取订单成功!请等待跳转到支付页面~");
+                    }
 
-            // 支付失败,原因可能是用户中断支付操作,也可能是网络原因
-            @Override
-            public void fail(int code, String reason) {
+                    // 支付失败,原因可能是用户中断支付操作,也可能是网络原因
+                    @Override
+                    public void fail(int code, String reason) {
 
-                // 当code为-2,意味着用户中断了操作
-                // code为-3意味着没有安装BmobPlugin插件
-                if (code == -3) {
-                    Toast.makeText(
-                            PayActivity.this,
-                            "监测到你尚未安装支付插件,无法进行支付,请先安装插件(已打包在本地,无流量消耗),安装结束后重新支付",
-                            Toast.LENGTH_SHORT).show();
+                        // 当code为-2,意味着用户中断了操作
+                        // code为-3意味着没有安装BmobPlugin插件
+                        if (code == -3) {
+                            Toast.makeText(
+                                    PayActivity.this,
+                                    "监测到你尚未安装支付插件,无法进行支付,请先安装插件(已打包在本地,无流量消耗),安装结束后重新支付",
+                                    Toast.LENGTH_SHORT).show();
 //                    installBmobPayPlugin("bp.db");
-                    installApk("bp.db");
-                } else {
-                    Toast.makeText(PayActivity.this, "支付中断!", Toast.LENGTH_SHORT)
-                            .show();
-                }
+                            installApk("bp.db");
+                        } else {
+                            Toast.makeText(PayActivity.this, "支付中断!", Toast.LENGTH_SHORT)
+                                    .show();
+                        }
 //                tv.append(name + "'s pay status is fail, error code is \n"
 //                        + code + " ,reason is " + reason + "\n\n");
-                hideDialog();
-            }
-        });
+                        hideDialog();
+                    }
+                });
     }
 
     /*// 执行订单查询
