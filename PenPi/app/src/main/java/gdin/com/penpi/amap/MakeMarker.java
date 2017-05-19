@@ -7,7 +7,6 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.MarkerOptions;
-import com.amap.api.services.core.LatLonPoint;
 
 import java.util.List;
 import java.util.Map;

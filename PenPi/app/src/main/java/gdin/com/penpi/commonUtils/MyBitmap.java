@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Map;
 
+import gdin.com.penpi.internetUtils.ConnectServer;
 import gdin.com.penpi.login.LoginActivity;
 
 public class MyBitmap {

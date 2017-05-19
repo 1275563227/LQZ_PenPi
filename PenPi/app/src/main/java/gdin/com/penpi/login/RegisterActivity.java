@@ -21,7 +21,7 @@ import android.widget.Toast;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import gdin.com.penpi.R;
-import gdin.com.penpi.commonUtils.UserHandle;
+import gdin.com.penpi.internetUtils.UserHandle;
 import gdin.com.penpi.domain.User;
 import gdin.com.penpi.commonUtils.ClearEditTextUtil;
 

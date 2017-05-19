@@ -16,6 +16,9 @@ public class User {
     private String phoneNumber;
     private String gender;      // 性别
     private String authority;   // 权限
+
+    private String location;    // 位置
+
     private Date loginTime;     // 登录时间
     private Date logoutTime;    // 退出时间
 
@@ -25,9 +28,10 @@ public class User {
                 "userID=" + userID +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", phoneNumber=" + phoneNumber +
+                ", phoneNumber='" + phoneNumber + '\'' +
                 ", gender='" + gender + '\'' +
                 ", authority='" + authority + '\'' +
+                ", location='" + location + '\'' +
                 ", loginTime=" + loginTime +
                 ", logoutTime=" + logoutTime +
                 '}';
@@ -79,6 +83,14 @@ public class User {
 
     public void setAuthority(String authority) {
         this.authority = authority;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public Date getLoginTime() {

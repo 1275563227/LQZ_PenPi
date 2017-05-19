@@ -44,6 +44,7 @@
         <activity android:name=".activity.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -57,12 +58,12 @@
         <activity android:name=".activity.SubmitOrderActivity" />
         <activity android:name=".activity.PersonalPageActivity" />
         <activity android:name=".activity.ChargesStandardActivity" />
-        <activity android:name=".activity.SettingActivity"/>
+        <activity android:name=".activity.SettingActivity" />
         <activity android:name=".myRecord.MyOrderRecordActivity" />
         <activity android:name=".myRecord.EvaluationActivity" />
         <activity android:name=".placeList.PlaceListActivity" />
         <activity android:name="cn.bmob.pay.v3.act.PayAct" />
-        <activity android:name=".activity.PayActivity"/>
+        <activity android:name=".activity.PayActivity" />
 
         <!-- 高德地图定位服务 -->
         <service android:name="com.amap.api.location.APSService" />
@@ -72,17 +73,27 @@
             android:enabled="true"
             android:exported="false">
             <intent-filter>
-                <action android:name="cn.jpush.android.intent.REGISTRATION" /> <!-- Required  用户注册SDK的intent -->
-                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" /> <!-- Required  用户接收SDK消息的intent -->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" /> <!-- Required  用户接收SDK通知栏信息的intent -->
-                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" /> <!-- Required  用户打开自定义通知栏的intent -->
-                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" /> <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
-                <action android:name="cn.jpush.android.intent.CONNECTION" /> <!-- 接收网络变化 连接/断开 since 1.6.3 -->
+                <action android:name="cn.jpush.android.intent.REGISTRATION" />
+                <!-- Required  用户注册SDK的intent -->
+                <action android:name="cn.jpush.android.intent.MESSAGE_RECEIVED" />
+                <!-- Required  用户接收SDK消息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_RECEIVED" />
+                <!-- Required  用户接收SDK通知栏信息的intent -->
+                <action android:name="cn.jpush.android.intent.NOTIFICATION_OPENED" />
+                <!-- Required  用户打开自定义通知栏的intent -->
+                <action android:name="cn.jpush.android.intent.ACTION_RICHPUSH_CALLBACK" />
+                <!-- Optional 用户接受Rich Push Javascript 回调函数的intent -->
+                <action android:name="cn.jpush.android.intent.CONNECTION" />
+                <!-- 接收网络变化 连接/断开 since 1.6.3 -->
                 <!-- 一定要配置为自己的包名 -->
                 <category android:name="gdin.com.penpi" />
             </intent-filter>
         </receiver>
 
+        <!--<service-->
+            <!--android:name=".service.SendLocationService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true" />-->
     </application>
 
 </manifest>

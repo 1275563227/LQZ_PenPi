@@ -1,4 +1,4 @@
-package gdin.com.penpi.commonUtils;
+package gdin.com.penpi.internetUtils;
 
 import android.util.Log;
 
@@ -10,6 +10,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
+
+import gdin.com.penpi.commonUtils.JacksonUtils;
 
 public class ConnectServer {
 

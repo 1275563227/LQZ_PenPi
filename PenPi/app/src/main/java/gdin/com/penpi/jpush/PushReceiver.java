@@ -10,11 +10,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Iterator;
-import java.util.Map;
 
 import cn.jpush.android.api.JPushInterface;
-import gdin.com.penpi.commonUtils.JacksonUtils;
-import gdin.com.penpi.commonUtils.NotificationUtil;
 import gdin.com.penpi.homeIndex.HomeActivity;
 
 /**

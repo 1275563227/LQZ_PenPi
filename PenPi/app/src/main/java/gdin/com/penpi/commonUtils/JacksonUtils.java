@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class JacksonUtils {
 	/**
-	 * 将java对象,map,list集合转换成json字符串
+	 * 将java对象如map,list集合转换成json字符串
 	 * 
 	 * @param value 任意对象
 	 * @return 返回String类型的json输数据

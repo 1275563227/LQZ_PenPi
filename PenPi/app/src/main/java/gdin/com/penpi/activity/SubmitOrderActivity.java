@@ -20,10 +20,10 @@ import java.util.Map;
 
 import gdin.com.penpi.R;
 import gdin.com.penpi.commonUtils.JacksonUtils;
-import gdin.com.penpi.commonUtils.OrderHandle;
 import gdin.com.penpi.domain.Order;
 import gdin.com.penpi.domain.User;
 import gdin.com.penpi.homeIndex.HomeActivity;
+import gdin.com.penpi.internetUtils.OrderHandle;
 import gdin.com.penpi.login.LoginActivity;
 import gdin.com.penpi.placeList.PlaceListActivity;
 
@@ -73,6 +73,8 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
 
         et_startPlace.setOnTouchListener(this);
         et_endPlace.setOnTouchListener(this);
+        et_userName.setText(user.getUsername());
+        et_phone_number.setText(user.getPhoneNumber());
 
         rb_common = (RadioButton) findViewById(R.id.common_order);
         rb_Vip = (RadioButton) findViewById(R.id.Vip_order);
@@ -135,6 +137,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
         }
     }
 
+    /**
+     * 提交订单 上传信息到服务器
+     */
     public void sumbitOrder(View view) {
         double final_price = calculatePrice();
         final Order order = new Order();
@@ -193,6 +198,9 @@ public class SubmitOrderActivity extends AppCompatActivity implements View.OnTou
                     }).show();//在按键响应事件中显示此对话框
     }
 
+    /**
+     * 计算配送的价格
+     */
     public double calculatePrice() {
         double common_price = 1;
         double vip_price = 2;

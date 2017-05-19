@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 import gdin.com.penpi.R;
-import gdin.com.penpi.commonUtils.UserHandle;
+import gdin.com.penpi.internetUtils.UserHandle;
 import gdin.com.penpi.domain.User;
 import gdin.com.penpi.homeIndex.HomeActivity;
 

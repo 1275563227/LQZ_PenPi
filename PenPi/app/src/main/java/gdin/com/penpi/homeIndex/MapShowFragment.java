@@ -26,13 +26,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import gdin.com.penpi.R;
+import gdin.com.penpi.commonUtils.Parameter;
 
 public class MapShowFragment extends Fragment implements LocationSource, AMapLocationListener {
 
     private TextureMapView mapView;
     private static AMap aMap;
     private OnLocationChangedListener mListener;
-    private AMapLocationClient mlocationClient;
+    private AMapLocationClient mLocationClient;
     private static Map<String, String> addressMap;
 
     public static AMap getaMap() {
@@ -75,11 +76,11 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
     @Override
     public void activate(OnLocationChangedListener onLocationChangedListener) {
         mListener = onLocationChangedListener;
-        if (mlocationClient == null) {
+        if (mLocationClient == null) {
             //初始化定位
-            mlocationClient = new AMapLocationClient(getActivity());
+            mLocationClient = new AMapLocationClient(getActivity());
             //设置定位回调监听
-            mlocationClient.setLocationListener(this);
+            mLocationClient.setLocationListener(this);
 
             //初始化定位参数
             AMapLocationClientOption mLocationOption = new AMapLocationClientOption();
@@ -95,12 +96,12 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
             mLocationOption.setInterval(300000);
 
             //设置定位参数
-            mlocationClient.setLocationOption(mLocationOption);
+            mLocationClient.setLocationOption(mLocationOption);
             // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
             // 注意设置合适的定位时间的间隔（最小间隔支持为2000ms），并且在合适时间调用stopLocation()方法来取消定位请求
             // 在定位结束后，在合适的生命周期调用onDestroy()方法
             // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
-            mlocationClient.startLocation();//启动定位
+            mLocationClient.startLocation();//启动定位
         }
     }
 
@@ -110,11 +111,11 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
     @Override
     public void deactivate() {
         mListener = null;
-        if (mlocationClient != null) {
-            mlocationClient.stopLocation();
-            mlocationClient.onDestroy();
+        if (mLocationClient != null) {
+            mLocationClient.stopLocation();
+            mLocationClient.onDestroy();
         }
-        mlocationClient = null;
+        mLocationClient = null;
     }
 
     /**
@@ -175,6 +176,7 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
                 addressMap.put("City", aMapLocation.getCity());
                 addressMap.put("District", aMapLocation.getDistrict());
                 addressMap.put("Street", aMapLocation.getStreet());
+                Parameter.addressMap = addressMap;
             }
         } else {
             assert aMapLocation != null;
@@ -195,8 +197,8 @@ public class MapShowFragment extends Fragment implements LocationSource, AMapLoc
         super.onDestroy();
         //在activity执行onDestroy时执行mMapView.onDestroy()，销毁地图
         mapView.onDestroy();
-        if (null != mlocationClient) {
-            mlocationClient.onDestroy();
+        if (null != mLocationClient) {
+            mLocationClient.onDestroy();
         }
     }
 
