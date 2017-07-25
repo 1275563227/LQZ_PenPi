@@ -15,7 +15,7 @@ import gdin.com.penpi.commonUtils.JacksonUtils;
 
 public class ConnectServer {
 
-    private static final String baseURL = "http://www.lqzcloud.cn/PenPiServer/";
+    private static final String baseURL = "http://123.207.245.81/PenPiServer/";
 //  private static final String baseURL = "http://192.168.1.168:8080/PenPiServer/";
 
     public static final String requestURL = baseURL + "forAndroid/";
