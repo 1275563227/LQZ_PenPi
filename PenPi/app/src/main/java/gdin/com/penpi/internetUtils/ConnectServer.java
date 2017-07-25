@@ -15,13 +15,11 @@ import gdin.com.penpi.commonUtils.JacksonUtils;
 
 public class ConnectServer {
 
-//    public static String requestURL = "http://192.168.1.168:8080/PenPiServer/forAndroid/";
-//
-//    public static String imgURL = "http://192.168.1.168:8080/PenPiServer/upload/";
+    private static final String baseURL = "http://www.lqzcloud.cn/PenPiServer/";
+//  private static final String baseURL = "http://192.168.1.168:8080/PenPiServer/";
 
-    public static String requestURL = "http://www.lqzcloud.cn/PenPiServer/forAndroid/";
-
-    public static String imgURL = "http://www.lqzcloud.cn/PenPiServer/upload/";
+    public static final String requestURL = baseURL + "forAndroid/";
+    public static final String imgURL = baseURL + "upload/";
 
     public static String connect(String requestURL, Object value) {
 
