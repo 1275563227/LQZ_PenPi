@@ -29,9 +29,6 @@ pids
 # built application files
 *.apk
 *.ap_
-wxframework
-sdk
-bmwidget
 # files for the dex VM
 *.dex
 
